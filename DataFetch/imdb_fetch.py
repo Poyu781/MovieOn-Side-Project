@@ -7,7 +7,7 @@ import datetime
 from Modules.MySQL_module import SQL
 today_date = datetime.datetime.today().date()
 print(today_date)
-
+# export PYTHONPATH="$PWD" 
 dotenv.load_dotenv()
 rds_host = os.getenv("rds_host")
 rds_user = os.getenv("rds_user")
