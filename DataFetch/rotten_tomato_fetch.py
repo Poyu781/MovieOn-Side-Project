@@ -16,16 +16,19 @@ client = MongoClient(mongo_server,
                      authMechanism='SCRAM-SHA-1')
 
 db = client['movie']
-collection = db.douban_raw_json
+collection = db.rottentomato_raw_json
 
 ua = UserAgent(verify_ssl=False)
-start_year = 2000
-end_year = 2009
-start_num = 1720
+failed_ip_list = ['http://tihyjcyk-dest:sr9mbjac4xab@193.27.10.145:6230', 'http://tihyjcyk-dest:sr9mbjac4xab@45.154.58.50:7563', 'http://tihyjcyk-dest:sr9mbjac4xab@45.131.212.146:6195', 'http://tihyjcyk-dest:sr9mbjac4xab@5.154.253.155:8413', 'http://tihyjcyk-dest:sr9mbjac4xab@45.72.55.201:7238']
+for i in failed_ip_list:
+    ip_list.remove(i)
+print(len(ip_list))
+failed_page =[]
+page_num =26
 ip_cycle = cycle(ip_list)
-failed_num_list = []
+
 for ip_address in ip_cycle:
-    request_url  = f"https://movie.douban.com/j/new_search_subjects?sort=U&range=2,10&tags=%E7%94%B5%E5%BD%B1&start={start_num}&year_range={start_year},{end_year}"
+    request_url  = f"https://www.rottentomatoes.com/api/private/v2.0/browse?minTomato=10&maxTomato=100&services=amazon%3Bhbo_go%3Bitunes%3Bnetflix_iw%3Bvudu%3Bamazon_prime%3Bfandango_now&certified&sortBy=release&type=dvd-streaming-all&page={page_num}"
     proxies = {
         'http': ip_address,
         'https': ip_address,
@@ -35,18 +38,19 @@ for ip_address in ip_cycle:
             'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,ja;q=0.5',
             }  
     req = requests.get(request_url,headers=headers,proxies=proxies)
-    print(f"page {start_num} status {req}")
-    try:
-        fetch_json = json.loads(req.text)['data']
-        # print(fetch_json)
-        if fetch_json != []:
-            collection.insert_many(fetch_json)
-            print("success insert")
-        else:
-            print(fetch_json)
-            print("out of list")
-            break
-    except:
-        failed_num_list.append(start_num)
-        print("failure with" ,start_num)
-    start_num += 20
+    print(f"page {page_num} status {req}")
+    if req.status_code != 200:
+        failed_page.append(page_num)
+        print("failed",page_num)
+        page_num += 1
+        continue
+
+    fetch_json = json.loads(req.text)['results']
+    if fetch_json != []:
+        collection.insert_many(fetch_json)
+        print("success insert")
+    else:
+        print(fetch_json)
+        print("out of list")
+        break
+    page_num += 1
