@@ -10,6 +10,7 @@ python-dotenv = "*"
 pymongo = "*"
 fake-useragent = "*"
 beautifulsoup4 = "*"
+multithreading = "*"
 
 [dev-packages]
 
