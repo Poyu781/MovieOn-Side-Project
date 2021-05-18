@@ -11,6 +11,7 @@ pymongo = "*"
 fake-useragent = "*"
 beautifulsoup4 = "*"
 multithreading = "*"
+opencc-python-reimplemented = "*"
 
 [dev-packages]
 
