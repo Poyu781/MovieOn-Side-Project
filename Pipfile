@@ -12,6 +12,7 @@ fake-useragent = "*"
 beautifulsoup4 = "*"
 multithreading = "*"
 opencc-python-reimplemented = "*"
+django = "*"
 
 [dev-packages]
 

@@ -5,7 +5,7 @@ from opencc import OpenCC
 from Modules.MySQL_module import SQL
 
 import dotenv
-
+r = 1/0
 dotenv.load_dotenv()
 rds_host = os.getenv("rds_host")
 rds_user = os.getenv("rds_user")
