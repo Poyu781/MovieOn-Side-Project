@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+requests = "*"
+pymysql = "*"
+python-dotenv = "*"
+pymongo = "*"
+fake-useragent = "*"
+beautifulsoup4 = "*"
+multithreading = "*"
+opencc-python-reimplemented = "*"
+django = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
