@@ -55,7 +55,7 @@ def insert_rating(data):
     print("successful insert rating")
 
 
-movie_detail = IMDb_fetch("https://datasets.imdbws.com/title.basics.tsv.gz","movie_detail.tsv.gz")
+# movie_detail = IMDb_fetch("https://datasets.imdbws.com/title.basics.tsv.gz","movie_detail.tsv.gz")
 # movie_detail.install_data()
 # detail_list = movie_detail.decompress_file()
 # print(len(detail_list))
@@ -73,6 +73,6 @@ def insert_detail(data):
         except:
             print(movie_detail_info)
     movie_database.bulk_execute("INSERT INTO `movie_detail`(`IMDb_id`, `primary_title`, `original_title`, `is_adult`, `start_year`, `runtime_minutes`, `category`) VALUES (%s,%s,%s,%s,%s,%s,%s)",insert_detail_list)
-insert_rating(rating_list)
-# insert_detail(detail_list)
-print("si")
+# insert_rating(rating_list)
+# # insert_detail(detail_list)
+# print("si")
