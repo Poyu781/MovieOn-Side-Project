@@ -17,7 +17,7 @@ dotenv.load_dotenv()
 rds_host = os.getenv("rds_host")
 rds_user = os.getenv("rds_user")
 rds_password = os.getenv("rds_password")
-
+secret_key = os.getenv("SECRET_KEY")
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '3xt$2tzo44cwbb0m!^sbzp8e2^%5s!3o(odn&6m6$_d#5=@7lw'
+SECRET_KEY = secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
