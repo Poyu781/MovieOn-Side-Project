@@ -88,7 +88,7 @@ class MovieLatestRating(models.Model):
     tomatoes_rating = models.IntegerField()
     douban_rating = models.IntegerField()
     ptt_rating = models.IntegerField()
-    update_time = models.DateField(timezone.now())
+    update_time = models.DateField(default = timezone.now())
     class Meta:
         managed = True
         db_table = 'movie_latest_rating'

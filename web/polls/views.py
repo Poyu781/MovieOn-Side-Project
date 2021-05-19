@@ -5,10 +5,11 @@ from .models import DoubanDetail
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 
-def hello_word(request):
+def main_page(request):
     # print(DoubanDetail.objects.filter(douban_id__contains="7916239")[0].movie_title)
     return render(request,"index.html")
 
 
-def get_movie():
-    DoubanDetail.objects.filter(douban_id__contains="7916239")[0].movie_title
+def get_movies_rating():
+    # DoubanDetail.objects.filter(douban_id__contains="7916239")[0].movie_title
+    return 1
