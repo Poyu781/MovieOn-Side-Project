@@ -93,6 +93,7 @@ class MovieLatestRating(models.Model):
         managed = True
         db_table = 'movie_latest_rating'
 class LatestRating(models.Model):
+    # imdb_id = models.CharField(max_length=30)
     imdb = models.ForeignKey('DoubanDetail', models.DO_NOTHING,related_name='keyword')
     audience_rating = models.CharField(max_length=10)
     tomator_rating = models.CharField(max_length=10)

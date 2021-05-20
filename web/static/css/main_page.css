@@ -41,11 +41,13 @@ nav .logo img {
 
   }
 
-.itemsWrap{
-
-  display: flex;
-  justify-content: center;
-  padding: 15vh 10vw;
+  .itemsWrap {
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 5vh ;
+    width: 75%;
+    justify-content: center;
 }
 div img {
   width:100%;

@@ -10,7 +10,7 @@ class DoubanDetailView(viewsets.ModelViewSet):
     queryset = DoubanDetail.objects.all()
     serializer_class = DoubanDetailSerializer
 class LatestRatingView(viewsets.ModelViewSet):
-    queryset = LatestRating.objects.all()
+    queryset = LatestRating.objects.all().select_related('imdb')
     serializer_class = LatestRatingSerializer
 
 
