@@ -35,7 +35,7 @@ class DoubanDetail(models.Model):
     movie_description = models.TextField()
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'douban_detail'
 
 
@@ -92,7 +92,16 @@ class MovieLatestRating(models.Model):
     class Meta:
         managed = True
         db_table = 'movie_latest_rating'
+class LatestRating(models.Model):
+    imdb_id = models.CharField(max_length=30)
+    audience_rating = models.CharField(max_length=10)
+    tomator_rating = models.CharField(max_length=10)
+    imdb_rating = models.DecimalField(max_digits=2, decimal_places=1, blank=True, null=True)
+    douban_rating = models.DecimalField(max_digits=4, decimal_places=2, blank=True, null=True)
 
+    class Meta:
+        managed = True
+        db_table = 'latest_rating'
 # class RottenTomatoRating(models.Model):
 #     tomato_id = models.CharField(max_length=16)
 #     imdb_id = models.CharField(unique=True, max_length=26)
