@@ -27,8 +27,8 @@ class DirectorTable(models.Model):
 
 
 class DoubanDetail(models.Model):
-    douban_id = models.CharField(primary_key=True, max_length=16)
-    imdb_id = models.CharField(max_length=16)
+    douban_id = models.CharField(max_length=16)
+    imdb_id = models.CharField(primary_key=True, max_length=16)
     movie_title = models.CharField(max_length=64)
     image = models.CharField(max_length=255)
     other_names = models.CharField(max_length=255)
@@ -93,7 +93,7 @@ class MovieLatestRating(models.Model):
         managed = True
         db_table = 'movie_latest_rating'
 class LatestRating(models.Model):
-    imdb_id = models.CharField(max_length=30)
+    imdb = models.ForeignKey('DoubanDetail', models.DO_NOTHING,related_name='keyword')
     audience_rating = models.CharField(max_length=10)
     tomator_rating = models.CharField(max_length=10)
     imdb_rating = models.DecimalField(max_digits=2, decimal_places=1, blank=True, null=True)

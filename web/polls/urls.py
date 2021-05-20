@@ -1,9 +1,14 @@
+from django.conf.urls import url, include
 from django.urls import path
-
 from . import views
+from rest_framework.routers import DefaultRouter
 
+router = DefaultRouter()
+router.register('Do',views.DoubanDetailView)
+router.register('rating',views.LatestRatingView)
 urlpatterns = [
-    path('', views.main_page),
+    url(r'^api/', include(router.urls)),
     path('test', views.index, name='index'),
-    path("api/1.0/movies", views.get_movies_rating, name="movies")
+    # path("api/1.0/movies", views.get_movies_rating, name="movies"),
+    # path("api/1.0/douban_detail",views.DoubanDetailView.as_view())
 ]

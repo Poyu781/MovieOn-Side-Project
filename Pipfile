@@ -14,6 +14,7 @@ multithreading = "*"
 opencc-python-reimplemented = "*"
 django = "*"
 django-debug-toolbar = "*"
+djangorestframework = "*"
 
 [dev-packages]
 
