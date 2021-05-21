@@ -58,16 +58,10 @@ function main(url,offsetNum) {
         });
 }
 offsetNum = 0
-main('/api/rating/?limit=8&offset=0',offsetNum)
-// fetch()
-//     .then((response) =>{
-//         return response.json()
-//     })
-//     .then((response)=>{
-//         console.log(response["results"])
-//     })
+main('/api/rating/?limit=12&offset=0',offsetNum)
+
 showMoreButton = document.querySelector(".showMore")
 showMoreButton.addEventListener("click",()=>{
-    offsetNum += 8
-    main(`/api/rating/?limit=8&offset=${offsetNum}`,offsetNum)
+    offsetNum += 12
+    main(`/api/rating/?limit=12&offset=${offsetNum}`,offsetNum)
 })

@@ -15,6 +15,7 @@ opencc-python-reimplemented = "*"
 django = "*"
 django-debug-toolbar = "*"
 djangorestframework = "*"
+django-filter = "*"
 
 [dev-packages]
 
