@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block css%}<link rel="stylesheet" href="../static/css/sign_up.css" />{% endblock %}
+{% block content%}
+<h1>登入</h1>
+<div class="formWrap">
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ form }}
+
+    <input class="btn btn-primary" type="submit" value="送出" />
+    <p>還沒有帳號嗎? <a href="/signup">註冊</a></p>
+</form>
+</div>
+{% endblock %}
+
+
+
+

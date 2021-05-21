@@ -10,7 +10,10 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
     path('', views.main_page, name='index'),
     path('test',views.index),
-    path("movie/<imdb_id>",views.movie_single_page)
+    path("movie/<imdb_id>",views.movie_single_page),
+    path("signup",views.sign_up),
+    path("signin",views.sign_in),
+    path("login",views.login)
     # path("api/1.0/movies", views.get_movies_rating, name="movies"),
     # path("api/1.0/douban_detail",views.DoubanDetailView.as_view())
 ]

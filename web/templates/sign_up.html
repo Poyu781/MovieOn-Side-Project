@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block css%}<link rel="stylesheet" href="../static/css/sign_up.css" />{% endblock %}
+{% block content%}
+<h1>註冊頁面</h1>
+<div class="formWrap">
+<form action="" method="POST">
+    {% csrf_token %}
+    {{ form }}
+
+    <br />
+    <input class="btn btn-success" type="submit" value="送出" />
+</form>
+</div>
+{% endblock %}
+
+
+
+

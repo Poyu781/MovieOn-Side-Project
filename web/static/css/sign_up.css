@@ -1,0 +1,21 @@
+/* body {
+    background-color: #E6E6FA;
+  } */
+
+h1{
+    padding: 50px;
+}
+.formWrap{
+    display:flex;
+    align-items:center;
+    background-color: royalblue;
+    text-align: center;
+    width: 300px;
+    padding: 50px;
+    margin-left: 50%;
+    
+}
+/* 
+form{
+    background-color: #E6E6FA;
+} */
