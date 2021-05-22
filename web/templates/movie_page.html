@@ -2,20 +2,6 @@
 
 {% block css%}<link rel="stylesheet" href="../static/css/movie_page.css" />{% endblock %}
 {% block content%}
-<nav>
-    <div class="logo">
-        <img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/ScreenShot+2021-05-17+%E4%B8%8B%E5%8D%884.19.58.png" id="logo" />
-    </div>
-
-    <ul class="options">
-        <li id="women">熱門</li>
-        <li id="men">驚悚</li>
-        <li id="acc">動作</li>
-    </ul>
-    <input type="text" />
-    <input type="submit" value="search" />
-    
-</nav>
 
 <section class="movieSetion">
     <img src  = {{image}} />
@@ -26,7 +12,27 @@
     {{ movie_description }}
 </section>
 
-<button class="showMore">顯示更多</button>
+<div class="rating">
+    你對這部電影的評價是？
+    <div class="container">
+        <div class="row">
+        <div class="rating">
+          <input type="radio" id="star10" name="rating" value="10" /><label for="star10" title="Rocks!">5 stars</label>
+          <input type="radio" id="star9" name="rating" value="9" /><label for="star9" title="Rocks!">4 stars</label>
+          <input type="radio" id="star8" name="rating" value="8" /><label for="star8" title="Pretty good">3 stars</label>
+          <input type="radio" id="star7" name="rating" value="7" /><label for="star7" title="Pretty good">2 stars</label>
+          <input type="radio" id="star6" name="rating" value="6" /><label for="star6" title="Meh">1 star</label>
+          <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="Meh">5 stars</label>
+          <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="Kinda bad">4 stars</label>
+          <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="Kinda bad">3 stars</label>
+          <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="Sucks big tim">2 stars</label>
+          <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="Sucks big time">1 star</label>
+        </div>
+        </div>
+        <div class="ratingNum"></div>
+    </div>
+        <button class="ratingSubmit">送出</button>
+</div>
 {% endblock %}
 
 {% block js%}<script src="../static/js/signal_page.js" type="text/javascript"></script>{% endblock %}

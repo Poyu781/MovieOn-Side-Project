@@ -3,17 +3,23 @@ function renderMovies(movieObject, nodeDiv) {
     let node = document.createElement("div");
     node.classList.add("movie");
     node.setAttribute("id", movieObject.imdb.imdb_id)
+    
     let img = movieObject.imdb.image;
     let title = movieObject.imdb.movie_title;
     let imdb_rating = movieObject.imdb_rating
+    let path = movieObject.imdb.imdb_id
     let rotten_audience_rating = movieObject.audience_rating
     let rotten_tomator_rating = movieObject.tomator_rating
     let douban_rating = movieObject.douban_rating
     let htmlText = `
-  <img src=${img}>
+
+        <a href= movie/${path}>
+        <img src=${img}>
+        <div>${title}</div>
+        </a>
   <div class="information">
     <div class="productInfo">
-      <div>${title}</div>
+      
       <div>IMDb:${imdb_rating}</div>
       <div>Rotten Audience:${rotten_audience_rating}</div>
       <div>Rotten Reviewer:${rotten_tomator_rating}</div>

@@ -13,7 +13,8 @@ urlpatterns = [
     path("movie/<imdb_id>",views.movie_single_page),
     path("signup",views.sign_up),
     path("signin",views.sign_in),
-    path("login",views.login)
+    path("rating",views.score_movie),
+    path("logout",views.logout)
     # path("api/1.0/movies", views.get_movies_rating, name="movies"),
     # path("api/1.0/douban_detail",views.DoubanDetailView.as_view())
 ]

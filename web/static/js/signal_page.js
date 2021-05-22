@@ -1,4 +1,66 @@
 const itemsSection = document.querySelector(".itemsSection");
+const ratingSubmit = document.querySelector(".ratingSubmit")
+const ratingSection = document.querySelector(".rating")
+const ratingNum = document.querySelector(".ratingNum")
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+const path = document.location['pathname'];
+
+console.log(csrftoken)
+ratingSection.addEventListener("change",()=>{
+    
+    let ratingValue = document.querySelector('input[name="rating"]:checked').value
+    let data = {"rating":ratingValue}
+    ratingNum.innerHTML = `Choose Rating :${ratingValue}`
+    console.log(data)
+    fetch("/rating",{
+        method: "POST",
+        mode: 'same-origin',
+        
+        body : JSON.stringify(data),
+        headers : {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': csrftoken,
+            'Content-Type': 'application/json'
+        },
+    })
+
+        .then((res)=>{
+
+            return res.json()
+        })
+        .catch((error) => {
+            window.location.href = `/signin?next=${path}`;
+            console.error('Error:', error)
+        })
+        .then((json)=>{
+            console.log(json)
+        })
+})
+ratingSubmit.addEventListener("click",()=>{
+    let ratingValue = document.querySelector('input[name="rating"]:checked').value
+    console.log(ratingValue)
+})
+
+
+
+
+
+
 function renderMovies(movieObject, nodeDiv) {
     let node = document.createElement("div");
     node.classList.add("movie");

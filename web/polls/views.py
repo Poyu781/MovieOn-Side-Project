@@ -11,6 +11,8 @@ from .forms import RegisterForm,LoginForm
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+import json
+from django.contrib import messages
 class DoubanDetailView(viewsets.ModelViewSet):
     queryset = DoubanDetail.objects.all()
     serializer_class = DoubanDetailSerializer
@@ -30,7 +32,7 @@ def main_page(request):
     return render(request,"index.html")
 
 
-@login_required
+# @login_required
 def movie_single_page(request,imdb_id):
     data = DoubanDetail.objects.filter(imdb_id= imdb_id)
     
@@ -59,7 +61,9 @@ def sign_up(request):
             # if 驗證成功返回 user 物件，否則返回None
             user = auth.authenticate(username=user, password=pwd)
             auth.login(request, user)
-            return redirect('/login')  #重新導向到登入畫面
+            if 'next' in request.POST:
+                return redirect(request.POST.get("next"))
+            return redirect('/')  #重新導向到登入畫面
     context = {
         'form': form
     }
@@ -79,10 +83,29 @@ def sign_in(request):
         if user:
             # request.user ： 當前登入物件
             auth.login(request, user)
+            if 'next' in request.POST:
+                return redirect(request.POST.get("next"))
+            else:
             # return HttpResponse("OK")
-            return redirect('/login')
+                return redirect('/')
+        else:
+            messages.error(request,'username or password not correct')
+            return redirect('/signin')
     return render(request, 'sign_in.html', context)
 
-def login(request):
-    username = request.user.username    
-    return render(request, 'user_page.html', locals())
+# def login(request):
+#     username = request.user.username    
+#     return render(request, 'user_page.html', locals())
+
+
+@login_required
+def score_movie(request):
+    data_from_post = json.load(request)['rating']
+
+    print("rating",data_from_post)
+    return JsonResponse({"message":"success"})
+
+
+def logout(request):
+    auth.logout(request)
+    return redirect('/')
