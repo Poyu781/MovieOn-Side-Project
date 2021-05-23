@@ -1,18 +1,19 @@
 from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.http import HttpResponse
-from .models import DoubanDetail,LatestRating
+from .models import DoubanDetail,LatestRating,InternalUserRating
 from django.db import transaction
 from rest_framework import viewsets
 from .serializers import DoubanDetailSerializer ,LatestRatingSerializer
 from django_filters.rest_framework import DjangoFilterBackend
-from django.contrib.auth.forms import UserCreationForm
+
 from .forms import RegisterForm,LoginForm
 from django.contrib.auth.models import User
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
 import json
 from django.contrib import messages
+from datetime import datetime
 class DoubanDetailView(viewsets.ModelViewSet):
     queryset = DoubanDetail.objects.all()
     serializer_class = DoubanDetailSerializer
@@ -20,6 +21,8 @@ class DoubanDetailView(viewsets.ModelViewSet):
     filterset_fields = ['imdb_id']
 class LatestRatingView(viewsets.ModelViewSet):
     queryset = LatestRating.objects.all().select_related('imdb')
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['imdb_id']
     serializer_class = LatestRatingSerializer
 
 
@@ -29,7 +32,7 @@ def index(request):
 def main_page(request):
     # print(DoubanDetail.objects.filter(douban_id__contains="7916239")[0].movie_title)
 
-    return render(request,"index.html")
+    return render(request,"home_page.html")
 
 
 # @login_required
@@ -100,9 +103,22 @@ def sign_in(request):
 
 @login_required
 def score_movie(request):
-    data_from_post = json.load(request)['rating']
+    current_user = request.user
+    get_dict = json.load(request)
+    rating = get_dict['rating']
+    imdb_id = get_dict['imdb_id']
+    review_record = InternalUserRating.objects.filter(user_id = current_user.id, movie_id= imdb_id)
+    if review_record.exists():
+        review = InternalUserRating.objects.get(user_id = current_user.id, movie_id= imdb_id)
+        print(review)
+        review.rating = rating
+        review.update_date = datetime.now()
+    else:
+        review = InternalUserRating(movie_id = imdb_id, update_date = datetime.now(), rating = rating, user_id = current_user.id)
+        print(1)
+    review.save()
+    # print(review_record)
 
-    print("rating",data_from_post)
     return JsonResponse({"message":"success"})
 
 
