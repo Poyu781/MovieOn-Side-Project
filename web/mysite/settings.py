@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'rest_framework',
     'django_filters',
+    'social_django',
+
 
 ]
 

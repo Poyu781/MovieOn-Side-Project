@@ -16,6 +16,7 @@ django = "*"
 django-debug-toolbar = "*"
 djangorestframework = "*"
 django-filter = "*"
+social-auth-app-django = "*"
 
 [dev-packages]
 
