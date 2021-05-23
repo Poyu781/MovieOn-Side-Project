@@ -17,6 +17,7 @@ django-debug-toolbar = "*"
 djangorestframework = "*"
 django-filter = "*"
 social-auth-app-django = "*"
+tenacity = "*"
 
 [dev-packages]
 
