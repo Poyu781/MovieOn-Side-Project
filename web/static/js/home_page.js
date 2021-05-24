@@ -1,4 +1,4 @@
-const itemsSection = document.querySelector(".itemsSection");
+const itemsSection = document.querySelector(".home__content");
 function renderMovies(movieObject, nodeDiv) {
     let node = document.createElement("div");
     node.classList.add("movie");
@@ -12,21 +12,26 @@ function renderMovies(movieObject, nodeDiv) {
     let rotten_tomator_rating = movieObject.tomator_rating
     let douban_rating = movieObject.douban_rating
     let htmlText = `
-
-        <a href= movie/${path}>
+        <a class="movie" href= movie/${path}>
         <img src=${img}>
-        <div>${title}</div>
-        </a>
-  <div class="information">
-    <div class="productInfo">
-      
-      <div>IMDb:${imdb_rating}</div>
-      <div>Rotten Audience:${rotten_audience_rating}</div>
-      <div>Rotten Reviewer:${rotten_tomator_rating}</div>
-      <div>Douban :${douban_rating}</div>
-    </div>
-  </div>
-  `;
+        <div class="movie__info">
+            <h3>${title}</h3>
+            <div class="rank">
+                <div>
+                    <img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/imdb.png">
+                    <p>${imdb_rating}</p>
+                </div>
+                <div>
+                    <img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/douban.jpg">
+                    <p>${douban_rating}</p>
+                </div>
+                <div>
+                    <img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/tomato.png">
+                    <p>${rotten_audience_rating}</p>
+                </div>
+            </div>
+        </div>
+`;
     node.innerHTML = htmlText;
     nodeDiv.appendChild(node);
 }
@@ -43,22 +48,8 @@ function main(url,offsetNum) {
             console.log(dataArray)
             let num = dataArray.length;
 // Math.ceil(offsetNum/4);
-            if (offsetNum == 0){
-                let node = document.createElement("div");
-                node.classList.add("itemsWrap");
-                // node.setAttribute("id", `wrap${row}`);
-                itemsSection.appendChild(node);
-            }
-            itemsWrap = document.querySelector('.itemsWrap');
             for (let i = 0; i < num; i++) {
-
-                try {
-                    renderMovies(dataArray[i], itemsWrap);
-                } catch {
-                    let node = document.createElement("div");
-                    node.classList.add("item");
-                    itemsWrap.appendChild(node);
-                }
+                renderMovies(dataArray[i], itemsSection);
             }
 
         });
@@ -66,7 +57,7 @@ function main(url,offsetNum) {
 offsetNum = 0
 main('/api/rating/?limit=12&offset=0',offsetNum)
 
-showMoreButton = document.querySelector(".showMore")
+showMoreButton = document.querySelector(".button__more")
 showMoreButton.addEventListener("click",()=>{
     offsetNum += 12
     main(`/api/rating/?limit=12&offset=${offsetNum}`,offsetNum)

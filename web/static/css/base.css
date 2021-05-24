@@ -1,80 +1,299 @@
-/* body *, body {
-  border: 1px solid red;
-} */
-
-.page{
-  margin:0px;
-  font-family:Noto;
-} 
-
-   
-  nav{
-    display:flex;
-    justify-content:space-around;
-    background-color:	white;
-    align-items: center;
-     position:fixed;
-     top: 0;
-     left: 0;
-     width: 100%;
-    }
-  nav .logo{
-    margin-left:30px;
-    width:80%;
-    }
-nav .logo img {
-  position: relative;
-  width: 60%;
-}
-  nav .options{
-    margin-right:500px;
-    list-style:none;
-    display:flex;
-    font-size:30px;
-    width:900px;
-    justify-content:space-around;
-  }
-
-.intro {
-      width:100%;
-      text-align:center;
-
-  }
-
-  .itemsWrap {
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    padding: 5vh ;
-    width: 75%;
-    justify-content: center;
-}
-div img {
-  width:100%;
+body, body * {
+  margin: 0;
+  padding: 0;
+  /* border: 1px solid gold; */
+  font-family: Noto;
 }
 
-
-.item {
-  width: 300px;
-  height: 300px;
-  margin: 50px;
+body {
+  background: #1E1E1E;
+  text-align: center;
 }
 
- 
-.productColors {
+nav {
+  width: 100%;
+  height: 70px;
   display: flex;
-  justify-content: left;
-}
-.color{
- width:  20px;
-  height: 20px;  
-  margin: 5px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
 }
 
-.productInfo div{
-  margin:10px;
-  margin-top:5px;
-  margin-left:5px;
-  font-size:20px;
+.logo {
+  display: flex;
+  align-items: center;
+  margin: 0 10px;
+  width: 100px;
+  color: white;
+  text-decoration: none;
+  letter-spacing: 10px;
+}
 
+.logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+.nav__input {
+  display: flex;
+  justify-content: space-between;
+  border: .5px solid #d6d6d6;
+  border-radius: 4px;
+  padding: 5px 10px;
+}
+
+.nav__input input {
+  border: none;
+  color: white;
+  background: transparent;
+}
+
+.nav__input img {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+}
+
+.nav__input input:focus {
+  outline: none;
+}
+
+.nav__input input::placeholder {
+  color: #d6d6d6;
+  opacity: .5;
+}
+
+.nav__options {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 10px;
+}
+
+.nav__options button {
+  border: none;
+  background: white;
+  border-radius: 3px;
+  padding: 8px 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 4px;
+  transition:  all 0.4s ease-in-out;
+  cursor: pointer;
+}
+
+.nav__options button:hover {
+  background: white;
+  color: black;
+}
+
+.banner {
+  width: 100vw;
+  height: 40vh;
+}
+
+.banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+.home__content {
+  width: 85%;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3vh;
+  padding: 10vh;
+}
+
+.home__content .movie {
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+  display: block;
+  width: 240px;
+  height: 456px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+.home__content .movie:hover {
+  transform: scale(1.08);
+  filter: brightness(1.02);
+}
+
+.home__content .movie img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* object-position: 50% 50%; */
+}
+
+.home__content .movie__info {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  padding: 15px 0;
+  background: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.9));
+  text-align: center;
+  color: white;
+  z-index: 3;
+}
+
+.home__content .rank {
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.home__content .rank > div {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  gap: 5px;
+}
+
+.home__content .rank img {
+  width: 28px;
+  height: 28px;
+  border-radius: 3px;
+}
+
+.button__more {
+  margin: 5vh auto;
+  border: none;
+  background: #eee;
+  border-radius: 3px;
+  padding: 10px 15px;
+  font-weight: 700;
+  border-radius: 4px;
+  transition:  all 0.4s ease-in-out;
+  cursor: pointer;
+}
+
+.button__more:hover {
+  background: gold;
+}
+
+.movie__section {
+  width: 100vwv;
+  height: auto;
+  padding: 5vh;
+  box-sizing: border-box;
+}
+
+.movie__section img {
+  width: 280px;
+  height: 406px;
+  object-fit: cover;
+  object-position: 50% 50%;
+  box-shadow: 0 0 15px #414141;
+}
+
+.movie__information {
+  margin: 0 auto;
+  max-width: 768px;
+  display: flex;
+  padding: 5vh;
+  gap: 8%;
+  text-align: left;
+}
+
+.movie__detail {
+  width: 100%;
+  color: white;
+}
+
+.movie__detail h2 {
+  font-size: 36px;
+}
+
+.movie__detail ul {
+  padding: 20px;
+}
+
+.movie__detail li {
+  font-size: 18px;
+  margin-bottom: 10px;
+  list-style-type: circle;
+}
+
+.movie__intro {
+  text-align: left;
+  margin: 3vh auto;
+  max-width: 768px;
+  color: white;
+  font-size: 15px;
+  line-height: 26px;
+}
+
+.movie__ranking {
+  padding: 0 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.movie__ranking > div {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  gap: 5px;
+}
+
+.movie__ranking img {
+  width: 28px;
+  height: 28px;
+  border-radius: 3px;
+  margin-right: 10px;
+}
+
+.rating__wrap {
+  position: relative;
+  width: 100%;
+  height: 60px;
+}
+
+.rating {
+  position: absolute;
+}
+
+/* :not(:checked) is a filter, so that browsers that don’t support :checked don’t 
+  follow these rules. Every browser that supports :checked also supports :not(), so
+  it doesn’t make the test unnecessarily selective */
+.rating:not(:checked) > input {
+    position: absolute;
+    clip:rect(0,0,0,0);
+}
+
+.rating:not(:checked) > label {
+    float: right;
+    width: 1em;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 24px;
+    color: #ddd;
+}
+.rating:not(:checked) > label:before {
+    content: '★';
+}
+.rating > input:checked ~ label {
+    color: gold;
+}
+.rating:not(:checked) > label:hover, .rating:not(:checked) > label:hover ~ label {
+    color: gold; 
+}
+.rating > input:checked + label:hover,
+.rating > input:checked + label:hover ~ label,
+.rating > input:checked ~ label:hover,
+.rating > input:checked ~ label:hover ~ label,
+.rating > label:hover ~ input:checked ~ label {
+    color: gold;
 }

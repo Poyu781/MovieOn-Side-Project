@@ -37,9 +37,16 @@ def main_page(request):
 
 # @login_required
 def movie_single_page(request,imdb_id):
+    current_user = request.user
     data = DoubanDetail.objects.filter(imdb_id= imdb_id)
-    
-    return render(request,"movie_page.html",list(data.values())[0])
+    content = list(data.values())[0]
+    try :
+        review = InternalUserRating.objects.get(user_id = current_user.id, movie_id= imdb_id)
+        content['rating']=review.rating
+    except:
+        pass
+    print(content)
+    return render(request,"movie_page.html",content)
 
 def get_movies_rating(request):
     data = DoubanDetail.objects.get(douban_id= "10001432")
@@ -107,13 +114,14 @@ def score_movie(request):
     get_dict = json.load(request)
     rating = get_dict['rating']
     imdb_id = get_dict['imdb_id']
-    review_record = InternalUserRating.objects.filter(user_id = current_user.id, movie_id= imdb_id)
-    if review_record.exists():
+    # review_record = InternalUserRating.objects.filter(user_id = current_user.id, movie_id= imdb_id)
+    # if review_record.exists():
+    try:
         review = InternalUserRating.objects.get(user_id = current_user.id, movie_id= imdb_id)
         print(review)
         review.rating = rating
         review.update_date = datetime.now()
-    else:
+    except:
         review = InternalUserRating(movie_id = imdb_id, update_date = datetime.now(), rating = rating, user_id = current_user.id)
         print(1)
     review.save()

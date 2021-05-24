@@ -10,28 +10,24 @@
 </head>
 <body class="page">
     <nav>
-        <div class="logo">
-            <a href="/">
-            <img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/ScreenShot+2021-05-17+%E4%B8%8B%E5%8D%884.19.58.png" id="logo" />
-            </a>
+        <a class="logo" href="/">
+            <img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/ScreenShot+2021-05-17+%E4%B8%8B%E5%8D%884.19.58.png">
+        </a>
+        <div class="nav__options">
+            <div class="nav__input">
+        <input type="text" placeholder="片名、導演或演員"/>
+        <img src="https://i.imgur.com/RspHfzJ.png"/>
         </div>
-    
-        <ul class="options">
-            <li id="women">熱門</li>
-            <li id="men">驚悚</li>
-            <li id="acc">動作</li>
-        </ul>
-        <input type="text" />
-        <input type="submit" value="search" />
         {% if user.is_authenticated %}
-        <div>Welcome {{ user.username }}</div>
-        <button type="button" class="btn btn-primary logOut" onclick="location.href='/logout'">Log Out</button>
+        <button>{{ user.username }}</button>
+        <button onclick="location.href='/logout'">Log Out</button>
         {% else %}
-        <button type="button" class="btn btn-primary logIn" onclick="location.href='/signin'">Log In</button>
-        <button type="button" class="btn btn-primary signIn" onclick="location.href='/signup'">Register</button>
+        <button onclick="location.href='/signin'">Log In</button>
+        <button onclick="location.href='/signup'">Register</button>
         {% endif%}
-        
+    </div>
     </nav>
+    
     {% block content%}{% endblock %}
 </body>
 {% block js%}{% endblock %}
