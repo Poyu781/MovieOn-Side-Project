@@ -9,15 +9,9 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+from config import rds_host,rds_password,rds_user,secret_key
 from pathlib import Path
 import os
-import dotenv
-dotenv.load_dotenv()
-rds_host = os.getenv("rds_host")
-rds_user = os.getenv("rds_user")
-rds_password = os.getenv("rds_password")
-secret_key = os.getenv("SECRET_KEY")
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
