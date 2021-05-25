@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+}
+{% block content%}
+<h1 style="color:#D68B00;border:2px #ccc solid;padding:10px;">Hello {{ user.username }}</h1>
+<h3 style="color:white">
+  你的眼光跟爛番茄的影評們最相似！
+</h3>
+<div style="width: 100px;height: 100px;"><img src="https://pic3.zhimg.com/80/v2-81c9e615e4be71a4802166b324f2082e_1440w.jpg">
+</div>
+{% endblock %}
+
+{% block js%}<script src="../static/js/movie_page.js" type="text/javascript"></script>{% endblock %}
+
+

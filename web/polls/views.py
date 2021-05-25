@@ -34,6 +34,9 @@ def main_page(request):
 
     return render(request,"home_page.html")
 
+@login_required
+def member_page(request):
+    return render(request,"member_page.html")
 
 # @login_required
 def movie_single_page(request,imdb_id):

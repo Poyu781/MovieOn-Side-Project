@@ -14,7 +14,8 @@ urlpatterns = [
     path("signup",views.sign_up),
     path("signin",views.sign_in),
     path("rating",views.score_movie),
-    path("logout",views.logout)
+    path("logout",views.logout),
+    path("memberpage",views.member_page),
     # path("api/1.0/movies", views.get_movies_rating, name="movies"),
     # path("api/1.0/douban_detail",views.DoubanDetailView.as_view())
 ]

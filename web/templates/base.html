@@ -19,7 +19,7 @@
         <img src="https://i.imgur.com/RspHfzJ.png"/>
         </div>
         {% if user.is_authenticated %}
-        <button>{{ user.username }}</button>
+        <button onclick="location.href='/memberpage'">{{ user.username }}</button>
         <button onclick="location.href='/logout'">Log Out</button>
         {% else %}
         <button onclick="location.href='/signin'">Log In</button>
