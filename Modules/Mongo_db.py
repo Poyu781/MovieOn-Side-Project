@@ -16,7 +16,7 @@ class Mongo():
         return db
 
 movie_db = Mongo(host="127.0.0.1:27017",username='poyu2',password='root',database="movie")
-movie_db = movie_db.db_init()
+movie_mongo_db = movie_db.db_init()
 
 
 
