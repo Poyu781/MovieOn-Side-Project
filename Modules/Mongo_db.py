@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-from config import mongo_password,mongo_server,mongo_user
+# from config import mongo_password,mongo_server,mongo_user
 class Mongo():
     def __init__(self,host,username,password,database,authMechanism='SCRAM-SHA-1'):
         self.connect_kwargs = {

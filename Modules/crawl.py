@@ -20,21 +20,23 @@ def error_handle(fun):
 
 @error_handle
 @tenacity.retry(reraise=True,stop=tenacity.stop_after_attempt(5))
-def fetch_data(fixed_url, search_id):
+def fetch_data(fixed_url, search_id,bs4_render=True):
     ip = random.choice(ip_list)
     crawl_url = fixed_url + search_id
-    print(crawl_url)
     proxies = {'http': ip, 'https': ip}
     headers = {'user-agent': ua.random, 'accept-language': 'zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7,zh-CN;q=0.6,ja;q=0.5',}
     req = requests.get(crawl_url,headers=headers,proxies=proxies)
-    soup = BeautifulSoup(req.content, 'html.parser')
-    return soup
+    if bs4_render == True:
+        soup = BeautifulSoup(req.content, 'html.parser')
+        return soup
+    else:
+        return req.text
 
 
 
 def start_thread(threads,fun,*args):
     threads.append(threading.Thread(target = fun, args = (args)))
-    time.sleep(0.01)
+    time.sleep(0.1)
     threads[-1].start()
 
 # def clean_data(fixed_url, search_id,error_file):
