@@ -1,8 +1,7 @@
-const itemsSection = document.querySelector(".itemsSection");
-const ratingSubmit = document.querySelector(".ratingSubmit")
+// const ratingSubmit = document.querySelector(".ratingSubmit")
 const ratingSection = document.querySelector(".rating")
-const ratingNum = document.querySelector(".ratingNum")
-const movieDetail = document.querySelector(".movieSection")
+// const numberOfRating = document.querySelector(" numberOfRating")
+const movieDetail = document.querySelector(".movie__information")
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -21,12 +20,16 @@ function getCookie(name) {
 const csrftoken = getCookie('csrftoken');
 const path = document.location['pathname'];
 
-console.log(csrftoken)
+let userRating = document.querySelector("#rating").innerHTML;
+if (userRating != ""){
+    document.querySelector(`#star${userRating}`).checked=true
+}
+
 ratingSection.addEventListener("change",()=>{
     
     let ratingValue = document.querySelector('input[name="rating"]:checked').value
     let data = {"rating":ratingValue, "imdb_id":movieDetail.id}
-    ratingNum.innerHTML = `Choose Rating :${ratingValue}`
+    // numberOfRating.innerHTML = `Choose Rating :${ratingValue}`
     console.log(data)
     fetch("/rating",{
         method: "POST",
@@ -52,10 +55,10 @@ ratingSection.addEventListener("change",()=>{
             console.log(json)
         })
 })
-ratingSubmit.addEventListener("click",()=>{
-    let ratingValue = document.querySelector('input[name="rating"]:checked').value
-    console.log(ratingValue)
-})
+// ratingSubmit.addEventListener("click",()=>{
+//     let ratingValue = document.querySelector('input[name="rating"]:checked').value
+//     console.log(ratingValue)
+// })
 
 
 
