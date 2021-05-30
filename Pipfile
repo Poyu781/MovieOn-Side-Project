@@ -18,6 +18,7 @@ djangorestframework = "*"
 django-filter = "*"
 social-auth-app-django = "*"
 tenacity = "*"
+pandas = "*"
 
 [dev-packages]
 
