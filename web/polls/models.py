@@ -175,7 +175,10 @@ class WebsIdRelation(models.Model):
 
 
 
-
+class MovieDetail(models.Model):
+    internal = models.IntegerField()
+    imdb_rating = models.DecimalField(max_digits=2, decimal_places=1)
+    imdb_rating = models.CharField(max_length=20)
 # class CastTable(models.Model):
 #     actor_name = models.CharField(max_length=64)
 #     imdb_id = models.CharField(max_length=16)

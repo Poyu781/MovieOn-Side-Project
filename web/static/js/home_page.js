@@ -1,13 +1,14 @@
 const itemsSection = document.querySelector(".home__content");
+const searchButton = document.querySelector(".button__search")
 function renderMovies(movieObject, nodeDiv) {
     let node = document.createElement("div");
     node.classList.add("movie");
-    node.setAttribute("id", movieObject.imdb.imdb_id)
+    node.setAttribute("id", movieObject.internal)
     
-    let img = movieObject.imdb.image;
-    let title = movieObject.imdb.movie_title;
+    let img = movieObject.img;
+    let title = movieObject.main_taiwan_name;
     let imdb_rating = movieObject.imdb_rating
-    let path = movieObject.imdb.imdb_id
+    let path = movieObject.internal
     let rotten_audience_rating = movieObject.audience_rating
     let rotten_tomator_rating = movieObject.tomator_rating
     let douban_rating = movieObject.douban_rating
@@ -37,14 +38,14 @@ function renderMovies(movieObject, nodeDiv) {
 }
 
 
-function main(url,offsetNum) {
+function main(url) {
     fetch(url)
         .then((response) => {
             return response.json();
         })
         .then((datalist) => {
 
-            let dataArray = datalist["results"]; //I will get a list of dict
+            let dataArray = datalist; //I will get a list of dict
             console.log(dataArray)
             let num = dataArray.length;
 // Math.ceil(offsetNum/4);
@@ -54,11 +55,36 @@ function main(url,offsetNum) {
 
         });
 }
-offsetNum = 0
-main('/api/rating/?limit=12&offset=0',offsetNum)
-
+let offsetNum = 0
+main('/api/movie')
+let feature_id = false
 showMoreButton = document.querySelector(".button__more")
 showMoreButton.addEventListener("click",()=>{
-    offsetNum += 12
-    main(`/api/rating/?limit=12&offset=${offsetNum}`,offsetNum)
+    offsetNum += 20
+    console.log(feature_id)
+    if (feature_id){
+        main(`/api/movie/?start=${offsetNum}&feature=${feature_id}`)
+    }
+    else{
+        main(`/api/movie/?start=${offsetNum}`)
+    }
+})
+
+for (let i = 1; i < 4; i++) {
+    let elem = document.querySelector(`.feature${i}`);
+    elem.addEventListener('click', function() {
+        feature_id = elem.id
+        offsetNum = 0
+        itemsSection.innerHTML = ""
+        
+        main(`/api/movie/?start=${offsetNum}&feature=${feature_id}`)
+    });
+}
+
+
+searchButton.addEventListener("click",()=>{
+    let search_value = document.querySelector("input[type='text']").value
+    itemsSection.innerHTML = ""
+    showMoreButton.style.display = "none";
+    main(`/api/search?query=${search_value}`)
 })

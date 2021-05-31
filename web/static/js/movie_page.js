@@ -1,7 +1,97 @@
 // const ratingSubmit = document.querySelector(".ratingSubmit")
-const ratingSection = document.querySelector(".rating")
+
 // const numberOfRating = document.querySelector(" numberOfRating")
 const movieDetail = document.querySelector(".movie__information")
+const movieSection= document.querySelector(".movie__section")
+
+let str = window.location.pathname;
+let internalId = str.match(/[0-9].*/)[0];
+console.log(internalId);
+
+
+function renderMovies(movieObject, nodeDiv) {
+    let node = document.createElement("div");
+    node.classList.add("movie__information");
+    node.setAttribute("id", movieObject.internal_id)
+    
+    let img = movieObject.img;
+    let cnTitle = movieObject.main_taiwan_name;
+    let engTitle = movieObject.main_original_name;
+    let theatherDate = movieObject.date_in_theater
+    let runTime = movieObject.runtime_minutes
+    let imdbId = movieObject.imdb_id
+    let doubanId = movieObject.douban_id
+    let tomatoId = movieObject.rotten_tomato_id
+    let imdbRating = movieObject.rating
+    let imdbCount = movieObject.rating_count
+    let rottenAudienceRating = movieObject.audience_rating
+    let rottenAudienceCount = movieObject.audience_rating_amount
+    let rottenTomatorRating = movieObject.tomator_rating
+    let rottenTomatorCount = movieObject.tomator_rating_amount
+    let doubanRating = movieObject.avg_rating
+    let doubanRatingCount = movieObject.total_rating_amount
+    let director_list = movieObject.director_list
+    let actor_list = movieObject.actor_list
+    let feature_list = movieObject.feature_list
+    let htmlText = `
+    <img src=${img}  />
+    <div class="movie__detail">
+      <h2>${cnTitle}</h2>
+      <h2>${engTitle}</h2>
+      <ul>
+        <li>導演：${director_list}</li>
+        <li>演員：${actor_list}</li>
+        <li>片長：${runTime} 分鐘</li>
+        <li>上映日期：${theatherDate}</li>
+        <li>類型：${feature_list}</li>
+      </ul>
+      <div class="movie__ranking">
+      <div>
+          <a href="https://www.imdb.com/title/${imdbId}">
+        <img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/imdb.png"/>
+          </a>
+        <p>${imdbRating}（共 ${imdbCount} 筆評分）</p>
+      </div>
+      <div>
+      <a href="https://movie.douban.com/subject/${doubanId}">
+        <img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/douban.jpg"/>
+      </a>
+        <p>${doubanRating}（共 ${doubanRatingCount} 筆評分）</p>
+      </div>
+      <div>
+        <a href="https://www.rottentomatoes.com/m/${tomatoId}">
+        <img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/tomato.png"/>
+        </a>
+        <p>  觀眾評分：${rottenAudienceRating}（共 ${rottenAudienceCount} 筆評分）
+             影評評分：${rottenTomatorRating}（共 ${rottenTomatorCount} 筆評分）</p>
+      </div>
+    </div>
+    <div class="movie__intro">
+    ${movieObject.chinese_description}
+  </div>
+    </div>
+ 
+
+`;
+    node.innerHTML = htmlText;
+    nodeDiv.appendChild(node);
+}
+
+
+function main(url) {
+    fetch(url)
+        .then((response) => {
+            return response.json();
+        })
+        .then((datalist) => {
+            let dataArray = datalist; //I will get a list of dict
+            console.log(dataArray[0])
+            renderMovies(dataArray[0], movieSection);
+
+        });
+    }
+main(`/api/detail/${internalId}`)
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -21,14 +111,15 @@ const csrftoken = getCookie('csrftoken');
 const path = document.location['pathname'];
 
 let userRating = document.querySelector("#rating").innerHTML;
+
 if (userRating != ""){
+    console.log(userRating)
     document.querySelector(`#star${userRating}`).checked=true
 }
-
-ratingSection.addEventListener("change",()=>{
-    
+const ratingSection = document.querySelector(".rating")
+ratingSection.addEventListener("change",(e)=>{
     let ratingValue = document.querySelector('input[name="rating"]:checked').value
-    let data = {"rating":ratingValue, "imdb_id":movieDetail.id}
+    let data = {"rating":ratingValue, "imdb_id":internalId}
     // numberOfRating.innerHTML = `Choose Rating :${ratingValue}`
     console.log(data)
     fetch("/rating",{
@@ -54,23 +145,4 @@ ratingSection.addEventListener("change",()=>{
         .then((json)=>{
             console.log(json)
         })
-})
-// ratingSubmit.addEventListener("click",()=>{
-//     let ratingValue = document.querySelector('input[name="rating"]:checked').value
-//     console.log(ratingValue)
-// })
-
-
-
-
-
-
-
-// offsetNum = 0
-// main('/api/rating/?limit=12&offset=0',offsetNum)
-
-// showMoreButton = document.querySelector(".showMore")
-// showMoreButton.addEventListener("click",()=>{
-//     offsetNum += 12
-//     main(`/api/rating/?limit=12&offset=${offsetNum}`,offsetNum)
-// })
+    })

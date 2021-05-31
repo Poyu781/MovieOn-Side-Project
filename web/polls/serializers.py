@@ -53,14 +53,10 @@ class FlattenMixin(object):
         return rep
 class LastestInfoSerializer(serializers.ModelSerializer):
     internal = MovieBasicSerializer()
-    # chinese_name = serializers.SerializerMethodField("get_cn_name_from_basic")
-    # english_name = serializers.SerializerMethodField("get_eg_name_from_basic")
-    # movie = MovieBasicSerializer(many=True, read_only=True)
     class Meta:
         model = LatestRating
-        # fields = ("internal_id",'audience_rating',"imdb_rating", "tomator_rating","douban_rating","chinese_name","english_name")
         fields = "__all__"
-        # flatten = [ ('internal', MovieBasicSerializer) ]
+
 
     def to_representation(self, obj):
         """Move fields from profile to user representation."""
@@ -70,22 +66,7 @@ class LastestInfoSerializer(serializers.ModelSerializer):
             representation[key] = profile_representation[key]
 
         return representation
-    # def setup_eager_loading(cls, queryset):
-    #     """ Perform necessary eager loading of data. """
-    #     queryset = queryset.prefetch_related('movie')
-    #     return queryset
-        # flatten = [ ('internal', MovieBasicSerializer) ]
-    # def get_cn_name_from_basic(self,obj):
-    #     cn_name = obj.internal.main_taiwan_name
-    #     return cn_name
-    # def get_eg_name_from_basic(self,obj):
-    #     cn_name = obj.internal.main_original_name
-    #     return cn_name
 
-
-
-
-    # 
     # tracks = LastestRatingSerializer( read_only=True,source='test')
 class FeaNaSer(serializers.ModelSerializer):  
     class Meta:
