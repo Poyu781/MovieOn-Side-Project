@@ -17,7 +17,7 @@ function renderMovies(movieObject, nodeDiv) {
     let img = movieObject.img;
     let cnTitle = movieObject.main_taiwan_name;
     let engTitle = movieObject.main_original_name;
-    let theatherDate = movieObject.date_in_theater
+    let theaterDate = movieObject.date_in_theater
     let runTime = movieObject.runtime_minutes
     let imdbId = movieObject.imdb_id
     let doubanId = movieObject.douban_id
@@ -42,7 +42,7 @@ function renderMovies(movieObject, nodeDiv) {
         <li>導演：${director_list}</li>
         <li>演員：${actor_list}</li>
         <li>片長：${runTime} 分鐘</li>
-        <li>上映日期：${theatherDate}</li>
+        <li>上映日期：${theaterDate}</li>
         <li>類型：${feature_list}</li>
       </ul>
       <div class="movie__ranking">

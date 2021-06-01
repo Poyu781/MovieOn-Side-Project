@@ -5,8 +5,10 @@ from . import views
 urlpatterns = [
     url(r'^api/movie/$', views.get_home_page_data),
     url(r"^api/detail/(?P<internal_id>\d+)/$", views.show_detail),
-    url(r"^api/test/$", views.test),
+    # url(r"^api/test/$", views.test),
     url(r"^api/search/$", views.search_movie),
+    url(r"^api/member/(?P<user_id>\d+)/movies/$", views.get_member_reviewed_movie),
+    url(r"^api/member/(?P<user_id>\d+)/similarity/$", views.get_member_similarity),
     path('', views.main_page, name='index'),
     path("movie/<internal_id>",views.movie_single_page),
     path("signup",views.sign_up),

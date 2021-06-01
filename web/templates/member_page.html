@@ -2,31 +2,25 @@
 
 }
 {% block content%}
-<h1 style="color:#D68B00;border:2px #ccc solid;padding:10px;">Hello {{ user.username }}</h1>
-<h3 style="color:white">
-  你的口味相似度評比
-</h3>
-<img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/imdb.png"/>
-<div style="color:#D68B00;border:2px">與 Imdb <div>83% 相似<div></div>
-<img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/douban.jpg"/>
-<div style="color:#D68B00;border:2px" >與 豆瓣 <div>83% 相似<div></div>
-<img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/tomato.png"/>
-<div style="color:#D68B00;border:2px" >與 爛番茄影評 <div>83% 相似<div></div>
-<div style="color:#D68B00;border:2px" >與 爛番茄觀眾 <div>數據太少無法顯示<div></div>
+<div class="profile profile__wrapper">
+  <h1 style="color:#D68B00;border:2px #ccc solid;padding:10px;" id={{user.id}} class="user">Hi {{ user.username }}</h1>
 
+  <h3>你的口味相似度</h3>
+  <section class="similarity">
+  </section>
+      
+  <h3>你最近評價過的電影</h3>
+  <section class="movies__block">
 
-<h1>曾經評價過的電影</h1>
-<img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/p2651298629.webp">
-<div>境界3</div>
-<div>評價<div>7</div></div>
-<img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/p2651298629.webp">
-<div>境界3</div>
-<div>評價<div>7</div></div>
-<img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/p2651298629.webp">
-<div>境界3</div>
-<div>評價<div>7</div></div>
+  </section>
+    
+  <h3>你最近瀏覽過的電影</h3>
+  <section class="movies__block">
+  </section>
+
+</div>
 {% endblock %}
 
-{% block js%}<script src="../static/js/movie_page.js" type="text/javascript"></script>{% endblock %}
+{% block js%}<script src="../static/js/member_page.js" type="text/javascript"></script>{% endblock %}
 
 

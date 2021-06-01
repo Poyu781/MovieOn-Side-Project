@@ -1,38 +1,16 @@
-from .models import MovieBasicInfo,LatestRating,WebsIdRelation,FeatureMovieTable,FeatureTable #DoubanDetail,LatestRating,
+from .models import MovieBasicInfo,LatestRating,WebsIdRelation,InternalUserRating
 from rest_framework import serializers
-
-# class DoubanDetailSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = DoubanDetail
-#         fields = '__all__'
-# class LatestRatingSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = LatestRating
-#         fields = '__all__'
-#         depth = 1
 
 
 class Web(serializers.ModelSerializer):
-    # chinese_name = serializers.SerializerMethodField("get_cn_name_from_basic")
-    # english_name = serializers.SerializerMethodField("get_eg_name_from_basic")
     class Meta:
         model = WebsIdRelation
         field = "__all__"
 class MovieBasicSerializer(serializers.ModelSerializer):
-    # movie = Web(many=True, read_only=True)
-    # id_relate = serializers.HyperlinkedRelatedField(
-    #     many=False,
-    #     read_only=True,
-    #     view_name='id_relate-detail'
-    # )
 
     class Meta:
         model = MovieBasicInfo
         fields = "__all__"
-
-    def get_rating_from_last(self,movie_basic_info):
-        rating = movie_basic_info.internal.imdb_rating
-        return rating
 class FlattenMixin(object):
     """Flatens the specified related objects in this representation"""
     def to_representation(self, obj):
@@ -68,20 +46,17 @@ class LastestInfoSerializer(serializers.ModelSerializer):
         return representation
 
     # tracks = LastestRatingSerializer( read_only=True,source='test')
-class FeaNaSer(serializers.ModelSerializer):  
+
+class InternalUserRatingSerializer(serializers.ModelSerializer):  
+    internal = MovieBasicSerializer()
     class Meta:
-        model = FeatureTable
-        fields = "__all__"
-class FeaSer(serializers.ModelSerializer):  
-    feature = FeaNaSer()
-    class Meta:
-        model = FeatureMovieTable
+        model = InternalUserRating
         fields = "__all__"
 
     def to_representation(self, obj):
         """Move fields from profile to user representation."""
         representation = super().to_representation(obj)
-        profile_representation = representation.pop('feature')
+        profile_representation = representation.pop('internal')
         for key in profile_representation:
             representation[key] = profile_representation[key]
 

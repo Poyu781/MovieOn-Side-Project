@@ -92,7 +92,7 @@ class ImdbRating(models.Model):
 
 
 class InternalUserRating(models.Model):
-    internal = models.ForeignKey('WebsIdRelation', models.DO_NOTHING)
+    internal = models.ForeignKey('MovieBasicInfo', models.DO_NOTHING,to_field="internal")
     rating = models.IntegerField(blank=True, null=True)
     review_text = models.TextField(blank=True, null=True)
     update_date = models.DateTimeField(blank=True, null=True)
@@ -111,7 +111,7 @@ class LatestRating(models.Model):
     douban_rating = models.DecimalField(max_digits=2, decimal_places=1)
     internal_rating = models.DecimalField(max_digits=2, decimal_places=1)
     total_avg_rating = models.DecimalField(max_digits=4, decimal_places=2)
-
+    rating_total_amount = models.IntegerField()
     class Meta:
         managed = True
         db_table = 'latest_rating'

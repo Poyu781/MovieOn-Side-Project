@@ -89,9 +89,11 @@ nav {
   color: black;
 }
 
+/* home */
+
 .banner {
   width: 100vw;
-  height: 40vh;
+  height: 70vh;
 }
 
 .banner img {
@@ -111,31 +113,32 @@ nav {
   padding: 10vh;
 }
 
-.home__content .movie {
+.home__content .movie, .profile .movie-ranking, .profile .movie-card {
   border-radius: 5px;
   overflow: hidden;
   position: relative;
   display: block;
-  width: 240px;
-  height: 456px;
+  width: 200px;
+  height: 290px;
   display: flex;
   flex-direction: column;
   transition: all 0.3s ease;
 }
 
-.home__content .movie:hover {
-  transform: scale(1.08);
+.home__content .movie:hover, .profile .movie-ranking:hover, .profile .movie-card:hover {
+  transform: scale(1.04);
   filter: brightness(1.02);
 }
 
-.home__content .movie img {
+
+.home__content .movie img, .profile .movie-ranking img, .profile .movie-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* object-position: 50% 50%; */
+  object-position: 50% 50%;
 }
 
-.home__content .movie__info {
+.home__content .movie__info, .profile .movie__info {
   position: absolute;
   width: 100%;
   bottom: 0;
@@ -182,11 +185,15 @@ nav {
   background: gold;
 }
 
-.movie__section {
-  width: 100vwv;
+
+/* movie page */
+
+.movie__section, .profile__wrapper {
+  width: 100%;
   height: auto;
   padding: 5vh;
   box-sizing: border-box;
+  max-width: 1280px;
 }
 
 .movie__section img {
@@ -264,9 +271,6 @@ nav {
   position: absolute;
 }
 
-/* :not(:checked) is a filter, so that browsers that don’t support :checked don’t 
-  follow these rules. Every browser that supports :checked also supports :not(), so
-  it doesn’t make the test unnecessarily selective */
 .rating:not(:checked) > input {
     position: absolute;
     clip:rect(0,0,0,0);
@@ -296,4 +300,123 @@ nav {
 .rating > input:checked ~ label:hover ~ label,
 .rating > label:hover ~ input:checked ~ label {
     color: gold;
+}
+
+
+/* profile */
+
+.profile > section {
+  margin-bottom: 10vh;
+}
+
+.profile h3 {
+    display: inline-block;
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    border-left: solid 15px gold;
+    margin: 36px;
+    padding-left: 17px;
+    white-space: nowrap;
+}
+
+.profile .movies__block {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.profile .movies__block .movie-ranking {
+  width: 200px;
+  height: 300px;
+}
+
+.profile .movie__info {
+  padding: 6px 2px;
+}
+
+.profile .movie__info h4 {
+  font-size: 18px;
+}
+
+.profile .movie__info h5 {
+  font-size: 16px;
+}
+
+.profile .movie__info span {
+  margin-left: 5px;
+}
+.profile .rating__wrap  {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 45px;
+}
+
+.profile .rating > label {
+  font-size: 16px;
+}
+
+.profile .movie-card {
+  width: 180px;
+  height: 180px;
+}
+
+.similarity {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.profile .similarity__block {
+  margin: 10px auto;
+  width: 100%;
+  max-width: 768px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  color: white;
+}
+
+.profile .similarity__block p {
+  height: 50px;
+}
+
+.profile .similarity__block span {
+  margin: 0 8px;
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  border: 5px solid #6a6a6a;
+  font-size: 28px;
+  position: relative;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.progress span {
+  font-size: 18px;
+}
+
+.progress::before {
+  content: "";
+  position: absolute;
+  width: 100px;
+  height: var(--percent);
+  bottom: 0;
+  background: var(--background);
+}
+
+.progress::after {
+  content: attr(data-percent);
+  position: absolute;
+  width: 100px;
+  color: white;
 }

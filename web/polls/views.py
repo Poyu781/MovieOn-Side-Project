@@ -5,8 +5,8 @@ from django.http import HttpResponse
 from django.db import transaction
 from rest_framework import viewsets
 from rest_framework import generics
-from .serializers import MovieBasicSerializer,LastestInfoSerializer,FeaSer
-from .models import MovieBasicInfo,LatestRating,FeatureMovieTable,FeatureTable,InternalUserRating,MovieOtherNames
+from .serializers import MovieBasicSerializer,LastestInfoSerializer,InternalUserRatingSerializer
+from .models import MovieBasicInfo,LatestRating,FeatureMovieTable,FeatureTable,InternalUserRating,MovieOtherNames,InternalUserRating
 # from .serializers import DoubanDetailSerializer ,LatestRatingSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
@@ -22,7 +22,8 @@ from pandas.io.json import json_normalize
 from rest_framework.decorators import api_view
 from .models import MovieDetail
 from django.db import connection
-
+import time
+from statistics import mean, pstdev
 def dictfetchall(cursor):
     "Return all rows from a cursor as a dict"
     columns = [col[0] for col in cursor.description]
@@ -31,16 +32,16 @@ def dictfetchall(cursor):
         for row in cursor.fetchall()
     ]
 
-@api_view(['GET'])
-def test(request,format=None,):
-    cursor= connection.cursor()
-    cursor.execute('')
-    result = dictfetchall(cursor)
-    # print(type(result))
-    # # r = {"test":12}
-    # # result[0].update(r)
-    print(result)
-    return Response(result)
+# @api_view(['GET'])
+# def test(request,format=None):
+    # cursor= connection.cursor()
+    # cursor.execute('')
+    # result = dictfetchall(cursor)
+    # # print(type(result))
+    # # # r = {"test":12}
+    # # # result[0].update(r)
+    # print(result)
+    # return Response(result)
 @api_view(['GET'])
 def show_detail(request,internal_id,format=None,):
     print(internal_id)
@@ -48,13 +49,7 @@ def show_detail(request,internal_id,format=None,):
     cursor.execute(f"CALL `get_movie_detail_procedure`({int(internal_id)})")
     result = dictfetchall(cursor)
     cursor.execute(f"CALL `get_director_actor_feature`({int(internal_id)})")
-    # x = dictfetchall(cursor)
-    # print(x)
     result[0].update(dictfetchall(cursor)[0])
-    # print(type(result))
-    # # r = {"test":12}
-    # # result[0].update(r)
-    # print(result)
     return Response(result)
 
 @api_view(['GET'])
@@ -62,7 +57,7 @@ def get_home_page_data(request, format=None):
     if request.method == 'GET':
         feature = request.GET.get('feature')
         start_num = int(request.GET.get('start',0))
-        movie_info = LatestRating.objects.select_related("internal").order_by("internal__start_year").reverse()
+        movie_info = LatestRating.objects.select_related("internal").order_by("rating_total_amount").reverse()
         if feature:
             id_result = FeatureMovieTable.objects.values("internal_id").filter(feature_id=feature)
             print(id_result)
@@ -92,6 +87,88 @@ def search_movie(request, format=None):
         # print(type(serializer.data))
         # print(serializer)
         return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_member_reviewed_movie(request,user_id, format=None):
+    if request.method == 'GET':
+        current_user_id = user_id
+        movie_info = InternalUserRating.objects.select_related("internal")
+        result = movie_info.filter(user_id =current_user_id).order_by("update_date").reverse()
+        serializer = InternalUserRatingSerializer(result, many=True)
+        # print(type(serializer.data))
+        # print(serializer)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+def get_member_similarity(request,user_id, format=None):
+    if request.method == 'GET':
+        current_user_id = user_id
+        r = time.time()
+        movie_info = InternalUserRating.objects.select_related("internal")
+
+        result = movie_info.filter(user_id =current_user_id).order_by("internal_id")
+        internal_id = []
+        internal_rating = []
+        
+        for i in result:
+            internal_id.append(i.internal.internal_id)
+            internal_rating.append(i.rating)
+        internal_stdev = pstdev(internal_rating)
+        internal_mean = mean(internal_rating)
+
+        lastest_rating = LatestRating.objects.filter(internal_id__in=internal_id)
+        imdb_rating  = []
+        douban_rating = []
+        audience_rating = []
+        
+        for i in lastest_rating:
+            print(i.internal_id)
+            imdb_rating.append(float(i.imdb_rating))
+            douban_rating.append(float(i.douban_rating))
+            audience_rating.append(float(i.audience_rating)/10)
+        print(internal_id)
+        def nor(_list,mean_value,standard_dv):
+            nor_result =[]
+            for i in _list:
+                new_value = round((i - mean_value) / standard_dv,3)
+                nor_result.append(new_value)
+            return nor_result
+        douban_stdev = 0.96684
+        douban_mean = 6.8653
+        imdb_stdev = 0.8288
+        imdb_mean = 6.4562
+        audience_stdev = 1.8659
+        audience_mean = 5.9953
+        douban_nor = nor(douban_rating,douban_mean,douban_stdev)
+        imdb_nor = nor(imdb_rating,imdb_mean,imdb_stdev)
+        audience_nor = nor (audience_rating,audience_mean,audience_stdev)
+        internal_nor = nor(internal_rating,internal_mean,internal_stdev)
+        def cosine_similarity(vec_a,vec_b):
+            dot = sum(a*b for a, b in zip(vec_a, vec_b))
+            norm_a = sum(a*a for a in vec_a) ** 0.5
+            norm_b = sum(b*b for b in vec_b) ** 0.5
+            cos_sim = dot / (norm_a*norm_b)
+            return cos_sim
+        douban_internal = cosine_similarity(douban_nor,internal_nor)
+        imdb_internal = cosine_similarity(imdb_nor,internal_nor)
+        audience_internal = cosine_similarity(audience_nor,internal_nor)
+        print(douban_nor,imdb_nor,internal_nor,audience_nor)
+        # rate = result.values("internal__internal")
+        print("time",time.time()-r)
+        # print(id_result)
+        # print(count)
+        response_json = {}
+        response_json["imdb"] = imdb_internal
+        response_json["douban"] = douban_internal
+        response_json["tomato"] = audience_internal
+        # print(type(serializer.data))
+        # print(serializer)
+        return Response([response_json])    
+
+
+
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 
@@ -183,18 +260,23 @@ def score_movie(request):
     get_dict = json.load(request)
     rating = get_dict['rating']
     imdb_id = get_dict['imdb_id']
-    # review_record = InternalUserRating.objects.filter(user_id = current_user.id, movie_id= imdb_id)
-    # if review_record.exists():
-    try:
+        # review_record = InternalUserRating.objects.filter(user_id = current_user.id, movie_id= imdb_id)
+        # if review_record.exists():
+    if request.method == "POST":
+        try:
+            review = InternalUserRating.objects.get(user_id = current_user.id, internal_id= imdb_id)
+            review.rating = rating
+            review.update_date = datetime.now()
+        except:
+            review = InternalUserRating(internal_id = imdb_id, update_date = datetime.now(), rating = rating, user_id = current_user.id)
+        review.save()
+    elif request.method == "DELETE":
         review = InternalUserRating.objects.get(user_id = current_user.id, internal_id= imdb_id)
-        print(review)
-        review.rating = rating
-        review.update_date = datetime.now()
-    except:
-        review = InternalUserRating(internal_id = imdb_id, update_date = datetime.now(), rating = rating, user_id = current_user.id)
-        print(1)
-    review.save()
+        review.delete()
+        return JsonResponse({"message":"delete success"})
     # print(review_record)
+    else :
+        return JsonResponse({"message":"error"})
 
     return JsonResponse({"message":"success"})
 
