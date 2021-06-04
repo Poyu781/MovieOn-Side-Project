@@ -1,4 +1,4 @@
-from .models import MovieBasicInfo,LatestRating,WebsIdRelation,InternalUserRating
+from .models import MovieBasicInfo,LatestRating,WebsIdRelation,InternalUserRating, MemberViewedRecord
 from rest_framework import serializers
 
 
@@ -51,6 +51,23 @@ class InternalUserRatingSerializer(serializers.ModelSerializer):
     internal = MovieBasicSerializer()
     class Meta:
         model = InternalUserRating
+        fields = "__all__"
+
+    def to_representation(self, obj):
+        """Move fields from profile to user representation."""
+        representation = super().to_representation(obj)
+        profile_representation = representation.pop('internal')
+        for key in profile_representation:
+            representation[key] = profile_representation[key]
+
+        return representation
+
+
+
+class MemberViewedRecordSerializer(serializers.ModelSerializer):  
+    internal = MovieBasicSerializer()
+    class Meta:
+        model = MemberViewedRecord
         fields = "__all__"
 
     def to_representation(self, obj):

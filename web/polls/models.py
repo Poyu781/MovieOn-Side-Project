@@ -179,6 +179,16 @@ class MovieDetail(models.Model):
     internal = models.IntegerField()
     imdb_rating = models.DecimalField(max_digits=2, decimal_places=1)
     imdb_rating = models.CharField(max_length=20)
+
+
+class MemberViewedRecord(models.Model):
+    internal = models.ForeignKey('MovieBasicInfo', models.DO_NOTHING,to_field="internal")
+    user_id = models.IntegerField()
+    viewed_date = models.DateTimeField()
+
+    class Meta:
+        managed = True
+        db_table = 'member_viewed_record'
 # class CastTable(models.Model):
 #     actor_name = models.CharField(max_length=64)
 #     imdb_id = models.CharField(max_length=16)

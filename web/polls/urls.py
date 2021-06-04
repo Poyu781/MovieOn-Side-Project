@@ -9,6 +9,7 @@ urlpatterns = [
     url(r"^api/search/$", views.search_movie),
     url(r"^api/member/(?P<user_id>\d+)/movies/$", views.get_member_reviewed_movie),
     url(r"^api/member/(?P<user_id>\d+)/similarity/$", views.get_member_similarity),
+    url(r"^api/member/(?P<user_id>\d+)/viewed_movie/$", views.get_member_viewed_movie),
     path('', views.main_page, name='index'),
     path("movie/<internal_id>",views.movie_single_page),
     path("signup",views.sign_up),

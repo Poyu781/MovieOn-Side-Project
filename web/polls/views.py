@@ -5,8 +5,8 @@ from django.http import HttpResponse
 from django.db import transaction
 from rest_framework import viewsets
 from rest_framework import generics
-from .serializers import MovieBasicSerializer,LastestInfoSerializer,InternalUserRatingSerializer
-from .models import MovieBasicInfo,LatestRating,FeatureMovieTable,FeatureTable,InternalUserRating,MovieOtherNames,InternalUserRating
+from .serializers import MovieBasicSerializer,LastestInfoSerializer,InternalUserRatingSerializer,MemberViewedRecordSerializer
+from .models import MovieBasicInfo,LatestRating,FeatureMovieTable,FeatureTable,InternalUserRating,MovieOtherNames,InternalUserRating,MemberViewedRecord
 # from .serializers import DoubanDetailSerializer ,LatestRatingSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
@@ -100,6 +100,17 @@ def get_member_reviewed_movie(request,user_id, format=None):
         # print(serializer)
         return Response(serializer.data)
 
+@api_view(['GET'])
+def get_member_viewed_movie(request,user_id, format=None):
+    if request.method == 'GET':
+        current_user_id = user_id
+        movie_info = MemberViewedRecord.objects.select_related("internal")
+        result = movie_info.filter(user_id =current_user_id).order_by("viewed_date").reverse()
+        serializer = MemberViewedRecordSerializer(result, many=True)
+        # print(type(serializer.data))
+        # print(serializer)
+        return Response(serializer.data)
+
 
 @api_view(['GET'])
 def get_member_similarity(request,user_id, format=None):
@@ -183,6 +194,15 @@ def member_page(request):
 
 # @login_required
 def movie_single_page(request,internal_id):
+    if str(request.user) != "AnonymousUser":
+        current_user = request.user
+        try:
+            review = MemberViewedRecord.objects.get(user_id = current_user.id, internal_id= internal_id)
+            review.viewed_date = datetime.now()
+        except:
+            review = MemberViewedRecord(internal_id = internal_id, viewed_date	 = datetime.now(), user_id = current_user.id)
+        review.save()
+    
     current_user = request.user
     content = {}
     try :

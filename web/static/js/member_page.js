@@ -79,8 +79,40 @@ function get_similarity(url,nodeDiv){
 })}
 get_similarity(`api/member/${userId}/similarity/`,similartiySection)
 
+function renderView(movieObject, nodeDiv) {
+    
+    let img = movieObject.img;
+    let internal_id = movieObject.internal
+    let title_name = movieObject.main_taiwan_name
 
+    let htmlText = `
+    <a class="movie-card" href="movie/${internal_id}">
+    <img src=${img} />
+    <div class="movie__info">
+      <h4>${title_name}</h4>
+    </div>
+     
+    </a>
+`;
+    nodeDiv.innerHTML = htmlText ;
+}
+viewedSection = document.querySelector(".xo")
+function get_viewed(url,nodeDiv){
+    fetch(url)
+        .then((response) => {
+            return response.json();
+        })
+        .then((datalist) => {
+            let num = datalist.length;
+            console.log(3)
+            for (let i = 0; i < num; i++) {
+                renderView(datalist[i], viewedSection);
+            }
+            // let htmlText = 
+        // nodeDiv.innerHTML = htmlText;
 
+})}
+get_viewed(`api/member/${userId}/viewed_movie/`,"de")
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
