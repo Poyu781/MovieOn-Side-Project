@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block css%}<link rel="stylesheet" href="../static/css/search_page.css" />{% endblock %}
+
+{% block content%}
+
+<section class="search__section">
+    <div class="type__wrapper">
+      <div class="tag">
+        <input type="radio" id="a" name="type" checked>
+        <label for="a">全部類型</label>
+      </div>
+      <div class="tag">
+        <input type="radio" id="3" name="type">
+        <label for="3">愛情</label>
+      </div>
+      <div class="tag">
+        <input type="radio" id="12" name="type">
+        <label for="12">驚悚</label>
+      </div>
+      <div class="tag">
+        <input type="radio" id="1" name="type">
+        <label for="1">喜劇</label>
+      </div>
+      <div class="tag">
+        <input type="radio" id="6" name="type">
+        <label for="6">懸疑</label>
+      </div>
+      <div class="tag">
+        <input type="radio" id="16" name="type">
+        <label for="16">歷史</label>
+      </div>
+      <div class="tag">
+        <input type="radio" id="4" name="type">
+        <label for="4">劇情</label>
+      </div>
+      <div class="tag">
+        <input type="radio" id="5" name="type">
+        <label for="5">動作</label>
+      </div>
+    </div>
+    <hr>
+    <div class="period__wrapper">
+      <div class="tag">
+        <input type="radio" id="all__period" name="period" checked>
+        <label for="all__period">不分時間</label>
+      </div>
+      <div class="tag">
+        <input type="radio" id="2021" name="period">
+        <label for="2021">2021</label>
+      </div>
+      <div class="tag">
+        <input type="radio" id="2020" name="period">
+        <label for="2020">2020</label>
+      </div>
+    </div>
+    <hr>
+    <div class="other__wrapper">
+      <div class="radios__block">
+        <div>
+          <input type="radio" id="popular" name="selector" value="popular" checked>
+          <label for="popular">熱門程度</label>
+        </div>
+        <!-- <div>
+          <input type="radio" id="ranking" name="selector" value="ranking">
+          <label for="ranking">評分最高</label>
+        </div> -->
+      </div>
+      <div>
+        <select name="imdb" class="score__selector">
+          <option>IMDB 評分</option>
+          <option value="9">9 分</option>
+          <option value="8">8 分</option>
+        </select>
+        <select name="douban" class="score__selector">
+          <option>豆瓣評分</option>
+          <option value="9">9 分</option>
+          <option value="8">8 分</option>
+        </select>
+        <!-- <select name="tomatoes" class="score__selector">
+          <option>爛番茄評分</option>
+          <option value="9">9 分</option>
+          <option value="8">8 分</option>
+        </select> -->
+      </div>
+    </div>
+  </section>
+  <section class="home__content">
+
+  </section>
+{% endblock %}
+
+{% block js%}<script src="../static/js/search_page.js" type="text/javascript"></script>{% endblock %}
+
+

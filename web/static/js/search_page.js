@@ -58,29 +58,48 @@ function main(url) {
 let offsetNum = 0
 main('/api/movie')
 let feature_id = false
-showMoreButton = document.querySelector(".button__more")
-showMoreButton.addEventListener("click",()=>{
-    offsetNum += 20
-    console.log(feature_id)
-    if (feature_id){
-        main(`/api/movie/?start=${offsetNum}&feature=${feature_id}`)
-    }
-    else{
-        main(`/api/movie/?start=${offsetNum}`)
-    }
-})
+// showMoreButton = document.querySelector(".button__more")
+// showMoreButton.addEventListener("click",()=>{
+//     offsetNum += 20
+//     console.log(feature_id)
+//     if (feature_id){
+//         main(`/api/movie/?start=${offsetNum}&feature=${feature_id}`)
+//     }
+//     else{
+//         main(`/api/movie/?start=${offsetNum}`)
+//     }
+// })
 
 // for (let i = 1; i < 4; i++) {
-//     let elem = document.querySelector(`.feature${i}`);
+//     let elem = document.querySelector('.tag');
+//     console.log(1)
 //     elem.addEventListener('click', function() {
-//         feature_id = elem.id
+//         feature_id = 12
 //         offsetNum = 0
 //         itemsSection.innerHTML = ""
         
 //         main(`/api/movie/?start=${offsetNum}&feature=${feature_id}`)
 //     });
 // }
+let elem = document.querySelector('.search__section');
 
+elem.addEventListener('click', function(e) {
+    // console.log(e.target.id)
+    if (e.target.type == "radio"){
+    console.log(e.target)
+    let feature_id = e.target.id
+    console.log("d",feature_id)
+    let offsetNum = 0
+    itemsSection.innerHTML = ""
+    if (feature_id == "a"){
+    main('/api/movie')
+    
+}
+    else if (feature_id){
+        main(`/api/movie/?start=${offsetNum}&feature=${feature_id}`)
+    }
+    }
+});
 
 searchButton.addEventListener("click",()=>{
     let search_value = document.querySelector("input[type='text']").value

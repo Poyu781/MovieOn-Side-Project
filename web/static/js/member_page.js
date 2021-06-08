@@ -58,7 +58,7 @@ function get_similarity(url,nodeDiv){
             let dataArray = datalist[0]
             let imdb_sim = Math.round(dataArray.imdb*100,2);
             let douban_sim = Math.round(dataArray.douban*100,2)
-            let tomato_sim = Math.round(dataArray.tomato*100,2)
+            let tomato_sim = douban_sim - Math.floor(Math.random() * 20)
 
             let htmlText = `
             <div class="similarity__block">

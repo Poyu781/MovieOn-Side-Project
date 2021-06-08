@@ -87,7 +87,32 @@ function main(url) {
             let dataArray = datalist; //I will get a list of dict
             console.log(dataArray[0])
             renderMovies(dataArray[0], movieSection);
+            let nodeRecommend = document.createElement("div");
+nodeRecommend.classList.add("movie__recommend");
+nodeRecommend.innerHTML = `
+<a class="movie" href="movie/tt8096832">
+<img src="https://img9.doubanio.com/view/photo/s_ratio_poster/public/p480747492.jpg" />
+<div class="movie__info">
+  <h3>綠色奇蹟</h3>
+  <div class="rank">
+    <div>
+      <img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/imdb.png"/>
+      <p>6.3</p>
+    </div>
+    <div>
+      <img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/douban.jpg"/>
+      <p>6.90</p>
+    </div>
+    <div>
+      <img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/tomato.png"/>
+      <p>80</p>
+    </div>
+  </div>
+</div>
+</a>
 
+`
+movieSection.appendChild(nodeRecommend)
         });
     }
 main(`/api/detail/${internalId}`)
@@ -146,3 +171,4 @@ ratingSection.addEventListener("change",(e)=>{
             console.log(json)
         })
     })
+

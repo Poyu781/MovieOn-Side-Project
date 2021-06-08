@@ -11,14 +11,12 @@
 <body class="page">
     <nav>
         <a class="logo" href="/">
-            <img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/ScreenShot+2021-05-17+%E4%B8%8B%E5%8D%884.19.58.png">
-        </a>
+            MOVIE ON
+          </a>>
         <div class="nav__options">
-            <input class ="feature1" id="12" type="button" value="驚悚">
-            <input class ="feature2" id="3" type="button" value="愛情">
-            <input class ="feature3" id="5" type="button" value="動作">
+            <button onclick="location.href='/search'">進階搜尋</button>
             <div class="nav__input">
-                <input type="text" placeholder="片名、導演或演員"/>
+                <input type="text" placeholder="片名"/>
                 <img class="button__search"src="https://i.imgur.com/RspHfzJ.png"/>
             </div>
         {% if user.is_authenticated %}

@@ -56,14 +56,24 @@ def show_detail(request,internal_id,format=None,):
 def get_home_page_data(request, format=None):
     if request.method == 'GET':
         feature = request.GET.get('feature')
+        year = request.GET.get('year')
+        print(year)
+        imdb_rating = request.GET.get('imdb_rating')
+        douban_rating = request.GET.get('douban_rating')
         start_num = int(request.GET.get('start',0))
         movie_info = LatestRating.objects.select_related("internal").order_by("rating_total_amount").reverse()
-        if feature:
+        if feature :
             id_result = FeatureMovieTable.objects.values("internal_id").filter(feature_id=feature)
-            print(id_result)
+            # print(id_result)
             result = movie_info.filter(internal_id__in =id_result)
         else:
             result = movie_info
+        if year :
+            result = result.filter(internal__start_year=year)
+        if imdb_rating :
+            result = result.filter(imdb_rating__gte=imdb_rating)
+        if douban_rating :
+            result = result.filter(douban_rating__gte=douban_rating)
         count = result.count()
         # print(start_num)
         # print(count)
@@ -138,7 +148,7 @@ def get_member_similarity(request,user_id, format=None):
             print(i.internal_id)
             imdb_rating.append(float(i.imdb_rating))
             douban_rating.append(float(i.douban_rating))
-            audience_rating.append(float(i.audience_rating)/10)
+            # audience_rating.append(float(i.audience_rating)/10)
         print(internal_id)
         def nor(_list,mean_value,standard_dv):
             nor_result =[]
@@ -154,7 +164,7 @@ def get_member_similarity(request,user_id, format=None):
         audience_mean = 5.9953
         douban_nor = nor(douban_rating,douban_mean,douban_stdev)
         imdb_nor = nor(imdb_rating,imdb_mean,imdb_stdev)
-        audience_nor = nor (audience_rating,audience_mean,audience_stdev)
+        # audience_nor = nor (audience_rating,audience_mean,audience_stdev)
         internal_nor = nor(internal_rating,internal_mean,internal_stdev)
         def cosine_similarity(vec_a,vec_b):
             dot = sum(a*b for a, b in zip(vec_a, vec_b))
@@ -164,8 +174,8 @@ def get_member_similarity(request,user_id, format=None):
             return cos_sim
         douban_internal = cosine_similarity(douban_nor,internal_nor)
         imdb_internal = cosine_similarity(imdb_nor,internal_nor)
-        audience_internal = cosine_similarity(audience_nor,internal_nor)
-        print(douban_nor,imdb_nor,internal_nor,audience_nor)
+        # audience_internal = cosine_similarity(audience_nor,internal_nor)
+        print(douban_nor,imdb_nor,internal_nor)
         # rate = result.values("internal__internal")
         print("time",time.time()-r)
         # print(id_result)
@@ -173,12 +183,14 @@ def get_member_similarity(request,user_id, format=None):
         response_json = {}
         response_json["imdb"] = imdb_internal
         response_json["douban"] = douban_internal
-        response_json["tomato"] = audience_internal
+        # response_json["tomato"] = audience_internal
         # print(type(serializer.data))
         # print(serializer)
         return Response([response_json])    
 
+def search_page(request):
 
+    return render(request,"search_page.html")
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
