@@ -495,7 +495,7 @@ body, body * {
     height: 1px;
     background: #313131;
   }
-  .type__wrapper, .period__wrapper, .other__wrapper {
+  .feature__wrapper, .period__wrapper, .other__wrapper {
     margin: 0 auto;
     width: 85%;
     display: flex;
@@ -507,7 +507,7 @@ body, body * {
   .other__wrapper {
     justify-content: space-between;
   }
-  .type__wrapper .tag label, .period__wrapper .tag label {
+  .feature__wrapper .tag label, .period__wrapper .tag label {
     display: inline-block;
     padding: 2px 5px;
     color: #BBBCBB;
@@ -519,7 +519,7 @@ body, body * {
     display: flex;
     gap: 15px;
   }
-  .radios__block input, .type__wrapper input, .period__wrapper input {
+  .radios__block input, .feature__wrapper input, .period__wrapper input {
     display: none;
   }
   .radios__block label {
@@ -528,7 +528,7 @@ body, body * {
     cursor: pointer;
     transition: .4s all ease-in;
   }
-  .radios__block input[type="radio"]:checked + label, .radios__block label:hover, .type__wrapper input[type="radio"]:checked + label, .type__wrapper label:hover, .period__wrapper input[type="radio"]:checked + label, .period__wrapper label:hover {
+  .radios__block input[type="radio"]:checked + label, .radios__block label:hover, .feature__wrapper input[type="radio"]:checked + label, .feature__wrapper label:hover, .period__wrapper input[type="radio"]:checked + label, .period__wrapper label:hover {
     background: #FFD700B3;
     color: white;
   }

@@ -3,7 +3,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    url(r'^api/movie/$', views.get_home_page_data),
+    url(r'^api/movie/$', views.get_movie_data_with_rating),
     url(r"^api/detail/(?P<internal_id>\d+)/$", views.show_detail),
     # url(r"^api/test/$", views.test),
     url(r"^api/search/$", views.search_movie),

@@ -53,15 +53,19 @@ def show_detail(request,internal_id,format=None,):
     return Response(result)
 
 @api_view(['GET'])
-def get_home_page_data(request, format=None):
+def get_movie_data_with_rating(request, format=None):
     if request.method == 'GET':
         feature = request.GET.get('feature')
         year = request.GET.get('year')
-        print(year)
+        sort = request.GET.get('sort')
+        if sort:
+            pass
+        else :
+            sort = "rating_total_amount"
         imdb_rating = request.GET.get('imdb_rating')
         douban_rating = request.GET.get('douban_rating')
         start_num = int(request.GET.get('start',0))
-        movie_info = LatestRating.objects.select_related("internal").order_by("rating_total_amount").reverse()
+        movie_info = LatestRating.objects.select_related("internal").order_by(sort).reverse()
         if feature :
             id_result = FeatureMovieTable.objects.values("internal_id").filter(feature_id=feature)
             # print(id_result)

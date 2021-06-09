@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
-{% block css%}<link rel="stylesheet" href="../static/css/search_page.css" />{% endblock %}
+{% block css%} 
+<link rel="stylesheet" href="../static/css/search_page.css" />{% endblock %}
 
 {% block content%}
 
 <section class="search__section">
-    <div class="type__wrapper">
+    <div class="feature__wrapper">
       <div class="tag">
-        <input type="radio" id="a" name="type" checked>
-        <label for="a">全部類型</label>
+        <input type="radio" id="all__feature" name="type" checked>
+        <label for="all__feature">全部類型</label>
       </div>
       <div class="tag">
         <input type="radio" id="3" name="type">
@@ -40,11 +41,7 @@
     </div>
     <hr>
     <div class="period__wrapper">
-      <div class="tag">
-        <input type="radio" id="all__period" name="period" checked>
-        <label for="all__period">不分時間</label>
-      </div>
-      <div class="tag">
+      <!-- <div class="tag">
         <input type="radio" id="2021" name="period">
         <label for="2021">2021</label>
       </div>
@@ -52,41 +49,74 @@
         <input type="radio" id="2020" name="period">
         <label for="2020">2020</label>
       </div>
+      <div class="tag">
+        <input type="radio" id="2019" name="period">
+        <label for="2019">2019</label>
+      </div>
+      <div class="tag">
+        <input type="radio" id="2020" name="period">
+        <label for="2020">2020</label>
+      </div> -->
     </div>
     <hr>
     <div class="other__wrapper">
       <div class="radios__block">
         <div>
-          <input type="radio" id="popular" name="selector" value="popular" checked>
-          <label for="popular">熱門程度</label>
+          <input type="radio" id="rating_total_amount" name="selector" value="popular" checked>
+          <label for="rating_total_amount">熱門程度</label>
         </div>
-        <!-- <div>
-          <input type="radio" id="ranking" name="selector" value="ranking">
-          <label for="ranking">評分最高</label>
-        </div> -->
+        <div>
+          <input type="radio" id="imdb_rating" name="selector" value="ranking">
+          <label for="imdb_rating">IMDB 評分最高</label>
+        </div>
+        <div>
+            <input type="radio" id="douban_rating" name="selector" value="ranking">
+            <label for="douban_rating">豆瓣評分最高</label>
+          </div>
+          <div>
+            <input type="radio" id="audience_rating" name="selector" value="ranking">
+            <label for="audience_rating">爛番茄評分最高</label>
+          </div>
       </div>
       <div>
-        <select name="imdb" class="score__selector">
+        <select id="imdb" class="score__selector">
           <option>IMDB 評分</option>
-          <option value="9">9 分</option>
-          <option value="8">8 分</option>
+          <option value="9">9 分以上</option>
+          <option value="8">8 分以上</option>
+          <option value="7">7 分以上</option>
+          <option value="6">6 分以上</option>
+          <option value="5">5 分以上</option>
+          <option value="4">4 分以上</option>
+          <option value="3">3 分以上</option>
         </select>
-        <select name="douban" class="score__selector">
+        <select id="douban" class="score__selector">
           <option>豆瓣評分</option>
-          <option value="9">9 分</option>
-          <option value="8">8 分</option>
+          <option value="9">9 分以上</option>
+          <option value="8">8 分以上</option>
+          <option value="7">7 分以上</option>
+          <option value="6">6 分以上</option>
+          <option value="5">5 分以上</option>
+          <option value="4">4 分以上</option>
+          <option value="3">3 分以上</option>
         </select>
-        <!-- <select name="tomatoes" class="score__selector">
+        <select id="tomatoes" class="score__selector">
           <option>爛番茄評分</option>
-          <option value="9">9 分</option>
-          <option value="8">8 分</option>
-        </select> -->
+          <option value="9">90 分以上</option>
+          <option value="8">80 分以上</option>
+          <option value="7">70 分以上</option>
+          <option value="6">60 分以上</option>
+          <option value="5">50 分以上</option>
+          <option value="4">40 分以上</option>
+          <option value="3">30 分以上</option>
+        </select>
       </div>
     </div>
   </section>
   <section class="home__content">
 
   </section>
+  <button class="button__more">顯示更多</button>
+
 {% endblock %}
 
 {% block js%}<script src="../static/js/search_page.js" type="text/javascript"></script>{% endblock %}
