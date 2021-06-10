@@ -1,4 +1,6 @@
 const itemsSection = document.querySelector(".home__content");
+const showMoreButton = document.querySelector(".button__more")
+
 function renderMovies(movieObject, nodeDiv) {
     let node = document.createElement("div");
     node.classList.add("movie");
@@ -36,9 +38,10 @@ function renderMovies(movieObject, nodeDiv) {
     nodeDiv.appendChild(node);
 }
 
-
 // const checkedValue = element.querySelector('input[type=radio]:checked').value;
 function main(url) {
+    showMoreButton.style.display="none"
+
     fetch(url)
         .then((response) => {
             return response.json();
@@ -48,16 +51,27 @@ function main(url) {
             let dataArray = datalist; //I will get a list of dict
             console.log(dataArray)
             let num = dataArray.length;
-// Math.ceil(offsetNum/4);
             
-            for (let i = 0; i < num; i++) {
-                renderMovies(dataArray[i], itemsSection);
-            }
+
             console.log(num)
-            if (num < 20){
+
+            if (num == 0){
+                console.log("x")
+                let node = document.createElement("div");
+                node.style.color = "white"
+                node.innerHTML = "無相關結果"
+                itemsSection.appendChild(node)
+            }
+            else if (num < 20){
+                for (let i = 0; i < num; i++) {
+                    renderMovies(dataArray[i], itemsSection);
+                }
                 showMoreButton.style.display="none"
             }
             else{
+                for (let i = 0; i < num; i++) {
+                    renderMovies(dataArray[i], itemsSection);
+                }
                 showMoreButton.style.display="inline"
             }
 
@@ -72,18 +86,51 @@ const elem = document.querySelector(".search__section")
 const featureElem = document.querySelector('.feature__wrapper');
 const yearElem = document.querySelector('.period__wrapper');
 const sortElem = document.querySelector(".radios__block")
-let yearInnerhtml = ""
-for (let i = 2021 ;i>=2000;i--){
-    addHtml = `      <div class="tag">
-    <input type="radio" id=${i} name="period">
-    <label for=${i}>${i}</label>
-  </div>`
-  yearInnerhtml += addHtml
-}
-yearElem.innerHTML = `      <div class="tag">
-<input type="radio" id="all__period" name="period" checked>
-<label for="all__period">不分時間</label>
-</div>` +yearInnerhtml
+// let yearInnerhtml = ""
+// for (let i = 2021 ;i>=2000;i--){
+//     addHtml = `      <div class="tag">
+//     <input type="radio" id=${i} name="period">
+//     <label for=${i}>${i}</label>
+//   </div>`
+//   yearInnerhtml += addHtml
+// }
+// yearElem.innerHTML = `      <div class="tag">
+// <input type="radio" id="all__period" name="period" checked>
+// <label for="all__period">不分時間</label>
+// </div>` +yearInnerhtml
+function initSliderSetting() {
+    const parent = document.querySelector(".range-slider")
+    if(!parent) return
+    const rangeS = parent.querySelectorAll("input[type=range]");
+    const numberS = parent.querySelectorAll("input[type=number]");
+  
+    rangeS.forEach((elem) => {
+        elem.oninput = function() {
+        let slide1 = rangeS[0].value
+        let slide2 = rangeS[1].value
+  
+        if (slide1 > slide2) [slide1, slide2] = [slide2, slide1];
+        numberS[0].value = slide1
+        numberS[1].value = slide2
+      }
+    })
+    numberS.forEach((elem) => {
+        elem.oninput = function() {
+              let number1 = parseFloat(numberS[0].value)
+              let number2 = parseFloat(numberS[1].value)
+              
+        if (number1 > number2) {
+          const tmp = number1
+          numberS[0].value = number2
+          numberS[1].value = tmp
+        }
+        rangeS[0].value = number1
+        rangeS[1].value = number2
+      }
+    });
+  }
+  
+  initSliderSetting();
 main('/api/movie?sort=rating_total_amount')
 let queryString ;
 function isNumber(val) {
@@ -95,7 +142,7 @@ elem.addEventListener('change', function(e) {
    
     let featureValue = featureElem.querySelector('input[type=radio]:checked').id;
     // console.log(featureValue)
-    let yearValue = yearElem.querySelector('input[type=radio]:checked').id
+    let yearValue = yearElem.querySelectorAll("input[type=number]");
     // console.log(yearValue)
     let imdbRating = document.querySelector('#imdb').value
     let doubanRating = document.querySelector('#douban').value
@@ -109,9 +156,9 @@ elem.addEventListener('change', function(e) {
         console.log(1)
         queryString += `&feature=${featureValue}`
     }
-    if (isNumber(yearValue)){
+    if (isNumber(yearValue[0].value)){
         console.log(2)
-        queryString += `&year=${yearValue}`
+        queryString += `&start_year=${yearValue[0].value}&end_year=${yearValue[1].value}`
     }
     if (isNumber(imdbRating)){
         queryString += `&imdb_rating=${imdbRating}`
@@ -136,7 +183,6 @@ elem.addEventListener('change', function(e) {
 // node.classList.add("button__more");
 // node.innerHTML = "顯示更多"
 // document.body.appendChild(node);
-const showMoreButton = document.querySelector(".button__more")
 showMoreButton.addEventListener("click",()=>{
     console.log(queryString)
     offsetNum += 20
@@ -146,3 +192,4 @@ showMoreButton.addEventListener("click",()=>{
         main(`/api/movie/?start=${offsetNum}`)
     }
 })
+showMoreButton.style.display="none"

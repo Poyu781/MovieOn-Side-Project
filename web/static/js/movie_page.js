@@ -47,34 +47,34 @@ function renderMovies(movieObject, nodeDiv) {
       </ul>
       <div class="movie__ranking">
       <div>
-          <a href="https://www.imdb.com/title/${imdbId}">
+          <a href="https://www.imdb.com/title/${imdbId}" target="_blank">
         <img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/imdb.png"/>
           </a>
         <p>${imdbRating}（共 ${imdbCount} 筆評分）</p>
       </div>
       <div>
-      <a href="https://movie.douban.com/subject/${doubanId}">
+      <a href="https://movie.douban.com/subject/${doubanId}" target="_blank">
         <img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/douban.jpg"/>
       </a>
         <p>${doubanRating}（共 ${doubanRatingCount} 筆評分）</p>
       </div>
       <div>
-        <a href="https://www.rottentomatoes.com/m/${tomatoId}">
+        <a href="https://www.rottentomatoes.com/m/${tomatoId}" target="_blank">
         <img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/tomato.png"/>
         </a>
         <p>  觀眾評分：${rottenAudienceRating}（共 ${rottenAudienceCount} 筆評分）
              影評評分：${rottenTomatorRating}（共 ${rottenTomatorCount} 筆評分）</p>
       </div>
     </div>
-    <div class="movie__intro">
-    ${movieObject.chinese_description}
-  </div>
-    </div>
- 
+
 
 `;
+    descriptionNode = document.createElement("div")
+    descriptionNode.classList.add("movie__intro");
+    descriptionNode.innerHTML =`${movieObject.chinese_description}`
     node.innerHTML = htmlText;
     nodeDiv.appendChild(node);
+    nodeDiv.appendChild(descriptionNode);
 }
 
 

@@ -56,7 +56,8 @@ def show_detail(request,internal_id,format=None,):
 def get_movie_data_with_rating(request, format=None):
     if request.method == 'GET':
         feature = request.GET.get('feature')
-        year = request.GET.get('year')
+        start_year = request.GET.get('start_year')
+        end_year = request.GET.get('end_year')
         sort = request.GET.get('sort')
         if sort:
             pass
@@ -72,15 +73,15 @@ def get_movie_data_with_rating(request, format=None):
             result = movie_info.filter(internal_id__in =id_result)
         else:
             result = movie_info
-        if year :
-            result = result.filter(internal__start_year=year)
+        if start_year :
+            result = result.filter(internal__start_year__gte=start_year).filter(internal__start_year__lte=end_year)
         if imdb_rating :
             result = result.filter(imdb_rating__gte=imdb_rating)
         if douban_rating :
             result = result.filter(douban_rating__gte=douban_rating)
         count = result.count()
         # print(start_num)
-        # print(count)
+        print(count)
         serializer = LastestInfoSerializer(result[start_num:min(start_num+20,count)], many=True)
         # print(type(serializer.data))
         # print(serializer)

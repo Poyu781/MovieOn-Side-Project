@@ -13,7 +13,7 @@ function renderMovies(movieObject, nodeDiv) {
     let rotten_tomator_rating = movieObject.tomator_rating
     let douban_rating = movieObject.douban_rating
     let htmlText = `
-        <a class="movie" href= movie/${path}>
+        <a class="movie" href= movie/${path} target="_blank">
         <img src=${img}>
         <div class="movie__info">
             <h3>${title}</h3>
