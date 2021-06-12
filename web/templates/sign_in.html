@@ -2,31 +2,38 @@
 
 {% block css%}<link rel="stylesheet" href="../static/css/sign_up.css" />{% endblock %}
 {% block content%}
-<h1>登入</h1>
-<div class="formWrap">
-<form action="" method="POST">
-    {% csrf_token %}
-    {{ form }}
-    {% if request.GET.next %}
-        <input type="hidden" name="next" value="{{request.GET.next}}">
-        <p>還沒有帳號嗎? <a href="/signup?next={{request.GET.next}}">註冊</a></p>
-    {% else %}
-        <p>還沒有帳號嗎? <a href="/signup">註冊</a></p>
-        
-    {% endif %}  
-    <input class="btn btn-primary" type="submit" value="送出" /> 
-    {% for message in messages %}
 
-    <div class="alert alert-success">
-        <a class="close" href="#" data-dismiss="alert">×</a>
-
-        {{ message }}
-
+<section class="log__section">
+    <div class="button__switch">
+        <h2 id="login">登入</h2>
     </div>
-{% endfor %}
+    <div class="form__wrap">
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{ form }}
+            {% if request.GET.next %}
+                <input type="hidden" name="next" value="{{request.GET.next}}">
+                <p>還沒有帳號嗎? <a href="/signup?next={{request.GET.next}}">註冊</a></p>
+            {% else %}
+                <p>還沒有帳號嗎? <a href="/signup">註冊</a></p>
+                
+            {% endif %}  
+            <input class="btn btn-primary" type="submit" value="送出" /> 
+            {% for message in messages %}
 
-</form>
-</div>
+            <div class="alert alert-success">
+                <a class="close" href="#" data-dismiss="alert">×</a>
+
+                {{ message }}
+            </div>
+            {% endfor %}
+        </form>
+    </div>
+</section>
+
+
+
+</>
 {% endblock %}
 
 

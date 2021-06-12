@@ -48,7 +48,7 @@ function main(url,node) {
     }
 main(`api/member/${userId}/movies/`,reviewedSection)
 const similartiySection = document.querySelector(".similarity")
-function get_similarity(url,nodeDiv){
+function getSimilarity(url,nodeDiv){
     fetch(url)
         .then((response) => {
             return response.json();
@@ -77,10 +77,10 @@ function get_similarity(url,nodeDiv){
         nodeDiv.innerHTML = htmlText;
 
 })}
-get_similarity(`api/member/${userId}/similarity/`,similartiySection)
+getSimilarity(`api/member/${userId}/similarity/`,similartiySection)
 
 function renderView(movieObject, nodeDiv) {
-    
+    node = document.createElement("div")
     let img = movieObject.img;
     let internal_id = movieObject.internal
     let title_name = movieObject.main_taiwan_name
@@ -94,76 +94,23 @@ function renderView(movieObject, nodeDiv) {
      
     </a>
 `;
-    nodeDiv.innerHTML = htmlText ;
+    node.innerHTML = htmlText ;
+    nodeDiv.appendChild(node)
 }
-viewedSection = document.querySelector(".xo")
-function get_viewed(url,nodeDiv){
+viewedSection = document.querySelector(".viewed__block")
+function getViewedMovie(url,nodeDiv){
     fetch(url)
         .then((response) => {
             return response.json();
         })
         .then((datalist) => {
             let num = datalist.length;
-            console.log(3)
+            console.log("num",num)
             for (let i = 0; i < num; i++) {
-                renderView(datalist[i], viewedSection);
+                renderView(datalist[i], nodeDiv);
             }
             // let htmlText = 
         // nodeDiv.innerHTML = htmlText;
 
 })}
-get_viewed(`api/member/${userId}/viewed_movie/`,"de")
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-const csrftoken = getCookie('csrftoken');
-// const path = document.location['pathname'];
-
-// let userRating = document.querySelector("#rating").innerHTML;
-
-// if (userRating != ""){
-//     console.log(userRating)
-//     document.querySelector(`#star${userRating}`).checked=true
-// }
-// const ratingSection = document.querySelector(".rating")
-// ratingSection.addEventListener("change",(e)=>{
-//     let ratingValue = document.querySelector('input[name="rating"]:checked').value
-//     let data = {"rating":ratingValue, "imdb_id":internalId}
-//     // numberOfRating.innerHTML = `Choose Rating :${ratingValue}`
-//     console.log(data)
-//     fetch("/rating",{
-//         method: "POST",
-//         mode: 'same-origin',
-        
-//         body : JSON.stringify(data),
-//         headers : {
-//             'X-Requested-With': 'XMLHttpRequest',
-//             'X-CSRFToken': csrftoken,
-//             'Content-Type': 'application/json'
-//         },
-//     })
-
-//         .then((res)=>{
-
-//             return res.json()
-//         })
-//         .catch((error) => {
-//             window.location.href = `/signin?next=${path}`;
-//             console.log('Error:', error)
-//         })
-//         .then((json)=>{
-//             console.log(json)
-//         })
-//     })
+getViewedMovie(`api/member/${userId}/viewed_movie/`,viewedSection)
