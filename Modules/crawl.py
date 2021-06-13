@@ -33,7 +33,7 @@ def fetch_data(fixed_url, search_id,bs4_render=True):
     else:
         return req.text
 
-
+# print(fetch_data("https://movie.douban.com/subject/","35076714"))
 
 def start_thread(threads,fun,*args):
     threads.append(threading.Thread(target = fun, args = (args)))
