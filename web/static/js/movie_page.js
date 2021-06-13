@@ -21,7 +21,14 @@ function getCookie(name) {
 }
 const csrftoken = getCookie('csrftoken');
 const path = document.location['pathname'];
-
+function numberWithCommas(x) {
+	try{
+		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	}
+	catch{
+		return x
+	}
+}
 function renderMovies(movieObject, nodeDiv) {
     let node = document.createElement("section");
     node.classList.add("movie__section");
@@ -35,13 +42,13 @@ function renderMovies(movieObject, nodeDiv) {
     let doubanId = movieObject.douban_id
     let tomatoId = movieObject.rotten_tomato_id
     let imdbRating = movieObject.rating
-    let imdbCount = movieObject.rating_count
+    let imdbCount = numberWithCommas(movieObject.rating_count)
     let rottenAudienceRating = movieObject.audience_rating
-    let rottenAudienceCount = movieObject.audience_rating_amount
+    let rottenAudienceCount = numberWithCommas(movieObject.audience_rating_amount)
     let rottenTomatorRating = movieObject.tomator_rating
-    let rottenTomatorCount = movieObject.tomator_rating_amount
+    let rottenTomatorCount = numberWithCommas(movieObject.tomator_rating_amount)
     let doubanRating = movieObject.avg_rating
-    let doubanRatingCount = movieObject.total_rating_amount
+    let doubanRatingCount = numberWithCommas(movieObject.total_rating_amount)
     let director_list = movieObject.director_list
     let actor_list = movieObject.actor_list
     let feature_list = movieObject.feature_list

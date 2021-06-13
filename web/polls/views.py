@@ -193,9 +193,9 @@ def get_member_similarity(request,user_id, format=None):
         # print(serializer)
         return Response([response_json])    
 
-def search_page(request):
+def advanced_search_page(request):
 
-    return render(request,"search_page.html")
+    return render(request,"advanced_search_page.html")
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")

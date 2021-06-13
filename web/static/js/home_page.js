@@ -57,7 +57,6 @@ function main(url) {
 }
 let offsetNum = 0
 main('/api/movie')
-let feature_id = false
 showMoreButton = document.querySelector(".button__more")
 showMoreButton.addEventListener("click",()=>{
     offsetNum += 20
@@ -70,16 +69,6 @@ showMoreButton.addEventListener("click",()=>{
     }
 })
 
-// for (let i = 1; i < 4; i++) {
-//     let elem = document.querySelector(`.feature${i}`);
-//     elem.addEventListener('click', function() {
-//         feature_id = elem.id
-//         offsetNum = 0
-//         itemsSection.innerHTML = ""
-        
-//         main(`/api/movie/?start=${offsetNum}&feature=${feature_id}`)
-//     });
-// }
 
 
 searchButton.addEventListener("click",()=>{
