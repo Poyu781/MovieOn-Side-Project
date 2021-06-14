@@ -96,7 +96,7 @@ def search_movie(request, format=None):
 
         movie_info = LatestRating.objects.select_related("internal")
         id_result = MovieOtherNames.objects.values("internal_id").filter(movie_name__icontains=query)
-        print(id_result)
+        # print(id_result)
         result = movie_info.filter(internal_id__in =id_result).order_by("internal__start_year").reverse()
         # print(id_result)
         # print(count)

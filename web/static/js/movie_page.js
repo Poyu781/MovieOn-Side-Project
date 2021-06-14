@@ -129,7 +129,7 @@ let userRating = document.querySelector("#rating").innerHTML
 function ratingFun(){
 	let userRating = document.querySelector("#rating").innerHTML;
 
-	if (userRating != "尚未評分"){
+	if (userRating != "尚未評"){
 		console.log(userRating)
 		document.querySelector(`#star${userRating}`).checked=true
 	}
