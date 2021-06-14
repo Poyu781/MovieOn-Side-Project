@@ -24,6 +24,7 @@ from .models import MovieDetail
 from django.db import connection
 import time
 from statistics import mean, pstdev
+from collections import defaultdict
 def dictfetchall(cursor):
     "Return all rows from a cursor as a dict"
     columns = [col[0] for col in cursor.description]
@@ -68,6 +69,7 @@ def get_movie_data_with_rating(request, format=None):
         start_num = int(request.GET.get('start',0))
         movie_info = LatestRating.objects.select_related("internal").order_by(sort).reverse()
         if feature :
+            # if feature.count(","):
             id_result = FeatureMovieTable.objects.values("internal_id").filter(feature_id=feature)
             # print(id_result)
             result = movie_info.filter(internal_id__in =id_result)
@@ -193,8 +195,36 @@ def get_member_similarity(request,user_id, format=None):
         # print(serializer)
         return Response([response_json])    
 
-def advanced_search_page(request):
 
+feature_dict = defaultdict(set)
+@api_view(['GET'])
+def get_recommend_movies(request):
+    feature = request.GET.get('feature')
+    internal_id = request.GET.get('id')
+    start  = time.time()
+    if feature_dict :
+        pass
+    else:
+        id_result = FeatureMovieTable.objects.all()
+        for i in id_result:
+            feature_dict[i.feature_id].add(i.internal_id)
+    if feature:
+        feature_list = json.loads(feature)
+        for i in range(len(feature_list)) :
+            if i == 0:
+                result = feature_dict[feature_list[i]]
+            else:
+                result = result.intersection(feature_dict[feature_list[i]])
+
+    id_result = list(result)
+    id_result.remove(int(internal_id))
+    movie_info = LatestRating.objects.select_related("internal").order_by("imdb_rating","rating_total_amount").reverse()
+    recommend_result = movie_info.filter(internal_id__in =id_result)
+    print(time.time()-start)
+    serializer = LastestInfoSerializer(recommend_result[:min(50,len(id_result))], many=True)
+    return Response(serializer.data)
+def advanced_search_page(request):
+    
     return render(request,"advanced_search_page.html")
 
 def index(request):

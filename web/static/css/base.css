@@ -1,12 +1,14 @@
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+
 body, body * {
   margin: 0;
   padding: 0;
-  border: 1px solid gold;
+/*   border: 1px solid gold; */
   font-family: Noto;
 }
 
 body {
-  background: #1E1E1E;
+  background: #1E201F;
   text-align: center;
 }
 
@@ -129,16 +131,18 @@ nav {
   transform: scale(1.04);
   filter: brightness(1.02);
 }
-h2{
-  color: white;
-  font-size:32px;
-}
+
 
 .home__content .movie img, .profile .movie-ranking img, .profile .movie-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: 50% 50%;
+}
+
+h2{
+  color: white;
+  font-size:32px;
 }
 
 .home__content .movie__info, .profile .movie__info {
@@ -197,6 +201,7 @@ h2{
   padding: 5vh;
   box-sizing: border-box;
   max-width: 1280px;
+  margin: 0 auto;
 }
 
 .movie__section img {
@@ -209,16 +214,19 @@ h2{
 
 .movie__information {
   margin: 0 auto;
-  max-width: 768px;
+  max-width: 850px;
   display: flex;
   padding: 5vh;
   gap: 8%;
   text-align: left;
+  color: #FFFFFE;
+}
+.movie__information-left {
+  position: relative;
 }
 
 .movie__detail {
   width: 100%;
-  color: white;
 }
 
 .movie__detail h2 {
@@ -243,35 +251,56 @@ h2{
   font-size: 15px;
   line-height: 26px;
 }
-
-.movie__ranking {
-  padding: 0 10px;
-  align-items: center;
-  justify-content: space-between;
+.movie__intro h3 {
+  padding: 5px;
+  border-radius: 2px;
+  margin-bottom: 10px;
+  background: #363636;
 }
-
-.movie__ranking > div {
+.movie__ranking {
   display: flex;
-  align-items: center;
-  margin-top: 10px;
+  flex-direction: column;
+  justify-content: space-between;
   gap: 5px;
 }
 
-.movie__ranking img {
+.movie__ranking > a {
+  padding: 4px;
+  border: 2px solid #434343;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  color: #FFFFFE;
+  text-decoration: none;
+}
+.movie__ranking > a:hover {
+  background: #434343;
+}
+
+.movie__ranking .ranking__icon__wrapper {
   width: 28px;
   height: 28px;
-  border-radius: 3px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-right: 10px;
+}
+.movie__ranking img {
+  width: 100%;
+  height: 100%;
+}
+.movie__ranking p.score {
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 28px;
   margin-right: 10px;
 }
 
 .rating__wrap {
-  position: relative;
-  width: 100%;
-  height: 60px;
+  display: flex;
+  text-align: center;
 }
-
 .rating {
-  position: absolute;
+  margin: 0 auto;
 }
 
 .rating:not(:checked) > input {
@@ -305,14 +334,25 @@ h2{
     color: gold;
 }
 
-.movie__recommend {
+.recommend__wrapper {
   margin: 10vh auto;
+  backgrdoun: red;
+  max-width: 1024px;
+}
+.recommend__wrapper > h3 {
+  padding: 5px;
+  border-radius: 2px;
+  margin-bottom: 5vh;
+  background: #363636;
+  color: white;
+}
+.movie__recommend {
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
-  max-width: 1024px;
 }
 
 .movie__recommend .movie {
@@ -545,4 +585,22 @@ h2{
   border-radius: 2px;
   background: #313131;
   color: #BBBCBB;
+}
+/* 收藏愛心按鈕 */
+#heart {
+  position: absolute;
+  color: grey;
+  font-size: 30px;
+  top: 5px;
+  left: 5px;
+  cursor: pointer;
+  transition: .3s all ease-in-out;
+}
+
+#heart:hover {
+  transform: scale(1.15);
+}
+
+#heart.red {
+  color: red;
 }

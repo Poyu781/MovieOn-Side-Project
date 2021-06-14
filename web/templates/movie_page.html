@@ -2,24 +2,15 @@
 
 }
 {% block content%}
-
-<!-- <section class="movie__section">
-  <div class="rating__wrap">
-    <div class="rating">
-      <input type="radio" id="star10" name="rating" value="10" /><label for="star10" title="Rocks!">10 stars</label>
-      <input type="radio" id="star9" name="rating" value="9" /><label for="star9" title="Rocks!">9 stars</label>
-      <input type="radio" id="star8" name="rating" value="8" /><label for="star8" title="Pretty good">8 stars</label>
-      <input type="radio" id="star7" name="rating" value="7" /><label for="star7" title="Pretty good">7 stars</label>
-      <input type="radio" id="star6" name="rating" value="6" /><label for="star6" title="Meh" >6 star</label>
-      <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="Meh">5 stars</label>
-      <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="Kinda bad">4 stars</label>
-      <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="Kinda bad">3 stars</label>
-      <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="Sucks big time">2 stars</label>
-      <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="Sucks big time">1 star</label>
-    </div>
-  </div>
+<div class="movie__all">
+</div>
+<div class="recommend__wrapper">
+  <h3>你可能也會喜歡</h3>
   
-</section> -->
+  <div class="movie__recommend">
+  </div>
+</div>
+
 {% if rating %}
     <p hidden="hidden" id="rating">{{rating}}</p>
 {% else %}
