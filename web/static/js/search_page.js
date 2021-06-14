@@ -1,6 +1,5 @@
 const itemsSection = document.querySelector(".home__content");
 const showMoreButton = document.querySelector(".button__more")
-
 function renderMovies(movieObject, nodeDiv) {
     let node = document.createElement("div");
     node.classList.add("movie");
@@ -54,9 +53,10 @@ function main(url) {
             
 
             console.log(num)
+            const loadNode = document.querySelector(".loader__wrapper")
 
+            loadNode.style.display = "none"
             if (num == 0){
-                console.log("x")
                 let node = document.createElement("div");
                 node.style.color = "white"
                 node.innerHTML = "無相關結果"
@@ -170,7 +170,19 @@ elem.addEventListener('change', function(e) {
         queryString += `&tomato_rating=${tomatoRating}`
     }
     console.log(queryString)
-    itemsSection.innerHTML = ""
+    itemsSection.innerHTML = `
+    <section class="loader__wrapper">
+    <div class="loader">
+      <div class="upper ball"></div>
+      <div class="right ball"></div>
+      <div class="lower ball"></div>
+      <div class="left ball"></div>
+    </div>
+      <h2 class="loading__word">Loading...</h2>
+  </section>
+    `
+    
+    console.log("2")
     offsetNum = 0
     main(`/api/movie/?start=${offsetNum}${queryString}`)
 })

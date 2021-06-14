@@ -99,7 +99,7 @@ nav {
 }
 
 .banner img {
-  width: 100%;
+  /* width: 100%; */
   height: 100%;
   object-fit: cover;
   object-position: 50% 50%;
@@ -252,6 +252,7 @@ h2{
   line-height: 26px;
 }
 .movie__intro h3 {
+  text-align: center;
   padding: 5px;
   border-radius: 2px;
   margin-bottom: 10px;
@@ -353,6 +354,7 @@ h2{
   align-items: center;
   flex-wrap: wrap;
   gap: 10px;
+  
 }
 
 .movie__recommend .movie {
@@ -603,4 +605,91 @@ h2{
 
 #heart.red {
   color: red;
+}
+
+
+/* Loading Css */
+.loader__wrapper{
+  
+  display: flex;
+  height: 15vh;
+  width: 100%;
+  background: #1E201F;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  
+}
+.loader{
+  height: 25px;
+  width: 25px;
+  position: relative;
+  animation: rotate 5s  infinite;
+}
+.ball{
+  position: absolute;
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+.upper{
+  left: 0;
+  top: -22px;
+  background: #2da2ff;
+  animation: upper 1s linear infinite;
+}
+@keyframes upper {
+  50%{
+    top: 22px;
+  }
+  100%{
+    top: 22px;
+  }
+}
+.right{
+  right: -22px;
+  top: 0;
+  background: #ff337a;
+  animation: right 1s linear infinite;
+}
+@keyframes right {
+  50%{
+    right: 22px;
+  }
+  100%{
+    right: 22px;
+  }
+}
+.lower{
+  bottom: -22px;
+  left: 0;
+  background: #ffff00;
+  animation: lower 1s linear infinite;
+}
+@keyframes lower {
+  50%{
+    bottom: 22px;
+  }
+  100%{
+    bottom: 22px;
+  }
+}
+.left{
+  left: -22px;
+  top: 0;
+  background: #00ff00;
+  animation: left 1s linear infinite;
+}
+@keyframes left {
+  50%{
+    left: 22px;
+  }
+  100%{
+    left: 22px;
+  }
+}
+.loading__word{
+  margin-top:30px;
+  color:white
 }

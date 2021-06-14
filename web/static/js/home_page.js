@@ -1,5 +1,6 @@
 const itemsSection = document.querySelector(".home__content");
 const searchButton = document.querySelector(".button__search")
+const loadNode = document.querySelector(".loader__wrapper")
 function renderMovies(movieObject, nodeDiv) {
     let node = document.createElement("div");
     node.classList.add("movie");
@@ -48,7 +49,11 @@ function main(url) {
             let dataArray = datalist; //I will get a list of dict
             console.log(dataArray)
             let num = dataArray.length;
+            if (num == 0){
+                itemsSection.innerHTML ="<h3 style='color:white'>查無相關結果</h3>"
+            }
 // Math.ceil(offsetNum/4);
+            loadNode.style.display = "none"
             for (let i = 0; i < num; i++) {
                 renderMovies(dataArray[i], itemsSection);
             }
@@ -60,13 +65,7 @@ main('/api/movie')
 showMoreButton = document.querySelector(".button__more")
 showMoreButton.addEventListener("click",()=>{
     offsetNum += 20
-    console.log(feature_id)
-    if (feature_id){
-        main(`/api/movie/?start=${offsetNum}&feature=${feature_id}`)
-    }
-    else{
-        main(`/api/movie/?start=${offsetNum}`)
-    }
+    main(`/api/movie/?start=${offsetNum}`)
 })
 
 
@@ -77,3 +76,8 @@ searchButton.addEventListener("click",()=>{
     showMoreButton.style.display = "none";
     main(`/api/search?query=${search_value}`)
 })
+
+
+// loadNode = document.createElement("section")
+// loadNode.setAttribute("class","loader__wrapper")
+// loadNode.innerHTML = 

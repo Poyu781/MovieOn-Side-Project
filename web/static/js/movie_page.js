@@ -62,7 +62,7 @@ function renderMovies(movieObject, nodeDiv) {
 		 <i class="fa fa-heart" id="heart" ></i>
 		 <img src=${img} >
 		 <div class="rating__wrap">
-		  <div class="rating">你的評價： 7分<p></p>
+		  <div class="rating"><span id="ratingText">你的評價： ${userRating}分</span><p></p>
 		  <input type="radio" id="star10" name="rating" value="10"><label for="star10" title="Rocks!">10 stars</label>
 		  <input type="radio" id="star9" name="rating" value="9"><label for="star9" title="Rocks!">9 stars</label>
 		  <input type="radio" id="star8" name="rating" value="8"><label for="star8" title="Pretty good">8 stars</label>
@@ -125,19 +125,22 @@ function renderMovies(movieObject, nodeDiv) {
 	nodeDiv.appendChild(descriptionNode);
 	
 }
+let userRating = document.querySelector("#rating").innerHTML
 function ratingFun(){
 	let userRating = document.querySelector("#rating").innerHTML;
 
-	if (userRating != ""){
+	if (userRating != "尚未評分"){
 		console.log(userRating)
 		document.querySelector(`#star${userRating}`).checked=true
 	}
 	const ratingSection = document.querySelector(".rating")
 	ratingSection.addEventListener("change",(e)=>{
 		let ratingValue = document.querySelector('input[name="rating"]:checked').value
+		let ratingText = document.querySelector("#ratingText")
+		ratingText.textContent = `你的評價：${ratingValue}分`
 		let data = {"rating":ratingValue, "imdb_id":internalId}
 		// numberOfRating.innerHTML = `Choose Rating :${ratingValue}`
-		console.log(data)
+		console.log("r",data)
 		fetch("/rating",{
 			method: "POST",
 			mode: 'same-origin',
@@ -186,6 +189,7 @@ function renderRecommend(url,node){
 				 nums.push(num); 
 				} 
 			} 
+			
 			for (let i of nums){
 				let internalId = dataArray[i].internal
 				nodeCreated = document.createElement("a")
@@ -238,31 +242,6 @@ function main(url) {
 			ratingFun()
 			heartButton()
 			renderRecommend(`/api/movie/recommend?feature=${jsonFeatureIdList}&id=${internalId}`,movieRecommend)
-            // let nodeRecommend = document.createElement("div");
-            // nodeRecommend.classList.add("movie__recommend");
-			// nodeRecommend.innerHTML = `
-			// <a class="movie" href="movie/tt8096832">
-			// <img src="https://img9.doubanio.com/view/photo/s_ratio_poster/public/p480747492.jpg" />
-			// <div class="movie__info">
-			// <h3>綠色奇蹟</h3>
-			// <div class="rank">
-			// 	<div>
-			// 	<img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/imdb.png"/>
-			// 	<p>6.3</p>
-			// 	</div>
-			// 	<div>
-			// 	<img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/douban.jpg"/>
-			// 	<p>6.90</p>
-			// 	</div>
-			// 	<div>
-			// 	<img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/tomato.png"/>
-			// 	<p>80</p>
-			// 	</div>
-			// </div>
-			// </div>
-			// </a>
-			// `
-			// // movieSection.appendChild(nodeRecommend)
         });
 }
 main(`/api/detail/${internalId}`)
