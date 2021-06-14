@@ -40,7 +40,7 @@ function main(url,node) {
             let dataArray = datalist; //I will get a list of dict
             let num = dataArray.length;
 // Math.ceil(offsetNum/4);
-            for (let i = 0; i < num; i++) {
+            for (let i = 0; i < Math.min(num,6); i++) {
                 renderMovies(dataArray[i], node);
             }
 

@@ -4,6 +4,7 @@ const movieDetail = document.querySelector(".movie__information")
 const movieSection= document.querySelector(".movie__section")
 const movieNode = document.querySelector(".movie__all")
 const movieRecommend = document.querySelector(".movie__recommend")
+let deleteRatingButton ;
 const featureObject = {'Comedy': 1, 'Fantasy': 2, 'Romance': 3, 'Drama': 4, 'Action': 5, 'Thriller': 6, 'War': 7, 'Adventure': 8, 'Animation': 9, 'Family': 10, 'Mystery': 11, 'Horror': 12, 'Sci-Fi': 13, 'Crime': 14, 'Biography': 15, 'History': 16, 'Music': 17, 'Sport': 18, 'Western': 19, 'Musical': 20, 'Documentary': 21, 'Adult': 22, 'News': 24}
 let str = window.location.pathname;
 let internalId = str.match(/[0-9].*/)[0];
@@ -62,7 +63,7 @@ function renderMovies(movieObject, nodeDiv) {
 		 <i class="fa fa-heart" id="heart" ></i>
 		 <img src=${img} >
 		 <div class="rating__wrap">
-		  <div class="rating"><span id="ratingText">你的評價： ${userRating}分</span><p></p>
+		  <div class="rating"><span id="ratingText">你的評價： ${userRating}分  </span><button class="delete__rating">刪除</button><p></p>
 		  <input type="radio" id="star10" name="rating" value="10"><label for="star10" title="Rocks!">10 stars</label>
 		  <input type="radio" id="star9" name="rating" value="9"><label for="star9" title="Rocks!">9 stars</label>
 		  <input type="radio" id="star8" name="rating" value="8"><label for="star8" title="Pretty good">8 stars</label>
@@ -126,23 +127,25 @@ function renderMovies(movieObject, nodeDiv) {
 	
 }
 let userRating = document.querySelector("#rating").innerHTML
-function ratingFun(){
-	let userRating = document.querySelector("#rating").innerHTML;
+function ratingFun(method){
+	if (method == "POST"){ 
+		let userRating = document.querySelector("#rating").innerHTML;
 
-	if (userRating != "尚未評"){
-		console.log(userRating)
-		document.querySelector(`#star${userRating}`).checked=true
+		if (userRating != "尚未評"){
+			console.log(userRating)
+			document.querySelector(`#star${userRating}`).checked=true
+		}
 	}
 	const ratingSection = document.querySelector(".rating")
 	ratingSection.addEventListener("change",(e)=>{
 		let ratingValue = document.querySelector('input[name="rating"]:checked').value
 		let ratingText = document.querySelector("#ratingText")
 		ratingText.textContent = `你的評價：${ratingValue}分`
-		let data = {"rating":ratingValue, "imdb_id":internalId}
+		let data = {"rating":ratingValue, "internal_id":internalId}
 		// numberOfRating.innerHTML = `Choose Rating :${ratingValue}`
 		console.log("r",data)
 		fetch("/rating",{
-			method: "POST",
+			method: method,
 			mode: 'same-origin',
 			
 			body : JSON.stringify(data),
@@ -167,9 +170,10 @@ function ratingFun(){
 		})
 }
 function heartButton() {
+	
 	let heart = document.querySelector('#heart');
 	heart.addEventListener('click', function() {
-	  	heart.classList.toggle('red');
+	heart.classList.toggle('red');
 	});
   }
   
@@ -221,6 +225,35 @@ function renderRecommend(url,node){
 		})	
 }
 
+function deleteRating(){
+	let data = {"rating":"none", "internal_id":internalId}
+	// numberOfRating.innerHTML = `Choose Rating :${ratingValue}`
+	console.log("r",data)
+	fetch("/rating",{
+		method: "DELETE",
+		mode: 'same-origin',
+		
+		body : JSON.stringify(data),
+		headers : {
+			'X-Requested-With': 'XMLHttpRequest',
+			'X-CSRFToken': csrftoken,
+			'Content-Type': 'application/json'
+		},
+	})
+
+		.then((res)=>{
+
+			return res.json()
+		})
+		.catch((error) => {
+			window.location.href = `/signin?next=${path}`;
+			console.log('Error:', error)
+		})
+		.then((json)=>{
+			console.log(json)
+		})
+
+}
 
 function main(url) {
 	fetch(url)
@@ -235,11 +268,18 @@ function main(url) {
 			featureList = featureStr.split(',')
 			console.log(featureList)
 			let featureIdList = []
-
+			deleteRatingButton =document.querySelector(".delete__rating")
+			deleteRatingButton.addEventListener("click",()=>{
+				deleteRating()
+				let ratingValue = document.querySelector('input[name="rating"]:checked').value
+				document.querySelector(`#star${ratingValue}`).checked=false
+				let ratingText = document.querySelector("#ratingText")
+				ratingText.textContent = `你的評價： 尚未評分`
+			})
 			featureList.forEach(element => featureIdList.push(featureObject[element]));
 			console.log(featureIdList)
 			jsonFeatureIdList = JSON.stringify(featureIdList)
-			ratingFun()
+			ratingFun("POST")
 			heartButton()
 			renderRecommend(`/api/movie/recommend?feature=${jsonFeatureIdList}&id=${internalId}`,movieRecommend)
         });

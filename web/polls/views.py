@@ -95,7 +95,7 @@ def search_movie(request, format=None):
         query = request.GET.get('query')
 
         movie_info = LatestRating.objects.select_related("internal")
-        id_result = MovieOtherNames.objects.values("internal_id").filter(movie_name__icontains=query)
+        id_result = MovieOtherNames.objects.values("internal_id").filter(movie_name__icontains=query).distinct()
         # print(id_result)
         result = movie_info.filter(internal_id__in =id_result).order_by("internal__start_year").reverse()
         # print(id_result)
@@ -323,22 +323,24 @@ def sign_in(request):
 
 @login_required
 def score_movie(request):
+    
+
     current_user = request.user
     get_dict = json.load(request)
     rating = get_dict['rating']
-    imdb_id = get_dict['imdb_id']
+    internal_id = get_dict['internal_id']
         # review_record = InternalUserRating.objects.filter(user_id = current_user.id, movie_id= imdb_id)
         # if review_record.exists():
     if request.method == "POST":
         try:
-            review = InternalUserRating.objects.get(user_id = current_user.id, internal_id= imdb_id)
+            review = InternalUserRating.objects.get(user_id = current_user.id, internal_id= internal_id)
             review.rating = rating
             review.update_date = datetime.now()
         except:
-            review = InternalUserRating(internal_id = imdb_id, update_date = datetime.now(), rating = rating, user_id = current_user.id)
+            review = InternalUserRating(internal_id = internal_id, update_date = datetime.now(), rating = rating, user_id = current_user.id)
         review.save()
     elif request.method == "DELETE":
-        review = InternalUserRating.objects.get(user_id = current_user.id, internal_id= imdb_id)
+        review = InternalUserRating.objects.get(user_id = current_user.id, internal_id= internal_id)
         review.delete()
         return JsonResponse({"message":"delete success"})
     # print(review_record)

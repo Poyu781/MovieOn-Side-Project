@@ -606,6 +606,17 @@ h2{
 #heart.red {
   color: red;
 }
+.delete__rating{
+    border: none;
+    background: white;
+    border-radius: 3px;
+    padding: 1px 3px;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 4px;
+    transition: all 0.4s ease-in-out;
+    cursor: pointer;
+}
 
 
 /* Loading Css */
