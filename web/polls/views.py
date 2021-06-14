@@ -227,6 +227,11 @@ def advanced_search_page(request):
     
     return render(request,"advanced_search_page.html")
 
+def search_by_word_page(request):
+    
+    return render(request,"search_by_word_page.html")
+
+
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 

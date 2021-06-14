@@ -19,6 +19,7 @@ urlpatterns = [
     path("logout",views.logout),
     path("memberpage",views.member_page),
     path("search",views.advanced_search_page),
+    path("basicSearch",views.search_by_word_page),
     # path("api/1.0/movies", views.get_movies_rating, name="movies"),
     # path("api/1.0/douban_detail",views.DoubanDetailView.as_view())
 ]

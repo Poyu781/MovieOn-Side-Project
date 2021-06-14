@@ -1,5 +1,8 @@
-const itemsSection = document.querySelector(".home__content");
 const loadNode = document.querySelector(".loader__wrapper")
+const itemsSection = document.querySelector(".home__content");
+const loadingGif = document.querySelector(".loader__wrapper")
+// const searchButton = document.querySelector(".button__search")
+let query = window.location.search;
 function renderMovies(movieObject, nodeDiv) {
     let node = document.createElement("div");
     node.classList.add("movie");
@@ -59,20 +62,11 @@ function main(url) {
 
         });
 }
-let offsetNum = 0
-main('/api/movie')
-showMoreButton = document.querySelector(".button__more")
-showMoreButton.addEventListener("click",()=>{
-    offsetNum += 20
-    main(`/api/movie/?start=${offsetNum}`)
-})
 
-
-
+main(`/api/search${query}`)
 // searchButton.addEventListener("click",()=>{
 //     let search_value = document.querySelector("input[type='text']").value
 //     itemsSection.innerHTML = ""
-//     showMoreButton.style.display = "none";
 //     main(`/api/search?query=${search_value}`)
 // })
 
