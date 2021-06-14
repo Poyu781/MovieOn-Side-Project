@@ -19,6 +19,7 @@ django-filter = "*"
 social-auth-app-django = "*"
 tenacity = "*"
 pandas = "*"
+whitenoise = "*"
 
 [dev-packages]
 
