@@ -55,7 +55,31 @@ function renderMovies(movieObject, nodeDiv) {
     let doubanRatingCount = numberWithCommas(movieObject.total_rating_amount)
     let director_list = movieObject.director_list
     let actor_list = movieObject.actor_list
-    let feature_list = movieObject.feature_list
+	let feature_list = movieObject.feature_list
+	let tomatoNodeValue;
+	if (tomatoId  === null){
+		tomatoNodeValue = ''
+	}
+	else{
+		tomatoNodeValue =`
+		<a href="https://www.rottentomatoes.com/m/${tomatoId}" target="_blank">
+		<div class="ranking__icon__wrapper">
+		<img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/tomato.png">
+		</div>
+		  <p class="score">${rottenAudienceRating}</p>
+		  <p>觀眾評分（共 ${rottenAudienceCount} 筆評分）</p>
+	   </a>
+		<a href="https://www.rottentomatoes.com/m/${tomatoId}" target="_blank">
+		<div class="ranking__icon__wrapper">
+		<img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/tomato.png">
+		</div>
+		<p class="score">${rottenTomatorRating}</p>
+		<p>影評評分（共 ${rottenTomatorCount} 筆評分）</p>
+	   </a>
+		`
+	}
+
+	let r =''
 	let htmlText = `
 	<h2>${cnTitle} ${engTitle}</h2>
 	<div class="movie__information" id=${movieObject.internal_id}>
@@ -101,20 +125,7 @@ function renderMovies(movieObject, nodeDiv) {
 		  <p class="score">${doubanRating}</p>
 		  <p>（共 ${doubanRatingCount}  筆評分）</p>
 		</a>
-		<a href="https://www.rottentomatoes.com/m/${tomatoId}" target="_blank">
-		  <div class="ranking__icon__wrapper">
-		  <img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/tomato.png">
-		  </div>
-			<p class="score">${rottenAudienceRating}</p>
-			<p>觀眾評分（共 ${rottenAudienceCount} 筆評分）</p>
-		 </a>
-		  <a href="https://www.rottentomatoes.com/m/${tomatoId}" target="_blank">
-		  <div class="ranking__icon__wrapper">
-		  <img src="https://stylishforjimmy.s3-ap-northeast-1.amazonaws.com/tomato.png">
-		  </div>
-		  <p class="score">${rottenTomatorRating}</p>
-		  <p>影評評分（共 ${rottenTomatorCount} 筆評分）</p>
-		 </a>
+		${tomatoNodeValue}
 		 </div>
   </div></div>
 	`
