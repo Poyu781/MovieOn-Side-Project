@@ -217,6 +217,7 @@ h2{
   max-width: 850px;
   display: flex;
   padding: 5vh;
+  padding-bottom: 1vh;
   gap: 8%;
   text-align: left;
   color: #FFFFFE;
@@ -245,7 +246,7 @@ h2{
 
 .movie__intro {
   text-align: left;
-  margin: 3vh auto;
+  margin: 0vh auto;
   max-width: 768px;
   color: white;
   font-size: 15px;
@@ -299,6 +300,7 @@ h2{
 .rating__wrap {
   display: flex;
   text-align: center;
+  padding-top: 20px;
 }
 .rating {
   margin: 0 auto;

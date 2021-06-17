@@ -218,10 +218,11 @@ def get_recommend_movies(request):
 
     id_result = list(result)
     id_result.remove(int(internal_id))
+    id_result = id_result[:min(50,len(id_result))]
     movie_info = LatestRating.objects.select_related("internal").order_by("imdb_rating","rating_total_amount").reverse()
     recommend_result = movie_info.filter(internal_id__in =id_result)
     print(time.time()-start)
-    serializer = LastestInfoSerializer(recommend_result[:min(50,len(id_result))], many=True)
+    serializer = LastestInfoSerializer(recommend_result, many=True)
     return Response(serializer.data)
 def advanced_search_page(request):
     
@@ -247,13 +248,19 @@ def member_page(request):
 # @login_required
 def movie_single_page(request,internal_id):
     if str(request.user) != "AnonymousUser":
+        print(1)
         current_user = request.user
         try:
             review = MemberViewedRecord.objects.get(user_id = current_user.id, internal_id= internal_id)
             review.viewed_date = datetime.now()
         except:
             review = MemberViewedRecord(internal_id = internal_id, viewed_date	 = datetime.now(), user_id = current_user.id)
-        review.save()
+        try:
+            review.save()
+        except:
+            print(4)
+            return render(request,"movie_page.html")
+        
     
     current_user = request.user
     content = {}

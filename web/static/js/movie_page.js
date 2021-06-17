@@ -4,10 +4,13 @@ const movieDetail = document.querySelector(".movie__information")
 const movieSection= document.querySelector(".movie__section")
 const movieNode = document.querySelector(".movie__all")
 const movieRecommend = document.querySelector(".movie__recommend")
+const recommendText = document.querySelector("#recommend_text")
+recommendText.style.display = "none";
 let deleteRatingButton ;
 const featureObject = {'Comedy': 1, 'Fantasy': 2, 'Romance': 3, 'Drama': 4, 'Action': 5, 'Thriller': 6, 'War': 7, 'Adventure': 8, 'Animation': 9, 'Family': 10, 'Mystery': 11, 'Horror': 12, 'Sci-Fi': 13, 'Crime': 14, 'Biography': 15, 'History': 16, 'Music': 17, 'Sport': 18, 'Western': 19, 'Musical': 20, 'Documentary': 21, 'Adult': 22, 'News': 24}
 let str = window.location.pathname;
-let internalId = str.match(/[0-9].*/)[0];
+let internalId = str.slice(7)
+console.log(internalId)
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -138,15 +141,15 @@ function renderMovies(movieObject, nodeDiv) {
 	
 }
 let userRating = document.querySelector("#rating").innerHTML
-function ratingFun(method){
-	if (method == "POST"){ 
-		let userRating = document.querySelector("#rating").innerHTML;
+function ratingFun(){
 
-		if (userRating != "尚未評"){
-			console.log(userRating)
-			document.querySelector(`#star${userRating}`).checked=true
-		}
+	let userRating = document.querySelector("#rating").innerHTML;
+
+	if (userRating != "尚未評"){
+		console.log(userRating)
+		document.querySelector(`#star${userRating}`).checked=true
 	}
+	
 	const ratingSection = document.querySelector(".rating")
 	ratingSection.addEventListener("change",(e)=>{
 		let ratingValue = document.querySelector('input[name="rating"]:checked').value
@@ -156,7 +159,7 @@ function ratingFun(method){
 		// numberOfRating.innerHTML = `Choose Rating :${ratingValue}`
 		console.log("r",data)
 		fetch("/rating",{
-			method: method,
+			method: "POST",
 			mode: 'same-origin',
 			
 			body : JSON.stringify(data),
@@ -270,7 +273,9 @@ function main(url) {
 	fetch(url)
         .then((response) => {
             return response.json();
-        })
+		})
+
+
         .then((datalist) => {
             let dataArray = datalist; //I will get a list of dict
             console.log(dataArray[0])
@@ -290,10 +295,22 @@ function main(url) {
 			featureList.forEach(element => featureIdList.push(featureObject[element]));
 			console.log(featureIdList)
 			jsonFeatureIdList = JSON.stringify(featureIdList)
-			ratingFun("POST")
+			ratingFun()
 			heartButton()
 			renderRecommend(`/api/movie/recommend?feature=${jsonFeatureIdList}&id=${internalId}`,movieRecommend)
-        });
+			recommendText.style.display = "block";
+		})
+		.catch((error) => {
+			console.log('Error:', error)
+			text = document.createElement("h3")
+			text.style.color = "white"
+			text.innerText = "無相關結果，三秒後自動跳轉至首頁"
+			movieRecommend.appendChild(text)
+			setTimeout(()=>{
+				window.location.href = `/`
+			}, 3000)
+			;
+		})
 }
 main(`/api/detail/${internalId}`)
 
