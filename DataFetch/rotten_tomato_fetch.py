@@ -175,6 +175,42 @@ for i in tomato_list :
 #             error_log.write(str(e)+"\n")
 #             error_log.write(crawl_url)
 
+insert_rotten_data = []
+def get_internal_rotten_relateion(url,internal_id,error_file):
+    name_list = movie_info_dict[internal_id][1].split(",")
+    movie_title = movie_info_dict[internal_id][0]
+    # douban_id = movie_info_dict[internal_id][2]
+    release_year = movie_info_dict[internal_id][2]
+    lenght_of_title = len(movie_title)
+    fetch_json = crawl.fetch_data(url,movie_title,"json")
+    result = fetch_json['movies']['items']
+    if result  == []:
+        print("doesn't have any matches !")
+        return False
+    for data in result :
+        # print(data)
+        if match_title(movie_title,data['name']) == 1:
+            if match_actor_name(name_list,data['cast']):
+                # print("success !")
+                insert_rotten_data.append([internal_id,data['url']])
+                # print(data['url'],movie_title,internal_id)
+                return True
+    match = False
+    for data in result :
+        len_of_title = min(lenght_of_title,len(data['name']))
+        if match_title(movie_title[:len_of_title], data['name'][:len_of_title]) >= 0.7 or match_title(movie_title[-len_of_title:], data['name'][-len_of_title:]) >= 0.7:
+            match = True
+            if match_actor_name(name_list,data['cast']) and data['releaseYear'] == str(release_year):
+                # print("success !")
+                insert_rotten_data.append([internal_id,data['url']])
+                return True       
+    if match:
+        print(data['releaseYear'],str(release_year))
+        print("title match but cast didn't match well,please check[",movie_title,internal_id)
+        return False
+    else:
+        print("doesn't have similarity name",movie_title,internal_id)
+crawl.main(get_internal_rotten_relateion,"https://www.rottentomatoes.com/napi/search/all?type=movie&searchQuery=",list(movie_info_dict.keys())[:100],"r.log")
 
 # def thread_crawler(fun,ip_list,id_list):
     # threads =[]

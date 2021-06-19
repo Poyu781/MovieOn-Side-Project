@@ -6,7 +6,7 @@ from django.db import transaction
 from rest_framework import viewsets
 from rest_framework import generics
 from .serializers import MovieBasicSerializer,LastestInfoSerializer,InternalUserRatingSerializer,MemberViewedRecordSerializer
-from .models import MovieBasicInfo,LatestRating,FeatureMovieTable,FeatureTable,InternalUserRating,MovieOtherNames,InternalUserRating,MemberViewedRecord
+from .models import MovieBasicInfo,LatestRating,FeatureMovieTable,FeatureTable,InternalUserRating,MovieOtherNames,InternalUserRating,MemberViewedRecord,ErrorMsgRecord
 # from .serializers import DoubanDetailSerializer ,LatestRatingSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
@@ -20,7 +20,7 @@ from django.contrib import messages
 from datetime import datetime
 from pandas.io.json import json_normalize
 from rest_framework.decorators import api_view
-from .models import MovieDetail
+
 from django.db import connection
 import time
 from statistics import mean, pstdev
@@ -273,17 +273,7 @@ def movie_single_page(request,internal_id):
     print(content)
     return render(request,"movie_page.html",content)
 
-def get_movies_rating(request):
-    data = DoubanDetail.objects.get(douban_id= "10001432")
-    ro = LatestRating.objects.get(imdb_id = "tt8096832")
-    total = LatestRating.objects.select_related('imdb').all()
-    # print(total)
-    for i in total:
-        print("33")
-        print(i)
-        break
-    # print()
-    return HttpResponse(f"{total.query}")
+
 
 def sign_up(request):
     form = RegisterForm()
@@ -365,3 +355,17 @@ def score_movie(request):
 def logout(request):
     auth.logout(request)
     return redirect('/')
+
+
+def report_error(request):
+    current_user = request.user
+    get_dict = json.load(request)
+    internal_id = get_dict['internal_id']
+    error_feature = get_dict['error_feature']
+    error_msg = get_dict['error_msg']
+        # review_record = InternalUserRating.objects.filter(user_id = current_user.id, movie_id= imdb_id)
+        # if review_record.exists():
+    if request.method == "POST":
+        review = ErrorMsgRecord(internal_id = internal_id, user_id = current_user.id ,update_date = datetime.now(), error_feature = error_feature, error_message = error_msg)
+        review.save()
+        return JsonResponse({"message":"success"})

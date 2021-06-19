@@ -5,6 +5,9 @@ const movieSection= document.querySelector(".movie__section")
 const movieNode = document.querySelector(".movie__all")
 const movieRecommend = document.querySelector(".movie__recommend")
 const recommendText = document.querySelector("#recommend_text")
+const reportTitle = document.querySelector(".report_title")
+const reportId = document.querySelector(".report_id")
+const sendErrorButton = document.querySelector("#submit_report")
 recommendText.style.display = "none";
 let deleteRatingButton ;
 const featureObject = {'Comedy': 1, 'Fantasy': 2, 'Romance': 3, 'Drama': 4, 'Action': 5, 'Thriller': 6, 'War': 7, 'Adventure': 8, 'Animation': 9, 'Family': 10, 'Mystery': 11, 'Horror': 12, 'Sci-Fi': 13, 'Crime': 14, 'Biography': 15, 'History': 16, 'Music': 17, 'Sport': 18, 'Western': 19, 'Musical': 20, 'Documentary': 21, 'Adult': 22, 'News': 24}
@@ -280,6 +283,8 @@ function main(url) {
             let dataArray = datalist; //I will get a list of dict
             console.log(dataArray[0])
 			renderMovies(dataArray[0], movieNode);
+			reportTitle.innerHTML = `<p>電影名稱: <br><span id="report_title">${dataArray[0].main_taiwan_name} ${dataArray[0].main_original_name}</span></p>`
+			reportId.innerHTML = `<p>電影序號: <br><span id="report_id">${dataArray[0].internal_id}</span></p>`
 			let featureStr = dataArray[0].feature_list
 			featureList = featureStr.split(',')
 			console.log(featureList)
@@ -312,10 +317,48 @@ function main(url) {
 			;
 		})
 }
-main(`/api/detail/${internalId}`)
+main(`/api/detail/${internalId}`);
+
+function reportError(internalId,errorFeature,errorMsg){
+	let data = {"internal_id" :internalId ,"error_feature":errorFeature , "error_msg": errorMsg}
+	fetch("/report_error",{
+		method: "POST",
+		mode: 'same-origin',
+		
+		body : JSON.stringify(data),
+		headers : {
+			'X-Requested-With': 'XMLHttpRequest',
+			'X-CSRFToken': csrftoken,
+			'Content-Type': 'application/json'
+		},
+	})
+		.then((res)=>{
+			return res.json()
+		})
+		.catch((error) => {
+			// window.location.href = `/signin?next=${path}`;
+			console.log('Error:', error)
+		})
+		.then((json)=>{
+			console.log(json)
+		})
+};
 
 
-
-
-
-
+function togglePopup(){
+	document.getElementById("popup-1").classList.toggle("active");
+  }
+  
+sendErrorButton.addEventListener("click",()=>{
+	try{
+		let internalId = document.querySelector("#report_id").innerText;
+		let errorFeature = document.querySelector("input[name='mistake']:checked").value
+		let errorMsg = document.querySelector("textarea").value
+		console.log(internalId,errorFeature,errorMsg)
+		document.getElementById("popup-1").classList.toggle("active");
+		reportError(internalId,errorFeature,errorMsg)
+}
+	catch{
+		alert("請選擇錯誤類型")
+	}
+})
