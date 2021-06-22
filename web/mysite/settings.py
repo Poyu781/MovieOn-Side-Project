@@ -9,18 +9,12 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
+from config import rds_host,rds_password,rds_user,secret_key
 from pathlib import Path
 import os
-import dotenv
-dotenv.load_dotenv()
-rds_host = os.getenv("rds_host")
-rds_user = os.getenv("rds_user")
-rds_password = os.getenv("rds_password")
-secret_key = os.getenv("SECRET_KEY")
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -33,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*",'f11e31119a49.ngrok.io']
 
-
+INTERNAL_IPS = [ '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
@@ -43,17 +37,26 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
+    'debug_toolbar',
+    'rest_framework',
+    'django_filters',
+    'social_django',
+
+
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -83,7 +86,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'stylish',
+        'NAME': 'movie_new',
         'USER': rds_user,
         'PASSWORD': rds_password,
         'HOST': rds_host,
@@ -127,6 +130,22 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
+if DEBUG:
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static').replace('\\', '/') ]
+else:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR,"staticfiles")
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static').replace('\\', '/') ]
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static').replace('\\', '/') ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 20
+}
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = "/signin"

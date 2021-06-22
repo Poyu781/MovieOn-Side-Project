@@ -1,0 +1,30 @@
+body {
+    color: #E6E6FA;
+  }
+
+h1{
+    padding: 50px;
+}
+.form__wrap{
+    
+    display:flex;
+    text-align: center;
+    justify-content:center;
+}
+.log__section{
+    
+    margin:0 auto;
+    width: 600px;
+    margin-top: 100px;
+}
+.button__switch{
+    display:flex;
+    justify-content:center;
+    text-align: center;
+}
+
+    /* display:none;} */
+/* 
+form{
+    background-color: #E6E6FA;
+} */

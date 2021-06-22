@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block css%}<link rel="stylesheet" href="../static/css/sign_up.css" />{% endblock %}
+{% block content%}
+
+
+<section class="log__section">
+    <div class="button__switch">
+        <h2 id="register">註冊</h2>
+    </div>
+    <div class="form__wrap">
+        <form action="" method="POST">
+
+            {% csrf_token %}
+            {{ form }}
+            <br />
+            <p>已經有帳號了嗎? <a href="/signin">登入</a></p>
+            <input class="btn btn-success" type="submit" value="送出" />
+            
+            {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{request.GET.next}}">
+            {% endif%}
+
+        </form>
+    </div>
+</section>
+
+{% endblock %}
+
+
+
+

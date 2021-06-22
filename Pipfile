@@ -13,6 +13,13 @@ beautifulsoup4 = "*"
 multithreading = "*"
 opencc-python-reimplemented = "*"
 django = "*"
+django-debug-toolbar = "*"
+djangorestframework = "*"
+django-filter = "*"
+social-auth-app-django = "*"
+tenacity = "*"
+pandas = "*"
+whitenoise = "*"
 
 [dev-packages]
 

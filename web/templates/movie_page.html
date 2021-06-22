@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+}
+{% block content%}
+<div class="movie__all">
+</div>
+<div class="recommend__wrapper">
+  <h3>你可能也會喜歡</h3>
+  
+  <div class="movie__recommend">
+  </div>
+</div>
+
+{% if rating %}
+    <p hidden="hidden" id="rating">{{rating}}</p>
+{% else %}
+    <p hidden="hidden" id="rating">尚未評</p>
+{% endif %}
+{% endblock %}
+
+{% block js%}<script src="../static/js/movie_page.js" type="text/javascript"></script>{% endblock %}
+
+

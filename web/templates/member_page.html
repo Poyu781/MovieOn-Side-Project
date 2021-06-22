@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+}
+{% block content%}
+<div class="profile profile__wrapper">
+  <h1 style="color:#D68B00;border:2px #ccc solid;padding:10px;" id={{user.id}} class="user">Hi {{ user.username }}</h1>
+
+  <h3>你的口味相似度</h3>
+  <section class="similarity">
+  </section>
+      
+  <h3>你最近評價過的電影</h3>
+  <section class="movies__block">
+
+  </section>
+    
+  <h3>你最近瀏覽過的電影</h3>
+  <section class="movies__block viewed__block">
+  </section>
+
+</div>
+{% endblock %}
+
+{% block js%}<script src="../static/js/member_page.js" type="text/javascript"></script>{% endblock %}
+
+
