@@ -203,13 +203,14 @@ function renderRecommend(url,node){
 			let dataArray = datalist; //I will get a list of dict
 			dataNum = dataArray.length
 			console.log(dataArray)
-			let nums = [], numsLen = 10, maxNum = Math.min(dataNum,25), num; 
+			let nums = [], numsLen = 10, maxNum = Math.min(dataNum-1,25), num; 
 			while (nums.length < numsLen) { 
 				num = Math.round(Math.random() * maxNum); 
 				if (nums.indexOf(num) === -1) { 
 				 nums.push(num); 
 				} 
 			} 
+			console.log(nums)
 			
 			for (let i of nums){
 				let internalId = dataArray[i].internal

@@ -54,11 +54,14 @@ function getSimilarity(url,nodeDiv){
             return response.json();
         })
         .then((datalist) => {
-
-            let dataArray = datalist[0]
+            if (datalist.message === "not enough"){
+                nodeDiv.innerHTML = '<h2 style="margin: 0 auto;"> 資料量不足，需要評分超過 10 部影片才能顯示</h2>'
+            }
+            else{
+            let dataArray = datalist
             let imdb_sim = Math.round(dataArray.imdb*100,2);
             let douban_sim = Math.round(dataArray.douban*100,2)
-            let tomato_sim = douban_sim - Math.floor(Math.random() * 20)
+            let tomato_sim = Math.round(dataArray.tomato*100,2)
 
             let htmlText = `
             <div class="similarity__block">
@@ -75,7 +78,7 @@ function getSimilarity(url,nodeDiv){
           </div>
         `;
         nodeDiv.innerHTML = htmlText;
-
+            }
 })}
 getSimilarity(`api/member/${userId}/similarity/`,similartiySection)
 
