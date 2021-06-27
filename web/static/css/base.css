@@ -770,3 +770,10 @@ h2{
   transition: all 0.4s ease-in-out;
   margin-bottom: 30px;
 }
+
+.top__btn {
+  position: fixed;
+  bottom: 20px;
+  Right: 20px;
+  width: 30px;
+}
