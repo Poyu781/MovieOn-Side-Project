@@ -20,6 +20,9 @@ document.addEventListener("keypress",(e)=>{
     }
 }
 )
+document.querySelector(".top__btn").addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  })
 // searchButton.addEventListener("click",()=>{
 //     let search_value = document.querySelector("input[type='text']").value
 //     itemsSection.innerHTML = ""

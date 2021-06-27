@@ -20,6 +20,7 @@ social-auth-app-django = "*"
 tenacity = "*"
 pandas = "*"
 whitenoise = "*"
+redis = "*"
 
 [dev-packages]
 

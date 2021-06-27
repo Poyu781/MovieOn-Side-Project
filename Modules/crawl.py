@@ -35,26 +35,18 @@ def fetch_data(fixed_url, search_id,render_way="bs4"):
         # print(req.text)
         return json.loads(req.text)
 
-# print(fetch_data("https://movie.douban.com/subject/","35076714"))
 
 def start_thread(threads,fun,*args):
     threads.append(threading.Thread(target = fun, args = (args)))
     time.sleep(0.05)
     threads[-1].start()
 
-# def clean_data(fixed_url, search_id,error_file):
-#     result = fetch_data(fixed_url, search_id)
-#     if isinstance(result,dict):
-#         error_file.write(json.dumps(result) + "\n")
-#         return "failed"
-#     print(result.find("strong",property="v:average").text)
-# douban_error_log = open("douban_error.json","a")
-# id_list = ['25728006',"34973399"]
+
 def main(fun, fixed_url, id_list, error_log):
     threads =[]
     for id in id_list:
         start_thread(threads,fun,fixed_url, id, error_log)
     for i in threads:
         i.join()
-# main(clean_data,"https://movie.douban.com/subject/",id_list,douban_error_log)
+
 

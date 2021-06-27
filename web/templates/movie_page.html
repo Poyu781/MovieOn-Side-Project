@@ -5,7 +5,7 @@
 <div class="movie__all">
 </div>
 <div class="recommend__wrapper">
-  <h3>你可能也會喜歡</h3>
+  <h3 id="recommend_text">你可能也會喜歡</h3>
   
   <div class="movie__recommend">
   </div>
@@ -16,6 +16,24 @@
 {% else %}
     <p hidden="hidden" id="rating">尚未評</p>
 {% endif %}
+<div class="popup" id="popup-1">
+  <div class="overlay"></div>
+    <div class="content">
+      <div class="close-btn" onclick="togglePopup()">×</div>
+      <h2>問題回報</h2>
+      <p class="report_title"></p>
+      <p class="report_id"></p>
+      請選擇問題種類：<br>
+      <input type="radio" name="mistake" value="rotten_match_error" required> 爛番茄序號錯誤
+      <input type="radio" name="mistake" value="title_name_error"> 電影名稱錯誤
+      <input type="radio" name="mistake" value="other"> 其他<br>
+      回報資訊：<br>
+      <textarea rows="3" cols="50" name="comment" placeholder="可以輸入正確的資訊或爛番茄連結"></textarea><br>
+      <button class= "report__btn" id="submit_report"> 送出</button>
+    </div>
+</div>
+ 
+<button class= "report__btn"onclick="togglePopup()">問題回報</button>
 {% endblock %}
 
 {% block js%}<script src="../static/js/movie_page.js" type="text/javascript"></script>{% endblock %}

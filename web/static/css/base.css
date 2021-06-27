@@ -217,6 +217,7 @@ h2{
   max-width: 850px;
   display: flex;
   padding: 5vh;
+  padding-bottom: 1vh;
   gap: 8%;
   text-align: left;
   color: #FFFFFE;
@@ -245,7 +246,7 @@ h2{
 
 .movie__intro {
   text-align: left;
-  margin: 3vh auto;
+  margin: 0vh auto;
   max-width: 768px;
   color: white;
   font-size: 15px;
@@ -299,6 +300,7 @@ h2{
 .rating__wrap {
   display: flex;
   text-align: center;
+  padding-top: 20px;
 }
 .rating {
   margin: 0 auto;
@@ -336,7 +338,7 @@ h2{
 }
 
 .recommend__wrapper {
-  margin: 10vh auto;
+  margin: 5vh auto;
   max-width: 1024px;
 }
 .recommend__wrapper > h3 {
@@ -702,4 +704,76 @@ h2{
 .loading__word{
   margin-top:30px;
   color:white
+}
+
+
+/* mistake report */
+.popup .overlay {
+  position:fixed;
+  top:0px;
+  left:0px;
+  width:100vw;
+  height:100vh; background:rgba(0,0,0,0.7);
+  z-index:1;
+  display:none;
+}
+ 
+.popup .content {
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) scale(0);
+  background:#fff;
+  width:95%;
+  max-width:500px;
+  height:400px;
+  z-index:10;
+  text-align:center;
+  padding:20px;
+  box-sizing:border-box;
+  font-family:"Open Sans",sans-serif;
+}
+ 
+.popup .close-btn {
+  cursor:pointer;
+  position:absolute;
+  right:20px;
+  top:20px;
+  width:30px;
+  height:30px;
+  background:#222;
+  color:#fff;
+  font-size:25px;
+  font-weight:600;
+  line-height:30px;
+  text-align:center;
+  border-radius:50%;
+}
+ 
+.popup.active .overlay {
+  display:block;
+}
+ 
+.popup.active .content {
+  transition:all 300ms ease-in-out;
+  transform:translate(-50%,-50%) scale(0.7);
+}
+ 
+.report__btn{
+  border: none;
+  background: white;
+  border-radius: 3px;
+  padding: 1px 3px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 4px;
+  transition: all 0.4s ease-in-out;
+  margin-bottom: 30px;
+}
+
+.top__btn {
+  position: fixed;
+  bottom: 20px;
+  Right: 20px;
+  width: 30px;
 }
