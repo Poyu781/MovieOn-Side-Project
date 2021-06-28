@@ -220,7 +220,7 @@ def get_member_viewed_movie(request, user_id, format=None):
         movie_info = MemberViewedRecord.objects.select_related("internal")
         result = movie_info.filter(
             user_id=current_user_id).order_by("viewed_date").reverse()
-        serializer = MemberViewedRecordSerializer(result, many=True)
+        serializer = MemberViewedRecordSerializer(result[:20], many=True)
         return Response(serializer.data)
 
 
