@@ -323,7 +323,7 @@ def get_recommend_movies(request):
         feature_dict = defaultdict(set)
         id_result = FeatureMovieTable.objects.all()
         for i in id_result:
-            feature_dict[i.feature_id].add(i.internal_id)
+            feature_dict[str(i.feature_id)].add(i.internal_id)
         redis_store_dict = {}
         for i in feature_dict :
             redis_store_dict[i] = list(feature_dict[i])
