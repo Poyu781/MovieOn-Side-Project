@@ -1,160 +1,159 @@
 {% extends 'base.html' %}
-{% block css%} 
+{% block css%}
 <link rel="stylesheet" href="../static/css/search_page.css" />{% endblock %}
 
 {% block content%}
 
 <section class="search__section">
-    <div class="feature__wrapper">
-      <div class="tag">
-        <input type="radio" id="all__feature" name="type" checked>
-        <label for="all__feature">全部類型</label>
-      </div>
-      <div class="tag">
-        <input type="radio" id="3" name="type">
-        <label for="3">愛情</label>
-      </div>
-      <div class="tag">
-        <input type="radio" id="12" name="type">
-        <label for="12">驚悚</label>
-      </div>
-      <div class="tag">
-        <input type="radio" id="1" name="type">
-        <label for="1">喜劇</label>
-      </div>
-      <div class="tag">
-        <input type="radio" id="6" name="type">
-        <label for="6">懸疑</label>
-      </div>
-      <div class="tag">
-        <input type="radio" id="16" name="type">
-        <label for="16">歷史</label>
-      </div>
-      <div class="tag">
-        <input type="radio" id="4" name="type">
-        <label for="4">劇情</label>
-      </div>
-      <div class="tag">
-        <input type="radio" id="5" name="type">
-        <label for="5">動作</label>
-      </div>
-      <div class="tag">
-        <input type="radio" id="2" name="type">
-        <label for="2">奇幻</label>
-      </div>
-      <div class="tag">
-        <input type="radio" id="7" name="type">
-        <label for="7">戰爭</label>
-      </div>
-      <div class="tag">
-        <input type="radio" id="8" name="type">
-        <label for="8">冒險</label>
-      </div>
-      <div class="tag">
-        <input type="radio" id="10" name="type">
-        <label for="10">家庭</label>
-      </div>
-      <div class="tag">
-        <input type="radio" id="11" name="type">
-        <label for="11">神秘</label>
-      </div>
-      <div class="tag">
-        <input type="radio" id="13" name="type">
-        <label for="13">科幻</label>
-      </div>
-      <div class="tag">
-        <input type="radio" id="14" name="type">
-        <label for="14">犯罪</label>
-      </div>
-      <div class="tag">
-        <input type="radio" id="17" name="type">
-        <label for="17">音樂</label>
-      </div>
-      <div class="tag">
-        <input type="radio" id="18" name="type">
-        <label for="18">運動</label>
+  <div class="feature__wrapper">
+    <div class="tag">
+      <input type="radio" id="all__feature" name="type" checked>
+      <label for="all__feature">全部類型</label>
+    </div>
+    <div class="tag">
+      <input type="radio" id="3" name="type">
+      <label for="3">愛情</label>
+    </div>
+    <div class="tag">
+      <input type="radio" id="12" name="type">
+      <label for="12">驚悚</label>
+    </div>
+    <div class="tag">
+      <input type="radio" id="1" name="type">
+      <label for="1">喜劇</label>
+    </div>
+    <div class="tag">
+      <input type="radio" id="6" name="type">
+      <label for="6">懸疑</label>
+    </div>
+    <div class="tag">
+      <input type="radio" id="16" name="type">
+      <label for="16">歷史</label>
+    </div>
+    <div class="tag">
+      <input type="radio" id="4" name="type">
+      <label for="4">劇情</label>
+    </div>
+    <div class="tag">
+      <input type="radio" id="5" name="type">
+      <label for="5">動作</label>
+    </div>
+    <div class="tag">
+      <input type="radio" id="2" name="type">
+      <label for="2">奇幻</label>
+    </div>
+    <div class="tag">
+      <input type="radio" id="7" name="type">
+      <label for="7">戰爭</label>
+    </div>
+    <div class="tag">
+      <input type="radio" id="8" name="type">
+      <label for="8">冒險</label>
+    </div>
+    <div class="tag">
+      <input type="radio" id="10" name="type">
+      <label for="10">家庭</label>
+    </div>
+    <div class="tag">
+      <input type="radio" id="11" name="type">
+      <label for="11">神秘</label>
+    </div>
+    <div class="tag">
+      <input type="radio" id="13" name="type">
+      <label for="13">科幻</label>
+    </div>
+    <div class="tag">
+      <input type="radio" id="14" name="type">
+      <label for="14">犯罪</label>
+    </div>
+    <div class="tag">
+      <input type="radio" id="17" name="type">
+      <label for="17">音樂</label>
+    </div>
+    <div class="tag">
+      <input type="radio" id="18" name="type">
+      <label for="18">運動</label>
+    </div>
+  </div>
+  <hr>
+  <div class="period__wrapper">
+    <p>選擇年份</p>
+    <div class="range-slider">
+      <span><input type="number" value="1980" min="1980" max="2021" /> to <input type="number" value="2021" min="1980"
+          max="2021" /></span>
+      <div>
+        <input value="1980" min="1980" max="2021" type="range" />
+        <input value="2021" min="1980" max="2021" type="range" />
       </div>
     </div>
-    <hr>
-    <div class="period__wrapper">
-        <p>選擇年份</p>
-        <div class="range-slider">
-          <span><input type="number" value="1980" min="1980" max="2021"/> to <input type="number" value="2021" min="1980" max="2021" /></span>
-          <div>
-            <input value="1980" min="1980" max="2021" type="range" />
-            <input value="2021" min="1980" max="2021" type="range" />
-          </div>
-        </div>
-      </div>
-    <hr>
-    <div class="other__wrapper">
-      <div class="radios__block">
-        <div>
-          <input type="radio" id="rating_total_amount" name="selector" value="popular" checked>
-          <label for="rating_total_amount">熱門程度</label>
-        </div>
-        <div>
-          <input type="radio" id="imdb_rating" name="selector" value="ranking">
-          <label for="imdb_rating">IMDB 評分最高</label>
-        </div>
-        <div>
-            <input type="radio" id="douban_rating" name="selector" value="ranking">
-            <label for="douban_rating">豆瓣評分最高</label>
-          </div>
-          <div>
-            <input type="radio" id="audience_rating" name="selector" value="ranking">
-            <label for="audience_rating">爛番茄評分最高</label>
-          </div>
+  </div>
+  <hr>
+  <div class="other__wrapper">
+    <div class="radios__block">
+      <div>
+        <input type="radio" id="rating_total_amount" name="selector" value="popular" checked>
+        <label for="rating_total_amount">熱門程度</label>
       </div>
       <div>
-        <select id="imdb" class="score__selector">
-          <option>IMDB 評分</option>
-          <option value="9">9 分以上</option>
-          <option value="8">8 分以上</option>
-          <option value="7">7 分以上</option>
-          <option value="6">6 分以上</option>
-          <option value="5">5 分以上</option>
-          <option value="4">4 分以上</option>
-          <option value="3">3 分以上</option>
-        </select>
-        <select id="douban" class="score__selector">
-          <option>豆瓣評分</option>
-          <option value="9">9 分以上</option>
-          <option value="8">8 分以上</option>
-          <option value="7">7 分以上</option>
-          <option value="6">6 分以上</option>
-          <option value="5">5 分以上</option>
-          <option value="4">4 分以上</option>
-          <option value="3">3 分以上</option>
-        </select>
-        <select id="tomatoes" class="score__selector">
-          <option>爛番茄評分</option>
-          <option value="9">90 分以上</option>
-          <option value="8">80 分以上</option>
-          <option value="7">70 分以上</option>
-          <option value="6">60 分以上</option>
-          <option value="5">50 分以上</option>
-          <option value="4">40 分以上</option>
-          <option value="3">30 分以上</option>
-        </select>
+        <input type="radio" id="imdb_rating" name="selector" value="ranking">
+        <label for="imdb_rating">IMDB 評分最高</label>
+      </div>
+      <div>
+        <input type="radio" id="douban_rating" name="selector" value="ranking">
+        <label for="douban_rating">豆瓣評分最高</label>
+      </div>
+      <div>
+        <input type="radio" id="audience_rating" name="selector" value="ranking">
+        <label for="audience_rating">爛番茄評分最高</label>
       </div>
     </div>
+    <div>
+      <select id="imdb" class="score__selector">
+        <option>IMDB 評分</option>
+        <option value="9">9 分以上</option>
+        <option value="8">8 分以上</option>
+        <option value="7">7 分以上</option>
+        <option value="6">6 分以上</option>
+        <option value="5">5 分以上</option>
+        <option value="4">4 分以上</option>
+        <option value="3">3 分以上</option>
+      </select>
+      <select id="douban" class="score__selector">
+        <option>豆瓣評分</option>
+        <option value="9">9 分以上</option>
+        <option value="8">8 分以上</option>
+        <option value="7">7 分以上</option>
+        <option value="6">6 分以上</option>
+        <option value="5">5 分以上</option>
+        <option value="4">4 分以上</option>
+        <option value="3">3 分以上</option>
+      </select>
+      <select id="tomatoes" class="score__selector">
+        <option>爛番茄評分</option>
+        <option value="9">90 分以上</option>
+        <option value="8">80 分以上</option>
+        <option value="7">70 分以上</option>
+        <option value="6">60 分以上</option>
+        <option value="5">50 分以上</option>
+        <option value="4">40 分以上</option>
+        <option value="3">30 分以上</option>
+      </select>
+    </div>
+  </div>
+</section>
+<section class="home__content">
+  <section class="loader__wrapper">
+    <div class="loader">
+      <div class="upper ball"></div>
+      <div class="right ball"></div>
+      <div class="lower ball"></div>
+      <div class="left ball"></div>
+    </div>
+    <h2 class="loading__word">Loading...</h2>
   </section>
-  <section class="home__content">
-    <section class="loader__wrapper">
-      <div class="loader">
-        <div class="upper ball"></div>
-        <div class="right ball"></div>
-        <div class="lower ball"></div>
-        <div class="left ball"></div>
-      </div>
-        <h2 class="loading__word">Loading...</h2>
-    </section>
-  </section>
-  <button class="button__more">顯示更多</button>
+</section>
+<button class="button__more">顯示更多</button>
 
 {% endblock %}
 
 {% block js%}<script src="../static/js/search_page.js" type="text/javascript"></script>{% endblock %}
-
-
