@@ -15,7 +15,7 @@ from modules.mysql_module import SQL
 from modules.imdb_fetch import IMDb_fetch,BASE_DIR,movie_mongo_db
 from modules import mail_notification
 from modules import crawl
-
+from config import rds_host,rds_password,rds_user
 
 default_args = {
     'owner': 'Poyu',
@@ -25,7 +25,6 @@ default_args = {
 }
 
 today_date = datetime.today().date()
-from config import rds_host,rds_password,rds_user
 movie_new_db =  SQL(user=rds_user,password=rds_password,host=rds_host,database="movie_new")
 
 fetch_id_relation = movie_new_db.fetch_list("select id,douban_id,imdb_id,rotten_tomato_id from movie_new.webs_id_relation where douban_id != 'Null'")
@@ -37,6 +36,7 @@ for data in fetch_id_relation :
         id_relation_dict[data[3]]=data[0]
     except:
         continue
+
 
 def insert_imdb_rating():
     imdb_id_list = [i[0] for i in movie_new_db.fetch_list("select imdb_id from movie_new.webs_id_relation where douban_id != 'Null'")]
@@ -57,6 +57,7 @@ def insert_imdb_rating():
         except:
             continue
     movie_new_db.bulk_execute("insert into `imdb_rating` (`internal_id`,`rating`,`rating_count`,`update_date`) values(%s, %s, %s, %s)", insert_rating_list)
+
 
 def insert_douban_rating():
     douban_id_list = [i[0] for i in movie_new_db.fetch_list("select douban_id from movie_new.webs_id_relation where douban_id != 'Null'")]
@@ -93,8 +94,8 @@ def insert_douban_rating():
             crawl.main(fetch_douban_rating,"https://movie.douban.com/subject/",retry_list,douban_rating_error_log)
     douban_rating_error_log.close()
     movie_new_db.bulk_execute('''INSERT INTO `douban_rating`( `internal_id`, `avg_rating`, `five_star_ratio`,
-     `four_star_ratio`, `three_star_ratio`, `two_star_ratio`, `one_star_ratio`, 
-     `total_rating_amount`, `update_date`) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)''',insert_data)
+    `four_star_ratio`, `three_star_ratio`, `two_star_ratio`, `one_star_ratio`, 
+    `total_rating_amount`, `update_date`) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)''',insert_data)
 
 
 def insert_tomato_rating():
@@ -129,30 +130,27 @@ def insert_tomato_rating():
     tomato_rating_error_log.close()
     movie_new_db.bulk_execute("INSERT INTO `rotten_tomato_rating`(`internal_id`, `audience_rating`, `audience_rating_amount`, `tomator_rating`, `tomator_rating_amount`, `update_date`) VALUES (%s,%s,%s,%s,%s,%s)",insert_data)
 
+
 def calculate_rating_standard_deviation_and_mean():
     pass
 
 with DAG('fetch_insert_rating_data', default_args=default_args) as dag:
-
     insert_imdb_rating = PythonOperator(
         task_id = "insert_imdb_rating",
         python_callable = insert_imdb_rating
     )
-
     insert_douban_rating = PythonOperator(
         task_id = "insert_douban_rating",
         python_callable = insert_douban_rating
     )
-
     insert_tomato_rating = PythonOperator(
         task_id = "insert_tomato_rating",
         python_callable = insert_tomato_rating
     )
-
     calculate_rating_standard_deviation_and_mean = PythonOperator(
         task_id = "calculate_rating_standard_deviation_and_mean",
         python_callable = calculate_rating_standard_deviation_and_mean
     )
+    
     [insert_imdb_rating,insert_douban_rating,insert_tomato_rating] >> calculate_rating_standard_deviation_and_mean
-    #  >> calculate_rating_standard_deviation_and_mean
-    #  >> calculate_rating_standard_deviation_and_mean
+

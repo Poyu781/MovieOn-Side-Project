@@ -24,11 +24,11 @@ default_args = {
     'retries': 2,
     'retry_delay': timedelta(minutes=1)
 }
+today_date = datetime.today().date()
+collection = movie_mongo_db["data_"+str(today_date)]
 
 def match_douban_id(fixed_url, search_id,error_file):
     result = crawl.fetch_data(fixed_url, search_id,"json")
-    # print(result)
-    # pprint(result)
     try:
         for i in result['items']:
             link = i['link']
@@ -45,8 +45,7 @@ def match_douban_id(fixed_url, search_id,error_file):
         print(e)
         collection.update( { "imdb_id" : search_id },{ "$set" : { 'douban_id' : None} } , upsert=True)
         print("error",search_id)
-today_date = datetime.today().date()
-collection = movie_mongo_db["data_"+str(today_date)]
+
 def download_imdb_movie_detail():
     
     file_path = os.path.join(BASE_DIR, 'data/download_data/')
@@ -60,7 +59,6 @@ def download_imdb_movie_detail():
     
 
 def insert_movie_detail_to_mongo(start_year, end_year, feature_type, **context):
-
     download_data_boolean = context['task_instance'].xcom_pull(task_ids='download_imdb_movie_detail')
     if not download_data_boolean :
         print("didn't have file to insert")
@@ -68,8 +66,6 @@ def insert_movie_detail_to_mongo(start_year, end_year, feature_type, **context):
     
     imdb_movie_datail_data = IMDb_fetch("https://datasets.imdbws.com/title.basics.tsv.gz","movie_detail",today_date)
     data = imdb_movie_datail_data.decompress_file()
-
-
     file_path = os.path.join(BASE_DIR, 'data/exist_movie_id.json')
     with open(file_path,"r") as file :
         existed_movie_list = json.load(file)
@@ -158,9 +154,6 @@ def send_email_when_movie_does_not_match_douban(**context):
     mail_notification.send_email(f"Notification! Daily Airflow Report - {today_date}",text)
 
 
-
-
-
 def multiple_thread_store_douban_web_data(**context):
     douban_id_list = context['task_instance'].xcom_pull(task_ids='multiple_thread_match_douban_id')
     if douban_id_list == [] :
@@ -201,8 +194,6 @@ def multiple_thread_store_douban_web_data(**context):
     return True
 
 
-
-
 def get_data_from_douban_json(douban_data):
     for i in douban_data:
         actors_list = []
@@ -239,6 +230,8 @@ def get_data_from_douban_json(douban_data):
             print("success insert json with " + douban_id)
         except Exception as e:
             print(e.__class__.__name__,e,f"failed with {douban_id}")
+
+
 def get_data_from_douban_html(douban_data):
     for i in douban_data:
         try:
@@ -272,6 +265,8 @@ def get_data_from_douban_html(douban_data):
         except Exception as e:
             print(douban_id)
             print(e.__class__.__name__,e)
+
+
 def get_data_from_douban():
     douban_data_file_path = os.path.join(BASE_DIR, f'data/download_data/douban_web_data_{today_date}.json')
     with open(douban_data_file_path,"r") as file:
@@ -279,7 +274,6 @@ def get_data_from_douban():
     get_data_from_douban_json(douban_data)
     get_data_from_douban_html(douban_data)
     return True
-
 
 
 def match_actor_name(douban_actor_list,tomato_actor_list,pass_threshold):
@@ -298,14 +292,19 @@ def match_actor_name(douban_actor_list,tomato_actor_list,pass_threshold):
     if count >= pass_threshold :
         # print(count)
         return True
+
+
 def match_title(douban_title,tomato_title):
     sim_ratio = SequenceMatcher(None, douban_title.lower(), tomato_title.lower()).ratio()
     return sim_ratio
+
+
 def str_has_chinese(check_str):
     for i in check_str: 
         if '\u4e00' <= i <= '\u9fa5':
             return False
     return True
+
 
 def get_match_data():
     mongo_data = collection.find({ "douban_id": { "$ne": None } } )
@@ -339,6 +338,7 @@ def get_match_data():
         tomato_search_dict[i['douban_id']] = douban_info_dict
     return tomato_search_dict
     print("suc")
+
 
 def get_douban_tomato_relateion(url,douban_id,error_file):
     actors_name_list = tomato_search_dict[douban_id]['actors_split_list']
@@ -392,13 +392,13 @@ def get_douban_tomato_relateion(url,douban_id,error_file):
         collection.update( { "douban_id" : douban_id },{ "$set" : { 'rotten_tomato_url' :None} } , upsert=True)
         print("doesn't match",movie_title,douban_id)#
 
+
 tomato_search_dict = {}
 def multiple_thread_match_douban_tomato_id(**context):
     global tomato_search_dict 
     tomato_search_dict = get_match_data()
 
     crawl.main(get_douban_tomato_relateion,"https://www.rottentomatoes.com/napi/search/all?type=movie&searchQuery=",list(tomato_search_dict.keys()),"r.log")
-
 
 
 douban_tomato_relation_dict = {}
@@ -409,6 +409,7 @@ def get_douban_tomato_relation_dict():
         douban_tomato_relation_dict[i['douban_id']] = i['rotten_tomato_url'].split("/")[-1]
 
     return douban_tomato_relation_dict
+
 
 def multiple_thread_download_tomato_web_data():
     global douban_tomato_relation_dict 
@@ -492,6 +493,7 @@ def get_data_from_tomato_html(**context):
                 continue
     return True,tomato_id_list
 
+
 def send_email_to_check_result():
     today_total_new_data = collection.find().count()
     douban_found_data = collection.find({"douban_id":{'$ne': None}}).count()
@@ -506,12 +508,10 @@ def send_email_to_check_result():
 
 
 with DAG('fetch_movie_data', default_args=default_args) as dag:
-
     download_imdb_movie_detail = PythonOperator(
         task_id = "download_imdb_movie_detail",
         python_callable = download_imdb_movie_detail
     )
-    
     insert_movie_detail_to_mongo = PythonOperator(
         task_id = "insert_movie_detail_to_mongo",
         python_callable = insert_movie_detail_to_mongo,
@@ -521,7 +521,6 @@ with DAG('fetch_movie_data', default_args=default_args) as dag:
         task_id = "multiple_thread_match_douban_id",
         python_callable = multiple_thread_match_douban_id,
     )
-
     check_douban_match = BranchPythonOperator(
         task_id='check_douban_match',
         python_callable=check_douban_match,
@@ -530,12 +529,9 @@ with DAG('fetch_movie_data', default_args=default_args) as dag:
         task_id = "send_email_when_movie_does_not_match_douban",
         python_callable = send_email_when_movie_does_not_match_douban
     )
-
-
     multiple_thread_store_douban_web_data = PythonOperator(
         task_id = "multiple_thread_store_douban_web_data",
         python_callable = multiple_thread_store_douban_web_data,
-
     )
     check_new_data_exist = BranchPythonOperator(
         task_id='new_movie_available',
@@ -545,16 +541,10 @@ with DAG('fetch_movie_data', default_args=default_args) as dag:
         task_id = "send_email_when_imdb_does_not_have_new_data_to_update",
         python_callable = send_email_when_imdb_does_not_have_new_data_to_update
     )
-    # trigger_clean_douban_dag = TriggerDagRunOperator(
-    #     task_id="trigger_clean_douban_dag",
-    #     trigger_dag_id="clean_douban_tomato_data", 
-    # )
-    
     get_data_from_douban = PythonOperator(
         task_id = "get_data_from_douban",
         python_callable = get_data_from_douban
     )
-
     multiple_thread_match_douban_tomato_id = PythonOperator(
         task_id = "multiple_thread_match_douban_tomato_id",
         python_callable = multiple_thread_match_douban_tomato_id
@@ -567,7 +557,6 @@ with DAG('fetch_movie_data', default_args=default_args) as dag:
         task_id = "get_data_from_tomato_html",
         python_callable = get_data_from_tomato_html
     )
-
     send_email_to_check_result = PythonOperator(
         task_id = "send_email_to_check_result",
         python_callable = send_email_to_check_result

@@ -18,7 +18,7 @@ from modules import mail_notification
 from modules import crawl
 from modules.mysql_module import SQL
 from modules.imdb_fetch import IMDb_fetch,BASE_DIR,movie_mongo_db
-
+from config import rds_host,rds_password,rds_user
 
 default_args = {
     'owner': 'Poyu',
@@ -32,9 +32,10 @@ today_date = datetime.today().date()
 collection = movie_mongo_db["data_"+str(today_date)]
 feature_dict = {'Comedy': 1, 'Fantasy': 2, 'Romance': 3, 'Drama': 4,'Action': 5,'Thriller': 6,'War': 7,'Adventure': 8,'Animation': 9,'Family': 10,'Mystery': 11,'Horror': 12,
 'Sci-Fi': 13,'Crime': 14,'Biography': 15,'History': 16,'Music': 17,'Sport': 18,'Western': 19,'Musical': 20,'Documentary': 21,'Adult': 22,'News': 24}
-from config import rds_host,rds_password,rds_user
 movie_new_db =  SQL(user=rds_user,password=rds_password,host=rds_host,database="movie_new")
 id_data = collection.find({"douban_id":{'$ne': None}})
+
+
 def insert_web_id_relation():
     lastest_id = movie_new_db.fetch_list("select id from webs_id_relation order by id desc limit 1")[0][0]
     insert_list = []
@@ -56,16 +57,21 @@ def insert_web_id_relation():
         # send email ?
         return False,str(e),insert_list
 
+
 def check_new_data_insert_status(**context):
     insert_success,error_msg,insert_list = context['task_instance'].xcom_pull(task_ids='insert_web_id_relation')
     if insert_success  :
         return 'insert_movie_basic_info'
     else:
         return 'alert_error_insert'
+
+
 def alert_error_insert(**context):
     insert_success,error_msg,insert_list = context['task_instance'].xcom_pull(task_ids='insert_web_id_relation')
     print(error_msg)
     print(insert_list)
+
+
 def insert_movie_basic_info():
     insert_movies_basic_info_list = []
     insert_other_movie_titles_list = []
@@ -110,10 +116,13 @@ def insert_movie_basic_info():
     movie_new_db.bulk_execute('INSERT INTO `movie_other_names`(`movie_name`, `internal_id`) VALUES (%s,%s)',insert_other_movie_titles_list)
     return True
 
+
 def is_chinese(check_str):
     if '\u4e00' <= check_str <= '\u9fa5':
         return True
     return False
+
+
 def name_split(ori_name):
     cc = OpenCC('s2tw')
     split_point = False
@@ -129,6 +138,7 @@ def name_split(ori_name):
         eng_name = ori_name
     return([chinese_name, eng_name, ori_name])
 
+
 def insert_actors_to_mysql():
     insert_list = []
     for i in id_data :
@@ -137,6 +147,7 @@ def insert_actors_to_mysql():
             insert_list.append(name_split(actor_name))
     if insert_list !=[]:
         movie_new_db.bulk_execute("INSERT ignore INTO `actor_table`( `actor_chinese_name`, `actor_english_name`, `mixed_name`) VALUES (%s, %s, %s)",insert_list)
+
 
 def insert_directors_to_mysql():
     insert_list = []
@@ -168,6 +179,7 @@ def insert_movie_feature_relation():
             feature_movie_relation_list.append([feature_id,internal_id])
     movie_new_db.bulk_execute("INSERT INTO `feature_movie_table`(`feature_id`, `internal_id`) VALUES (%s,%s)",feature_movie_relation_list)
 
+
 def insert_movie_actor_relation():
     actors_list = movie_new_db.fetch_list("SELECT `id`, `mixed_name` FROM `actor_table` ")
     actors_dict ={}
@@ -180,6 +192,7 @@ def insert_movie_actor_relation():
             actor_id = actors_dict[actor['name']]
             actor_movie_relation_list.append([actor_id,internal_id])
     movie_new_db.bulk_execute("INSERT INTO `actor_movie_relation`(`actor_id`, `internal_id`) VALUES (%s,%s)",actor_movie_relation_list)
+
 
 def insert_movie_director_relation():
     directors_list = movie_new_db.fetch_list("SELECT `id`, `mixed_name` FROM `director_table` ")
@@ -201,8 +214,8 @@ def insert_movie_director_relation():
             director_movie_relation_list.append([director_id,internal_id])
     movie_new_db.bulk_execute("INSERT INTO `director_movie_relation`( `director_id`, `internal_id`) VALUES (%s,%s)",director_movie_relation_list)
 
-with DAG('insert_data_into_mysql', default_args=default_args) as dag:
 
+with DAG('insert_data_into_mysql', default_args=default_args) as dag:
     insert_web_id_relation = PythonOperator(
         task_id = "insert_web_id_relation",
         python_callable = insert_web_id_relation
@@ -239,6 +252,7 @@ with DAG('insert_data_into_mysql', default_args=default_args) as dag:
         task_id = "alert_error_insert",
         python_callable = alert_error_insert
     )
+    
     insert_web_id_relation >> check_new_data_insert_status 
     check_new_data_insert_status >> alert_error_insert
     check_new_data_insert_status >> insert_movie_basic_info >> [insert_actors_to_mysql ,insert_directors_to_mysql]
