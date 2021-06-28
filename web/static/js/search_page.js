@@ -37,7 +37,6 @@ function renderMovies(movieObject, nodeDiv) {
     nodeDiv.appendChild(node);
 }
 
-// const checkedValue = element.querySelector('input[type=radio]:checked').value;
 function main(url) {
     showMoreButton.style.display="none"
 
@@ -48,11 +47,9 @@ function main(url) {
         .then((datalist) => {
 
             let dataArray = datalist; //I will get a list of dict
-            console.log(dataArray)
-            let num = dataArray.length;
-            
 
-            console.log(num)
+            let num = dataArray.length;
+        
             const loadNode = document.querySelector(".loader__wrapper")
 
             loadNode.style.display = "none"
@@ -86,18 +83,6 @@ const elem = document.querySelector(".search__section")
 const featureElem = document.querySelector('.feature__wrapper');
 const yearElem = document.querySelector('.period__wrapper');
 const sortElem = document.querySelector(".radios__block")
-// let yearInnerhtml = ""
-// for (let i = 2021 ;i>=2000;i--){
-//     addHtml = `      <div class="tag">
-//     <input type="radio" id=${i} name="period">
-//     <label for=${i}>${i}</label>
-//   </div>`
-//   yearInnerhtml += addHtml
-// }
-// yearElem.innerHTML = `      <div class="tag">
-// <input type="radio" id="all__period" name="period" checked>
-// <label for="all__period">不分時間</label>
-// </div>` +yearInnerhtml
 function initSliderSetting() {
     const parent = document.querySelector(".range-slider")
     if(!parent) return
@@ -141,23 +126,22 @@ elem.addEventListener('change', function(e) {
     
    
     let featureValue = featureElem.querySelector('input[type=radio]:checked').id;
-    // console.log(featureValue)
+
     let yearValue = yearElem.querySelectorAll("input[type=number]");
-    // console.log(yearValue)
+
     let imdbRating = document.querySelector('#imdb').value
     let doubanRating = document.querySelector('#douban').value
     let tomatoRating = document.querySelector('#tomatoes').value
     let sortValue = sortElem.querySelector('input[type=radio]:checked').id
-    console.log(sortValue)
+
     queryString = ""
     queryString += `&sort=${sortValue}`
-    // console.log(imdbRating,doubanRating,tomatoRating)
+
     if (isNumber(featureValue)){
-        console.log(1)
+
         queryString += `&feature=${featureValue}`
     }
     if (isNumber(yearValue[0].value)){
-        console.log(2)
         queryString += `&start_year=${yearValue[0].value}&end_year=${yearValue[1].value}`
     }
     if (isNumber(imdbRating)){
@@ -169,7 +153,6 @@ elem.addEventListener('change', function(e) {
     if (isNumber(tomatoRating)){
         queryString += `&tomato_rating=${tomatoRating}`
     }
-    console.log(queryString)
     itemsSection.innerHTML = `
     <section class="loader__wrapper">
     <div class="loader">
@@ -182,7 +165,7 @@ elem.addEventListener('change', function(e) {
   </section>
     `
     
-    console.log("2")
+
     offsetNum = 0
     main(`/api/movie/?start=${offsetNum}${queryString}`)
 })
@@ -190,13 +173,8 @@ elem.addEventListener('change', function(e) {
 
 
 
-
-// let node = document.createElement("button");
-// node.classList.add("button__more");
-// node.innerHTML = "顯示更多"
-// document.body.appendChild(node);
 showMoreButton.addEventListener("click",()=>{
-    console.log(queryString)
+
     offsetNum += 20
     if (queryString){
     main(`/api/movie/?start=${offsetNum}${queryString}`)}

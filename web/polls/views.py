@@ -7,11 +7,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 ## API relation
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,permission_classes
 from .models import MovieBasicInfo, LatestRating, FeatureMovieTable, FeatureTable, InternalUserRating, MovieOtherNames, InternalUserRating, MemberViewedRecord, ErrorMsgRecord
 from .serializers import MovieBasicSerializer, LastestInfoSerializer, InternalUserRatingSerializer, MemberViewedRecordSerializer
 from rest_framework.response import Response
 from django.db import connection
+from rest_framework.permissions import IsAuthenticated
 
 ## others
 from .forms import RegisterForm, LoginForm
@@ -147,7 +148,7 @@ def get_movie_detail_info(request, internal_id, format=None):
 
 @rate_limiter
 @api_view(['GET'])
-def get_movie_data_with_rating(request, format=None):
+def get_movie_data_with_rating(request, format='json'):
     if request.method == 'GET':
         feature = request.GET.get('feature')
         start_year = request.GET.get('start_year')
@@ -210,6 +211,7 @@ def search_movie(request, format=None):
 
 @rate_limiter
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_member_rating_movie(request, user_id, format=None):
     if request.method == 'GET':
         current_user_id = user_id
@@ -224,6 +226,7 @@ def get_member_rating_movie(request, user_id, format=None):
 
 @rate_limiter
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_member_viewed_movie(request, user_id, format=None):
     if request.method == 'GET':
         current_user_id = user_id
@@ -238,6 +241,7 @@ def get_member_viewed_movie(request, user_id, format=None):
 
 @rate_limiter
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_member_similarity(request, user_id, format=None):
     if request.method == 'GET':
         current_user_id = user_id

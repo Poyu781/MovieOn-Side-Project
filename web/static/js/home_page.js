@@ -46,7 +46,6 @@ function main(url) {
         .then((datalist) => {
 
             let dataArray = datalist; //I will get a list of dict
-            console.log(dataArray)
             let num = dataArray.length;
             if (num == 0){
                 itemsSection.innerHTML ="<h3 style='color:white'>查無相關結果</h3>"

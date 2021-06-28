@@ -49,7 +49,8 @@ function main(url) {
         .then((datalist) => {
 
             let dataArray = datalist; //I will get a list of dict
-            console.log(dataArray)
+
+            
             let num = dataArray.length;
             if (num == 0){
                 itemsSection.innerHTML ="<h3 style='color:white'>查無相關結果</h3>"
@@ -64,13 +65,3 @@ function main(url) {
 }
 
 main(`/api/search${query}`)
-// searchButton.addEventListener("click",()=>{
-//     let search_value = document.querySelector("input[type='text']").value
-//     itemsSection.innerHTML = ""
-//     main(`/api/search?query=${search_value}`)
-// })
-
-
-// loadNode = document.createElement("section")
-// loadNode.setAttribute("class","loader__wrapper")
-// loadNode.innerHTML = 

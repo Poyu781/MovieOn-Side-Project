@@ -4,7 +4,7 @@
 const reviewedSection= document.querySelector(".movies__block")
 
 const userId = document.querySelector(".user").id
-console.log(userId)
+
 
 
 function renderMovies(movieObject, nodeDiv) {
@@ -108,12 +108,8 @@ function getViewedMovie(url,nodeDiv){
         })
         .then((datalist) => {
             let num = datalist.length;
-            console.log("num",num)
             for (let i = 0; i < num; i++) {
                 renderView(datalist[i], nodeDiv);
             }
-            // let htmlText = 
-        // nodeDiv.innerHTML = htmlText;
-
 })}
 getViewedMovie(`api/member/${userId}/viewed_movie/`,viewedSection)
