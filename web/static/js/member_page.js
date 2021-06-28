@@ -1,17 +1,17 @@
 // const ratingSubmit = document.querySelector(".ratingSubmit")
 
 // const numberOfRating = document.querySelector(" numberOfRating")
-const reviewedSection= document.querySelector(".movies__block")
+const reviewedSection = document.querySelector(".movies__block")
 
 const userId = document.querySelector(".user").id
-console.log(userId)
+
 
 
 function renderMovies(movieObject, nodeDiv) {
     let node = document.createElement("div");
     node.classList.add("movie__information");
     node.setAttribute("id", movieObject.internal_id)
-    
+
     let img = movieObject.img;
     let internal_rating = movieObject.rating
     let internal_id = movieObject.internal
@@ -31,7 +31,7 @@ function renderMovies(movieObject, nodeDiv) {
 }
 
 
-function main(url,node) {
+function main(url, node) {
     fetch(url)
         .then((response) => {
             return response.json();
@@ -39,31 +39,31 @@ function main(url,node) {
         .then((datalist) => {
             let dataArray = datalist; //I will get a list of dict
             let num = dataArray.length;
-// Math.ceil(offsetNum/4);
-            for (let i = 0; i < Math.min(num,6); i++) {
+            // Math.ceil(offsetNum/4);
+            for (let i = 0; i < Math.min(num, 6); i++) {
                 renderMovies(dataArray[i], node);
             }
 
         });
-    }
-main(`api/member/${userId}/movies/`,reviewedSection)
+}
+main(`api/member/${userId}/movies/`, reviewedSection)
 const similartiySection = document.querySelector(".similarity")
-function getSimilarity(url,nodeDiv){
+
+function getSimilarity(url, nodeDiv) {
     fetch(url)
         .then((response) => {
             return response.json();
         })
         .then((datalist) => {
-            if (datalist.message === "not enough"){
+            if (datalist.message === "not enough") {
                 nodeDiv.innerHTML = '<h2 style="margin: 0 auto;"> 資料量不足，需要評分超過 10 部影片才能顯示</h2>'
-            }
-            else{
-            let dataArray = datalist
-            let imdb_sim = Math.round(dataArray.imdb*100,2);
-            let douban_sim = Math.round(dataArray.douban*100,2)
-            let tomato_sim = Math.round(dataArray.tomato*100,2)
+            } else {
+                let dataArray = datalist
+                let imdb_sim = Math.round(dataArray.imdb * 100, 2);
+                let douban_sim = Math.round(dataArray.douban * 100, 2)
+                let tomato_sim = Math.round(dataArray.tomato * 100, 2)
 
-            let htmlText = `
+                let htmlText = `
             <div class="similarity__block">
             <p>與 Imdb 相似程度</p>
             <div class="progress" data-percent="${imdb_sim}%" style="--percent: ${imdb_sim}px; --background: #f3ce13"></div>
@@ -77,10 +77,11 @@ function getSimilarity(url,nodeDiv){
             <div class="progress" data-percent="${tomato_sim}%" style="--percent: ${tomato_sim}px; --background: #F70006"></div>
           </div>
         `;
-        nodeDiv.innerHTML = htmlText;
+                nodeDiv.innerHTML = htmlText;
             }
-})}
-getSimilarity(`api/member/${userId}/similarity/`,similartiySection)
+        })
+}
+getSimilarity(`api/member/${userId}/similarity/`, similartiySection)
 
 function renderView(movieObject, nodeDiv) {
     node = document.createElement("div")
@@ -94,26 +95,22 @@ function renderView(movieObject, nodeDiv) {
     <div class="movie__info">
       <h4>${title_name}</h4>
     </div>
-     
-    </a>
-`;
-    node.innerHTML = htmlText ;
+    </a>`;
+    node.innerHTML = htmlText;
     nodeDiv.appendChild(node)
 }
 viewedSection = document.querySelector(".viewed__block")
-function getViewedMovie(url,nodeDiv){
+
+function getViewedMovie(url, nodeDiv) {
     fetch(url)
         .then((response) => {
             return response.json();
         })
         .then((datalist) => {
             let num = datalist.length;
-            console.log("num",num)
             for (let i = 0; i < num; i++) {
                 renderView(datalist[i], nodeDiv);
             }
-            // let htmlText = 
-        // nodeDiv.innerHTML = htmlText;
-
-})}
-getViewedMovie(`api/member/${userId}/viewed_movie/`,viewedSection)
+        })
+}
+getViewedMovie(`api/member/${userId}/viewed_movie/`, viewedSection)

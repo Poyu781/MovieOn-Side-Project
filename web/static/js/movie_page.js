@@ -13,7 +13,7 @@ let deleteRatingButton ;
 const featureObject = {'Comedy': 1, 'Fantasy': 2, 'Romance': 3, 'Drama': 4, 'Action': 5, 'Thriller': 6, 'War': 7, 'Adventure': 8, 'Animation': 9, 'Family': 10, 'Mystery': 11, 'Horror': 12, 'Sci-Fi': 13, 'Crime': 14, 'Biography': 15, 'History': 16, 'Music': 17, 'Sport': 18, 'Western': 19, 'Musical': 20, 'Documentary': 21, 'Adult': 22, 'News': 24}
 let str = window.location.pathname;
 let internalId = str.slice(7)
-console.log(internalId)
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -149,7 +149,7 @@ function ratingFun(){
 	let userRating = document.querySelector("#rating").innerHTML;
 
 	if (userRating != "尚未評"){
-		console.log(userRating)
+
 		document.querySelector(`#star${userRating}`).checked=true
 	}
 	
@@ -160,7 +160,7 @@ function ratingFun(){
 		ratingText.textContent = `你的評價：${ratingValue}分`
 		let data = {"rating":ratingValue, "internal_id":internalId}
 		// numberOfRating.innerHTML = `Choose Rating :${ratingValue}`
-		console.log("r",data)
+
 		fetch("/rating",{
 			method: "POST",
 			mode: 'same-origin',
@@ -202,7 +202,7 @@ function renderRecommend(url,node){
         .then((datalist) => {
 			let dataArray = datalist; //I will get a list of dict
 			dataNum = dataArray.length
-			console.log(dataArray)
+
 			let nums = [], numsLen = 10, maxNum = Math.min(dataNum-1,25), num; 
 			while (nums.length < numsLen) { 
 				num = Math.round(Math.random() * maxNum); 
@@ -210,7 +210,8 @@ function renderRecommend(url,node){
 				 nums.push(num); 
 				} 
 			} 
-			console.log(nums)
+
+		
 			
 			for (let i of nums){
 				let internalId = dataArray[i].internal
@@ -246,7 +247,6 @@ function renderRecommend(url,node){
 function deleteRating(){
 	let data = {"rating":"none", "internal_id":internalId}
 	// numberOfRating.innerHTML = `Choose Rating :${ratingValue}`
-	console.log("r",data)
 	fetch("/rating",{
 		method: "DELETE",
 		mode: 'same-origin',
@@ -282,13 +282,13 @@ function main(url) {
 
         .then((datalist) => {
             let dataArray = datalist; //I will get a list of dict
-            console.log(dataArray[0])
+
 			renderMovies(dataArray[0], movieNode);
 			reportTitle.innerHTML = `<p>電影名稱: <br><span id="report_title">${dataArray[0].main_taiwan_name} ${dataArray[0].main_original_name}</span></p>`
 			reportId.innerHTML = `<p>電影序號: <br><span id="report_id">${dataArray[0].internal_id}</span></p>`
 			let featureStr = dataArray[0].feature_list
 			featureList = featureStr.split(',')
-			console.log(featureList)
+
 			let featureIdList = []
 			deleteRatingButton =document.querySelector(".delete__rating")
 			deleteRatingButton.addEventListener("click",()=>{
@@ -299,7 +299,7 @@ function main(url) {
 				ratingText.textContent = `你的評價： 尚未評分`
 			})
 			featureList.forEach(element => featureIdList.push(featureObject[element]));
-			console.log(featureIdList)
+
 			jsonFeatureIdList = JSON.stringify(featureIdList)
 			ratingFun()
 			heartButton()
@@ -355,7 +355,7 @@ sendErrorButton.addEventListener("click",()=>{
 		let internalId = document.querySelector("#report_id").innerText;
 		let errorFeature = document.querySelector("input[name='mistake']:checked").value
 		let errorMsg = document.querySelector("textarea").value
-		console.log(internalId,errorFeature,errorMsg)
+
 		document.getElementById("popup-1").classList.toggle("active");
 		reportError(internalId,errorFeature,errorMsg)
 }

@@ -10,7 +10,7 @@
 
 #### Test Account
 
-* Email: test_account@movieon.tw
+* Account: test_account
 * Password: trymypage
 
 Login to test the user-only function (Rating, Collection and Similarity Report)

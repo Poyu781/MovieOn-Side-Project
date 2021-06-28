@@ -1,10 +1,3 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -112,6 +105,8 @@ class LatestRating(models.Model):
     internal_rating = models.DecimalField(max_digits=2, decimal_places=1)
     total_avg_rating = models.DecimalField(max_digits=4, decimal_places=2)
     rating_total_amount = models.IntegerField()
+    douban_rating_total_amount = models.IntegerField()
+
     class Meta:
         managed = True
         db_table = 'latest_rating'
@@ -124,6 +119,7 @@ class MovieBasicInfo(models.Model):
     is_adult = models.CharField(max_length=2)
     start_year = models.IntegerField()
     date_in_theater = models.DateField()
+    publish_country = models.CharField(max_length=16)
     runtime_minutes = models.IntegerField()
     img = models.CharField(max_length=255)
 
@@ -167,15 +163,11 @@ class RottenTomatoRating(models.Model):
 class WebsIdRelation(models.Model):
     imdb_id = models.CharField(unique=True, max_length=20, blank=True, null=True)
     douban_id = models.CharField(unique=True, max_length=20, blank=True, null=True)
-    rotten_tomato_id = models.CharField(unique=True, max_length=20, blank=True, null=True)
+    rotten_tomato_id = models.CharField(unique=True, max_length=125, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'webs_id_relation'
-
-
-
-
 
 
 class MemberViewedRecord(models.Model):
@@ -187,12 +179,14 @@ class MemberViewedRecord(models.Model):
         managed = True
         db_table = 'member_viewed_record'
 
+
 class ErrorMsgRecord(models.Model):
     internal = models.ForeignKey('MovieBasicInfo', models.DO_NOTHING,to_field="internal")
     error_feature = models.CharField(max_length=30)
     error_message = models.TextField()
     user_id = models.IntegerField()
     update_date = models.DateTimeField(blank=True, null=True)
+
     class Meta:
         managed = True
         db_table = 'error_msg_record'

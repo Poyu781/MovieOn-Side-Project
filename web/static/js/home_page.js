@@ -1,10 +1,11 @@
 const itemsSection = document.querySelector(".home__content");
 const loadNode = document.querySelector(".loader__wrapper")
+
 function renderMovies(movieObject, nodeDiv) {
     let node = document.createElement("div");
     node.classList.add("movie");
     node.setAttribute("id", movieObject.internal)
-    
+
     let img = movieObject.img;
     let title = movieObject.main_taiwan_name;
     let imdb_rating = movieObject.imdb_rating
@@ -46,12 +47,11 @@ function main(url) {
         .then((datalist) => {
 
             let dataArray = datalist; //I will get a list of dict
-            console.log(dataArray)
             let num = dataArray.length;
-            if (num == 0){
-                itemsSection.innerHTML ="<h3 style='color:white'>查無相關結果</h3>"
+            if (num == 0) {
+                itemsSection.innerHTML = "<h3 style='color:white'>查無相關結果</h3>"
             }
-// Math.ceil(offsetNum/4);
+            // Math.ceil(offsetNum/4);
             loadNode.style.display = "none"
             for (let i = 0; i < num; i++) {
                 renderMovies(dataArray[i], itemsSection);
@@ -62,21 +62,9 @@ function main(url) {
 let offsetNum = 0
 main('/api/movie')
 showMoreButton = document.querySelector(".button__more")
-showMoreButton.addEventListener("click",()=>{
+showMoreButton.addEventListener("click", () => {
     offsetNum += 20
     main(`/api/movie/?start=${offsetNum}`)
 })
 
 
-
-// searchButton.addEventListener("click",()=>{
-//     let search_value = document.querySelector("input[type='text']").value
-//     itemsSection.innerHTML = ""
-//     showMoreButton.style.display = "none";
-//     main(`/api/search?query=${search_value}`)
-// })
-
-
-// loadNode = document.createElement("section")
-// loadNode.setAttribute("class","loader__wrapper")
-// loadNode.innerHTML = 
