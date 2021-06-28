@@ -164,28 +164,23 @@ def get_movie_data_with_rating(request, format='json'):
         movie_info = LatestRating.objects.select_related("internal").order_by(
             sort).reverse()
         if feature:
-            # if feature.count(","):
             id_result = FeatureMovieTable.objects.values("internal_id").filter(
                 feature_id=feature)
-            # print(id_result)
             result = movie_info.filter(internal_id__in=id_result)
         else:
             result = movie_info
         if start_year:
             result = result.filter(
-                internal__start_year__gte=start_year).filter(
+                    internal__start_year__gte=start_year).filter(
                     internal__start_year__lte=end_year)
         if imdb_rating:
             result = result.filter(imdb_rating__gte=imdb_rating)
         if douban_rating:
             result = result.filter(douban_rating__gte=douban_rating)
         count = result.count()
-        # print(start_num)
         print(count)
-        serializer = LastestInfoSerializer(
-            result[start_num:min(start_num + 20, count)], many=True)
-        # print(type(serializer.data))
-        # print(serializer)
+        serializer = LastestInfoSerializer(result[start_num:min(start_num + 20, count)], many=True)
+
         return Response(serializer.data)
 
 
@@ -194,18 +189,12 @@ def get_movie_data_with_rating(request, format='json'):
 def search_movie(request, format=None):
     if request.method == 'GET':
         query = request.GET.get('query')
-
         movie_info = LatestRating.objects.select_related("internal")
         id_result = MovieOtherNames.objects.values("internal_id").filter(
             movie_name__icontains=query).distinct()
-        # print(id_result)
         result = movie_info.filter(internal_id__in=id_result).order_by(
             "internal__start_year").reverse()
-        # print(id_result)
-        # print(count)
         serializer = LastestInfoSerializer(result, many=True)
-        # print(type(serializer.data))
-        # print(serializer)
         return Response(serializer.data)
 
 
@@ -219,8 +208,6 @@ def get_member_rating_movie(request, user_id, format=None):
         result = movie_info.filter(
             user_id=current_user_id).order_by("update_date").reverse()
         serializer = InternalUserRatingSerializer(result, many=True)
-        # print(type(serializer.data))
-        # print(serializer)
         return Response(serializer.data)
 
 
@@ -234,8 +221,6 @@ def get_member_viewed_movie(request, user_id, format=None):
         result = movie_info.filter(
             user_id=current_user_id).order_by("viewed_date").reverse()
         serializer = MemberViewedRecordSerializer(result, many=True)
-        # print(type(serializer.data))
-        # print(serializer)
         return Response(serializer.data)
 
 
@@ -244,6 +229,19 @@ def get_member_viewed_movie(request, user_id, format=None):
 @permission_classes([IsAuthenticated])
 def get_member_similarity(request, user_id, format=None):
     if request.method == 'GET':
+        def nor(_list, mean_value, standard_dv):
+            nor_result = []
+            for i in _list:
+                new_value = round((i - mean_value) / standard_dv, 3)
+                nor_result.append(new_value)
+            return nor_result
+        
+        def cosine_similarity(vec_a, vec_b):
+            dot = sum(a * b for a, b in zip(vec_a, vec_b))
+            norm_a = sum(a * a for a in vec_a)**0.5
+            norm_b = sum(b * b for b in vec_b)**0.5
+            cos_sim = dot / (norm_a * norm_b)
+            return cos_sim
         current_user_id = user_id
         r = time.time()
         result = InternalUserRating.objects.filter(user_id=current_user_id)
@@ -251,7 +249,6 @@ def get_member_similarity(request, user_id, format=None):
             return JsonResponse({"message":"not enough"})
         internal_id = []
         internal_rating_dict = {}
-
         for i in result:
             internal_id.append(i.internal_id)
             internal_rating_dict[i.internal_id] = i.rating
@@ -270,14 +267,7 @@ def get_member_similarity(request, user_id, format=None):
         valid_rating_list = []
         for i in valid_internal_id_list :
             valid_rating_list.append(internal_rating_dict[i])
-        def nor(_list, mean_value, standard_dv):
-            nor_result = []
-            for i in _list:
-                new_value = round((i - mean_value) / standard_dv, 3)
-                nor_result.append(new_value)
-            return nor_result
-        internal_stdev = pstdev(valid_rating_list)
-        internal_mean = mean(valid_rating_list)
+
         douban_stdev = 0.96684
         douban_mean = 6.8653
         imdb_stdev = 0.8288
@@ -287,20 +277,10 @@ def get_member_similarity(request, user_id, format=None):
         douban_nor = nor(douban_rating, douban_mean, douban_stdev)
         imdb_nor = nor(imdb_rating, imdb_mean, imdb_stdev)
         audience_nor = nor (audience_rating,audience_mean,audience_stdev)
-        internal_nor = valid_rating_list#nor(valid_rating_list, internal_mean, internal_stdev)
-
-        def cosine_similarity(vec_a, vec_b):
-            dot = sum(a * b for a, b in zip(vec_a, vec_b))
-            norm_a = sum(a * a for a in vec_a)**0.5
-            norm_b = sum(b * b for b in vec_b)**0.5
-            cos_sim = dot / (norm_a * norm_b)
-            return cos_sim
-
+        internal_nor = valid_rating_list
         douban_internal = cosine_similarity(douban_nor, internal_nor)
         imdb_internal = cosine_similarity(imdb_nor, internal_nor)
         audience_internal = cosine_similarity(audience_nor,internal_nor)
-        # print(douban_nor, imdb_nor, internal_nor)
-        print("time", time.time() - r)
 
         response_json = {}
         response_json['message'] = "successful"
@@ -314,43 +294,44 @@ def get_member_similarity(request, user_id, format=None):
 @rate_limiter
 @api_view(['GET'])
 def get_recommend_movies(request):
-    feature = request.GET.get('feature')
-    internal_id = request.GET.get('id')    
-    
-    if redis.get("feature_dict") :
-        feature_dict =json.loads(redis.get("feature_dict"))
-        for i in feature_dict :
-            feature_dict[i] = set(feature_dict[i])
-        print("redis")
-        # print(feature_dict['3'])
-    else :
-        feature_dict = defaultdict(set)
-        id_result = FeatureMovieTable.objects.all()
-        for i in id_result:
-            feature_dict[str(i.feature_id)].add(i.internal_id)
-        redis_store_dict = {}
-        for i in feature_dict :
-            redis_store_dict[i] = list(feature_dict[i])
-        redis.set('feature_dict',json.dumps(redis_store_dict), ex=300)
-    if feature:
-        feature_list = json.loads(feature)
-        for i in range(len(feature_list)):
-            if i == 0:
-                result = feature_dict[str(feature_list[i])]
-            else:
-                result = result.intersection(feature_dict[str(feature_list[i])])
-                if len(result) <= 10 :
-                    for insert_data in list(feature_dict[str(feature_list[i-1])]) :
-                        result.add(insert_data)
+    if request.method == 'GET':
+        feature = request.GET.get('feature')
+        internal_id = request.GET.get('id')    
+        
+        if redis.get("feature_dict") :
+            feature_dict =json.loads(redis.get("feature_dict"))
+            for i in feature_dict :
+                feature_dict[i] = set(feature_dict[i])
+            print("redis")
+            # print(feature_dict['3'])
+        else :
+            feature_dict = defaultdict(set)
+            id_result = FeatureMovieTable.objects.all()
+            for i in id_result:
+                feature_dict[str(i.feature_id)].add(i.internal_id)
+            redis_store_dict = {}
+            for i in feature_dict :
+                redis_store_dict[i] = list(feature_dict[i])
+            redis.set('feature_dict',json.dumps(redis_store_dict), ex=300)
+        if feature:
+            feature_list = json.loads(feature)
+            for i in range(len(feature_list)):
+                if i == 0:
+                    result = feature_dict[str(feature_list[i])]
+                else:
+                    result = result.intersection(feature_dict[str(feature_list[i])])
+                    if len(result) <= 10 :
+                        for insert_data in list(feature_dict[str(feature_list[i-1])]) :
+                            result.add(insert_data)
 
-    id_result = list(result)
-    id_result.remove(int(internal_id))
-    id_result = id_result[:min(50, len(id_result))]
-    movie_info = LatestRating.objects.select_related("internal").order_by("imdb_rating", "rating_total_amount").reverse()
-    recommend_result = movie_info.filter(internal_id__in=id_result)
+        id_result = list(result)
+        id_result.remove(int(internal_id))
+        id_result = id_result[:min(50, len(id_result))]
+        movie_info = LatestRating.objects.select_related("internal").order_by("imdb_rating", "rating_total_amount").reverse()
+        recommend_result = movie_info.filter(internal_id__in=id_result)
 
-    serializer = LastestInfoSerializer(recommend_result, many=True)
-    return Response(serializer.data)
+        serializer = LastestInfoSerializer(recommend_result, many=True)
+        return Response(serializer.data)
 
 
 ## Feature
@@ -390,18 +371,19 @@ def logout(request):
 
 
 def report_error(request):
-    current_user = request.user
-    get_dict = json.load(request)
-    internal_id = get_dict['internal_id']
-    error_feature = get_dict['error_feature']
-    error_msg = get_dict['error_msg']
-    # review_record = InternalUserRating.objects.filter(user_id = current_user.id, movie_id= imdb_id)
-    # if review_record.exists():
-    if request.method == "POST":
-        review = ErrorMsgRecord(internal_id=internal_id,
-                                user_id=current_user.id,
-                                update_date=datetime.now(),
-                                error_feature=error_feature,
-                                error_message=error_msg)
-        review.save()
-        return JsonResponse({"message": "success"})
+    if request.method == 'POST':
+        current_user = request.user
+        get_dict = json.load(request)
+        internal_id = get_dict['internal_id']
+        error_feature = get_dict['error_feature']
+        error_msg = get_dict['error_msg']
+        # review_record = InternalUserRating.objects.filter(user_id = current_user.id, movie_id= imdb_id)
+        # if review_record.exists():
+        if request.method == "POST":
+            review = ErrorMsgRecord(internal_id=internal_id,
+                                    user_id=current_user.id,
+                                    update_date=datetime.now(),
+                                    error_feature=error_feature,
+                                    error_message=error_msg)
+            review.save()
+            return JsonResponse({"message": "success"})

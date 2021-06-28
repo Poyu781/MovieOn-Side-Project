@@ -28,7 +28,6 @@ class LastestInfoSerializer(serializers.ModelSerializer):
             representation[key] = profile_representation[key]
         return representation
 
-    # tracks = LastestRatingSerializer( read_only=True,source='test')
 
 
 class InternalUserRatingSerializer(serializers.ModelSerializer):
