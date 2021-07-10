@@ -1,4 +1,4 @@
-from .models import MovieBasicInfo, LatestRating, WebsIdRelation, InternalUserRating, MemberViewedRecord
+from .models import MovieBasicInfo, LatestRating, WebsIdRelation, InternalUserRating, MemberViewedRecord,PipelineRatingStatus,UpdateMovieDetailPipelineData
 from rest_framework import serializers
 
 
@@ -13,6 +13,20 @@ class MovieBasicSerializer(serializers.ModelSerializer):
         model = MovieBasicInfo
         fields = "__all__"
 
+class RatingPipelineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PipelineRatingStatus
+        fields = "__all__"
+
+class MovieUpdatePipelineSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UpdateMovieDetailPipelineData
+        fields = "__all__"
+
+class MovieBasicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MovieBasicInfo
+        fields = "__all__"
 
 class LastestInfoSerializer(serializers.ModelSerializer):
     internal = MovieBasicSerializer()

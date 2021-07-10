@@ -190,3 +190,40 @@ class ErrorMsgRecord(models.Model):
     class Meta:
         managed = True
         db_table = 'error_msg_record'
+
+
+class UpdateMovieDetailPipelineData(models.Model):
+    imdb_fetch_time = models.FloatField()
+    new_imdb_amount = models.IntegerField()
+    google_fetch_avg_time = models.FloatField()
+    new_douban_amount = models.IntegerField()
+    douban_fetch_avg_time = models.FloatField()
+    douban_failed_amount = models.IntegerField()
+    new_tomato_amount = models.IntegerField()
+    tomato_fetch_avg_time = models.FloatField()
+    tomato_failed_amount = models.IntegerField()
+    insert_amount = models.IntegerField()
+    insert_mysql_status = models.IntegerField()
+    update_date = models.DateField()
+
+    class Meta:
+        managed = True
+        db_table = 'update_movie_detail_pipeline_data'
+
+
+class PipelineRatingStatus(models.Model):
+    update_imdb_amount = models.IntegerField()
+    not_rating_imdb_amount = models.IntegerField()
+    update_douban_amount = models.IntegerField()
+    not_rating_douban_amount = models.IntegerField()
+    fail_douban_amount = models.IntegerField()
+    update_tomato_amount = models.IntegerField()
+    not_rating_tomato_amount = models.IntegerField()
+    fail_tomato_amount = models.IntegerField()
+    avg_douban_fetch_time = models.FloatField()
+    avg_tomato_fetch_time = models.FloatField()
+    update_date = models.DateField()
+
+    class Meta:
+        managed = True
+        db_table = 'pipeline_rating_status'

@@ -8,8 +8,8 @@ from django.contrib import messages
 
 ## API relation
 from rest_framework.decorators import api_view,permission_classes
-from .models import MovieBasicInfo, LatestRating, FeatureMovieTable, FeatureTable, InternalUserRating, MovieOtherNames, InternalUserRating, MemberViewedRecord, ErrorMsgRecord
-from .serializers import MovieBasicSerializer, LastestInfoSerializer, InternalUserRatingSerializer, MemberViewedRecordSerializer
+from .models import MovieBasicInfo, LatestRating, FeatureMovieTable, FeatureTable, InternalUserRating, MovieOtherNames, InternalUserRating, MemberViewedRecord, ErrorMsgRecord,PipelineRatingStatus,UpdateMovieDetailPipelineData
+from .serializers import MovieBasicSerializer, LastestInfoSerializer, InternalUserRatingSerializer, MemberViewedRecordSerializer,RatingPipelineSerializer,MovieUpdatePipelineSerializer
 from rest_framework.response import Response
 from django.db import connection
 from rest_framework.permissions import IsAuthenticated
@@ -331,6 +331,33 @@ def get_recommend_movies(request):
         recommend_result = movie_info.filter(internal_id__in=id_result)
 
         serializer = LastestInfoSerializer(recommend_result, many=True)
+        return Response(serializer.data)
+
+
+@rate_limiter
+@api_view(['GET'])
+def get_update_rating_status_data(request):
+    if request.method == 'GET':
+        start_time = request.GET.get('start')
+        end_time = request.GET.get('end')
+        pipeline_data = PipelineRatingStatus.objects.filter(
+            update_date__gte = start_time).filter(
+            update_date__lte = end_time).order_by("update_date").reverse()
+        serializer = RatingPipelineSerializer(pipeline_data, many=True)
+        return Response(serializer.data)
+
+
+
+@rate_limiter
+@api_view(['GET'])
+def get_update_movie_status_data(request):
+    if request.method == 'GET':
+        start_time = request.GET.get('start')
+        end_time = request.GET.get('end')
+        pipeline_data = UpdateMovieDetailPipelineData.objects.filter(
+            update_date__gte = start_time).filter(
+            update_date__lte = end_time).order_by("update_date").reverse()
+        serializer = MovieUpdatePipelineSerializer(pipeline_data, many=True)
         return Response(serializer.data)
 
 
