@@ -123,7 +123,8 @@ def sign_in(request):
 def member_page(request):
     return render(request, "member_page.html")
 
-
+def dashboard_page(request):
+    return render(request, "dashboard.html")
 ## API
 
 def dict_fetch_all(cursor):
@@ -342,7 +343,7 @@ def get_update_rating_status_data(request):
         end_time = request.GET.get('end')
         pipeline_data = PipelineRatingStatus.objects.filter(
             update_date__gte = start_time).filter(
-            update_date__lte = end_time).order_by("update_date").reverse()
+            update_date__lte = end_time).order_by("update_date")
         serializer = RatingPipelineSerializer(pipeline_data, many=True)
         return Response(serializer.data)
 
@@ -356,7 +357,7 @@ def get_update_movie_status_data(request):
         end_time = request.GET.get('end')
         pipeline_data = UpdateMovieDetailPipelineData.objects.filter(
             update_date__gte = start_time).filter(
-            update_date__lte = end_time).order_by("update_date").reverse()
+            update_date__lte = end_time).order_by("update_date")
         serializer = MovieUpdatePipelineSerializer(pipeline_data, many=True)
         return Response(serializer.data)
 

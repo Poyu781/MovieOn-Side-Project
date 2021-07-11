@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block css%}<script src='https://cdn.plot.ly/plotly-2.2.0.min.js'></script>
+<link rel="stylesheet" href="../static/css/dashboard.css" />{% endblock %}
+{% block content%}
+<div class="background">
+<div class="date__wrapper">
+    <h3>日期</h3>
+    <form>
+        <div>
+          <label for="startDate">起始日期:</label>
+          <input type="date"  name="startDate" min="2021-06-30" value="2021-06-30" >
+        </div>
+        <div>
+          <label for="endDate">結束日期:</label>
+          <input type="date" name="endDate" min="2021-06-30">
+        </div>
+      </form>
+</div>
+
+<h3>電影更新狀況</h3>
+<section class = "dashboard__wrapper">
+<div class = "plot" id='myDiv1'></div>
+<div class = "plot" id='myDiv'></div>
+<div class = "plot" >
+        <h3>資料庫更新狀態</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>更新數量</th>
+              <th>更新狀態</th>
+            </tr>
+          </thead>
+          <tbody class="table__value">
+          </tbody>
+        </table>
+</div>    
+<div class = "plot" id='myDiv2'></div>
+</section>
+<h3>評價更新狀況</h3>
+<section class = "dashboard__wrapper">
+<div class = "plot" id='myDiv3'></div>
+<div class = "plot" id='myDiv4'></div>   
+<div class = "plot" id='myDiv5'></div>
+<div class = "plot" id='myDiv6'></div>
+</section>
+
+<h3>電影轉換率</h3>
+<section class = "dashboard__wrapper">
+<div class = "plot" id='myDiv7'></div>
+<div class = "plot" id='myDiv8'></div>   
+</section>
+
+<div >
+    <h3 >IMDb 更新數量</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>更新數量</th>
+            <th>檔案下載時間</th>
+            <th>google api 平均時間</th>
+        </tr>
+        </thead>
+        <tbody class = "IMDb_table_data">
+
+        </tbody>
+
+    </table>
+
+</div>
+</div>
+
+
+{% endblock %}
+
+{% block js%}<script src="../static/js/dashboard.js" type="text/javascript"></script>
+{% endblock %}
