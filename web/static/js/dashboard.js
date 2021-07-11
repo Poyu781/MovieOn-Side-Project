@@ -130,10 +130,12 @@ function renderDatabaseStatusTable(object){
     let addText 
     for (let i of object) {
         console.log(i)
+        let status = (i.insert_amount>0) ? "更新成功" : "失敗";
+
         addText = `<tr>
         <td>${formatDate(i.update_date)}</td>
         <td>${i.insert_mysql_status}</td>
-        <td>${i.insert_amount}</td>
+        <td>${status}</td>
         </tr>`
         htmlText = addText + htmlText
     }
