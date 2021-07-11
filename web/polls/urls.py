@@ -20,7 +20,6 @@ urlpatterns = [
     path("rating",views.score_movie),
     path("logout",views.logout),
     path("memberpage",views.member_page),
-    path("search",views.advanced_search_page),
     path("basicSearch",views.search_by_word_page),
     path("report_error",views.report_error),
     path("dashboard",views.dashboard_page)

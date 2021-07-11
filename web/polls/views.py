@@ -36,8 +36,6 @@ def rate_limiter(fun):
     return decorated
 
 # Render with html 
-def advanced_search_page(request):
-    return render(request, "advanced_search_page.html")
 
 
 def search_by_word_page(request):
@@ -45,7 +43,7 @@ def search_by_word_page(request):
 
 
 def main_page(request):
-    return render(request, "home_page.html")
+    return render(request, "advanced_search_page.html")
 
 
 def movie_single_page(request, internal_id):
@@ -119,12 +117,20 @@ def sign_in(request):
     return render(request, 'sign_in.html', context)
 
 
+
 @login_required
 def member_page(request):
     return render(request, "member_page.html")
 
 def dashboard_page(request):
     return render(request, "dashboard.html")
+
+
+# backup webpage
+# def advanced_search_page(request):
+#     return render(request, "advanced_search_page.html")
+
+
 ## API
 
 def dict_fetch_all(cursor):
