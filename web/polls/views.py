@@ -8,7 +8,7 @@ from django.contrib import messages
 
 ## API relation
 from rest_framework.decorators import api_view,permission_classes
-from .models import MovieBasicInfo, LatestRating, FeatureMovieTable, FeatureTable, InternalUserRating, MovieOtherNames, InternalUserRating, MemberViewedRecord, ErrorMsgRecord,PipelineRatingStatus,UpdateMovieDetailPipelineData
+from .models import MovieBasicInfo, LatestRating, FeatureMovieTable, FeatureTable, InternalUserRating, MovieOtherNames, InternalUserRating, MemberViewedRecord, ErrorMsgRecord,PipelineRatingStatus,UpdateMovieDetailPipelineData,MovieRecommendList
 from .serializers import MovieBasicSerializer, LastestInfoSerializer, InternalUserRatingSerializer, MemberViewedRecordSerializer,RatingPipelineSerializer,MovieUpdatePipelineSerializer
 from rest_framework.response import Response
 from django.db import connection
@@ -302,41 +302,12 @@ def get_member_similarity(request, user_id, format=None):
 @api_view(['GET'])
 def get_recommend_movies(request):
     if request.method == 'GET':
-        feature = request.GET.get('feature')
-        internal_id = request.GET.get('id')    
-        
-        if redis.get("feature_dict") :
-            feature_dict =json.loads(redis.get("feature_dict"))
-            for i in feature_dict :
-                feature_dict[i] = set(feature_dict[i])
-            print("redis")
-            # print(feature_dict['3'])
-        else :
-            feature_dict = defaultdict(set)
-            id_result = FeatureMovieTable.objects.all()
-            for i in id_result:
-                feature_dict[str(i.feature_id)].add(i.internal_id)
-            redis_store_dict = {}
-            for i in feature_dict :
-                redis_store_dict[i] = list(feature_dict[i])
-            redis.set('feature_dict',json.dumps(redis_store_dict), ex=300)
-        if feature:
-            feature_list = json.loads(feature)
-            for i in range(len(feature_list)):
-                if i == 0:
-                    result = feature_dict[str(feature_list[i])]
-                else:
-                    result = result.intersection(feature_dict[str(feature_list[i])])
-                    if len(result) <= 10 :
-                        for insert_data in list(feature_dict[str(feature_list[i-1])]) :
-                            result.add(insert_data)
-
-        id_result = list(result)
-        id_result.remove(int(internal_id))
-        id_result = id_result[:min(50, len(id_result))]
+        internal_id = request.GET.get('id')   
+        id_result = MovieRecommendList.objects.filter(internal_id=internal_id).values('recommend_list')
+        id_result = json.loads(list(id_result)[0]['recommend_list'])
+        print(type(id_result),id_result)
         movie_info = LatestRating.objects.select_related("internal").order_by("imdb_rating", "rating_total_amount").reverse()
         recommend_result = movie_info.filter(internal_id__in=id_result)
-
         serializer = LastestInfoSerializer(recommend_result, many=True)
         return Response(serializer.data)
 
@@ -421,3 +392,108 @@ def report_error(request):
                                     error_message=error_msg)
             review.save()
             return JsonResponse({"message": "success"})
+
+
+# from collections import Counter
+# @rate_limiter
+# @api_view(['GET'])
+# def get_recommend_movies(request):
+#     if request.method == 'GET':
+
+#         cursor = connection.cursor()
+#         cursor.execute(f"CALL `123`({9251})")
+#         test = dict_fetch_all(cursor)
+#         cursor.execute(f"CALL `345`({123})")
+#         filter_data =dict_fetch_all(cursor)
+#         # feature = request.GET.get('feature')
+#         internal_id = request.GET.get('id')    
+        
+#         if redis.get("feature_dict") :
+#             feature_dict =json.loads(redis.get("feature_dict"))
+#             for i in feature_dict :
+#                 feature_dict[i] = set(feature_dict[i])
+#             print("redis")
+#             # print(feature_dict['3'])
+#         else :
+#             feature_dict = defaultdict(list)
+#             id_result = FeatureMovieTable.objects.all()
+#             for i in filter_data:
+#                 feature_dict[str(i['feature_id'])].append(i['internal_id'])
+#             redis.set('feature_dict',json.dumps(feature_dict), ex=300)
+#         insert_data = []
+#         for data in test:
+#             feature_list = data['feature_list'].split(",")
+#             movie_list = []
+#             pick_list = []
+#             for i in range(len(feature_list)):
+#                 movie_list.extend(feature_dict[feature_list[i]])
+#             movie_dict =Counter(movie_list)
+#             result = sorted(movie_dict.items(), key=lambda d: d[1],reverse=True)
+#             for i in result :
+#                 pick_list.append(i[0])
+#                 if len(pick_list) > 30 :
+#                     break
+#             # for movie in movie_list:
+#             #     if  movie_list.count(movie) == len(feature_list) and data['internal_id'] != movie:
+#             #         pick_list.append(movie)
+#             #         if len(pick_list) > 40:
+#             #             break
+#             # if len(pick_list) < 15 :
+#             #     for movie in movie_list:
+#             #         if  movie_list.count(movie) == len(feature_list)-1 and data['internal_id'] != movie:
+#             #             pick_list.append(movie)
+#             #             if len(pick_list) > 30:
+#             #                 break
+
+#             insert_data.append(MovieRecommendList(internal_id=data['internal_id'],recommend_list=json.dumps(pick_list)))
+#         MovieRecommendList.objects.bulk_create(insert_data)
+#         print("sucee")
+#         return JsonResponse({"2":2})
+
+
+# @rate_limiter
+# @api_view(['GET'])
+# def get_recommend_movies(request):
+#     if request.method == 'GET':
+
+#         cursor = connection.cursor()
+#         cursor.execute(f"CALL `123`({9251})")
+#         test = dict_fetch_all(cursor)
+#         cursor.execute(f"CALL `345`({123})")
+#         filter_data =dict_fetch_all(cursor)
+#         # feature = request.GET.get('feature')
+#         internal_id = request.GET.get('id')    
+        
+#         if redis.get("feature_dict") :
+#             feature_dict =json.loads(redis.get("feature_dict"))
+#             for i in feature_dict :
+#                 feature_dict[i] = set(feature_dict[i])
+#             print("redis")
+#             # print(feature_dict['3'])
+#         else :
+#             feature_dict = defaultdict(set)
+#             id_result = FeatureMovieTable.objects.all()
+#             for i in filter_data:
+#                 feature_dict[str(i['feature_id'])].add(i['internal_id'])
+#             redis_store_dict = {}
+#             for i in feature_dict :
+#                 redis_store_dict[i] = list(feature_dict[i])
+#             redis.set('feature_dict',json.dumps(redis_store_dict), ex=300)
+#         insert_data = []
+#         for data in test:
+#             feature_list = data['feature_list'].split(",")
+#             for i in range(len(feature_list)):
+#                 if i == 0:
+#                     result = feature_dict[feature_list[i]]
+#                 else:
+#                     result = result.intersection(feature_dict[feature_list[i]])
+#                     if len(result) <= 10 :
+#                         for x in list(feature_dict[feature_list[i-1]]) :
+#                             result.add(x)
+#             id_result = list(result)
+#             id_result.remove(data['internal_id'])
+#             id_result = id_result[:min(27, len(id_result))]
+#             insert_data.append(MovieRecommendList(internal_id=data['internal_id'],recommend_list=json.dumps(id_result)))
+#         MovieRecommendList.objects.bulk_create(insert_data)
+#         print("sucee")
+#         return JsonResponse({"2":2})

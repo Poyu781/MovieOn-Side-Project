@@ -227,3 +227,11 @@ class PipelineRatingStatus(models.Model):
     class Meta:
         managed = True
         db_table = 'pipeline_rating_status'
+
+class MovieRecommendList(models.Model):
+    internal = models.ForeignKey(MovieBasicInfo, models.DO_NOTHING)
+    recommend_list = models.CharField(max_length=125)
+
+    class Meta:
+        managed = True
+        db_table = 'movie_recommend_list'
