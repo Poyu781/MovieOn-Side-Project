@@ -203,17 +203,17 @@ function renderRecommend(url,node){
 			let dataArray = datalist; //I will get a list of dict
 			dataNum = dataArray.length
 
-			let nums = [], numsLen = 10, maxNum = Math.min(dataNum-1,25), num; 
-			while (nums.length < numsLen) { 
-				num = Math.round(Math.random() * maxNum); 
-				if (nums.indexOf(num) === -1) { 
-				 nums.push(num); 
-				} 
-			} 
+			// let nums = [], numsLen = 10, maxNum = Math.min(dataNum-1,25), num; 
+			// while (nums.length < numsLen) { 
+			// 	num = Math.round(Math.random() * maxNum); 
+			// 	if (nums.indexOf(num) === -1) { 
+			// 	 nums.push(num); 
+			// 	} 
+			// } 
 
 		
 			
-			for (let i of nums){
+			for (let i = 0 ; i <10 ;i++){
 				let internalId = dataArray[i].internal
 				nodeCreated = document.createElement("a")
 				nodeCreated.classList.add("movie");
@@ -298,12 +298,12 @@ function main(url) {
 				let ratingText = document.querySelector("#ratingText")
 				ratingText.textContent = `你的評價： 尚未評分`
 			})
-			featureList.forEach(element => featureIdList.push(featureObject[element]));
+			// featureList.forEach(element => featureIdList.push(featureObject[element]));
 
 			jsonFeatureIdList = JSON.stringify(featureIdList)
 			ratingFun()
 			heartButton()
-			renderRecommend(`/api/movie/recommend?feature=${jsonFeatureIdList}&id=${internalId}`,movieRecommend)
+			renderRecommend(`/api/movie/recommend?&id=${internalId}`,movieRecommend)
 			recommendText.style.display = "block";
 		})
 		.catch((error) => {

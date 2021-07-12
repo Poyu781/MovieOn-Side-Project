@@ -17,6 +17,7 @@ from rest_framework.permissions import IsAuthenticated
 ## others
 from .forms import RegisterForm, LoginForm
 import json
+import random
 from datetime import datetime
 from functools import wraps
 import time, redis
@@ -201,7 +202,7 @@ def search_movie(request, format=None):
             movie_name__icontains=query).distinct()
         result = movie_info.filter(internal_id__in=id_result).order_by(
             "internal__start_year").reverse()
-        serializer = LastestInfoSerializer(result, many=True)
+        serializer = LastestInfoSerializer(result[:20], many=True)
         return Response(serializer.data)
 
 
@@ -305,11 +306,11 @@ def get_recommend_movies(request):
         internal_id = request.GET.get('id')   
         id_result = MovieRecommendList.objects.filter(internal_id=internal_id).values('recommend_list')
         id_result = json.loads(list(id_result)[0]['recommend_list'])
-        print(type(id_result),id_result)
-        movie_info = LatestRating.objects.select_related("internal").order_by("imdb_rating", "rating_total_amount").reverse()
+        movie_info = LatestRating.objects.select_related("internal").order_by("imdb_rating","rating_total_amount").reverse()
         recommend_result = movie_info.filter(internal_id__in=id_result)
         serializer = LastestInfoSerializer(recommend_result, many=True)
-        return Response(serializer.data)
+        start = random.randint(0,40)
+        return Response(serializer.data[start:start+10])
 
 
 @rate_limiter
