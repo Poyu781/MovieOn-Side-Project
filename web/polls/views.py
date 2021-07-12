@@ -8,8 +8,8 @@ from django.contrib import messages
 
 ## API relation
 from rest_framework.decorators import api_view,permission_classes
-from .models import MovieBasicInfo, LatestRating, FeatureMovieTable, FeatureTable, InternalUserRating, MovieOtherNames, InternalUserRating, MemberViewedRecord, ErrorMsgRecord
-from .serializers import MovieBasicSerializer, LastestInfoSerializer, InternalUserRatingSerializer, MemberViewedRecordSerializer
+from .models import MovieBasicInfo, LatestRating, FeatureMovieTable, FeatureTable, InternalUserRating, MovieOtherNames, InternalUserRating, MemberViewedRecord, ErrorMsgRecord,PipelineRatingStatus,UpdateMovieDetailPipelineData,MovieRecommendList
+from .serializers import MovieBasicSerializer, LastestInfoSerializer, InternalUserRatingSerializer, MemberViewedRecordSerializer,RatingPipelineSerializer,MovieUpdatePipelineSerializer
 from rest_framework.response import Response
 from django.db import connection
 from rest_framework.permissions import IsAuthenticated
@@ -17,6 +17,7 @@ from rest_framework.permissions import IsAuthenticated
 ## others
 from .forms import RegisterForm, LoginForm
 import json
+import random
 from datetime import datetime
 from functools import wraps
 import time, redis
@@ -36,8 +37,6 @@ def rate_limiter(fun):
     return decorated
 
 # Render with html 
-def advanced_search_page(request):
-    return render(request, "advanced_search_page.html")
 
 
 def search_by_word_page(request):
@@ -45,7 +44,7 @@ def search_by_word_page(request):
 
 
 def main_page(request):
-    return render(request, "home_page.html")
+    return render(request, "advanced_search_page.html")
 
 
 def movie_single_page(request, internal_id):
@@ -119,9 +118,18 @@ def sign_in(request):
     return render(request, 'sign_in.html', context)
 
 
+
 @login_required
 def member_page(request):
     return render(request, "member_page.html")
+
+def dashboard_page(request):
+    return render(request, "dashboard.html")
+
+
+# backup webpage
+# def advanced_search_page(request):
+#     return render(request, "advanced_search_page.html")
 
 
 ## API
@@ -194,7 +202,7 @@ def search_movie(request, format=None):
             movie_name__icontains=query).distinct()
         result = movie_info.filter(internal_id__in=id_result).order_by(
             "internal__start_year").reverse()
-        serializer = LastestInfoSerializer(result, many=True)
+        serializer = LastestInfoSerializer(result[:20], many=True)
         return Response(serializer.data)
 
 
@@ -295,42 +303,40 @@ def get_member_similarity(request, user_id, format=None):
 @api_view(['GET'])
 def get_recommend_movies(request):
     if request.method == 'GET':
-        feature = request.GET.get('feature')
-        internal_id = request.GET.get('id')    
-        
-        if redis.get("feature_dict") :
-            feature_dict =json.loads(redis.get("feature_dict"))
-            for i in feature_dict :
-                feature_dict[i] = set(feature_dict[i])
-            print("redis")
-            # print(feature_dict['3'])
-        else :
-            feature_dict = defaultdict(set)
-            id_result = FeatureMovieTable.objects.all()
-            for i in id_result:
-                feature_dict[str(i.feature_id)].add(i.internal_id)
-            redis_store_dict = {}
-            for i in feature_dict :
-                redis_store_dict[i] = list(feature_dict[i])
-            redis.set('feature_dict',json.dumps(redis_store_dict), ex=300)
-        if feature:
-            feature_list = json.loads(feature)
-            for i in range(len(feature_list)):
-                if i == 0:
-                    result = feature_dict[str(feature_list[i])]
-                else:
-                    result = result.intersection(feature_dict[str(feature_list[i])])
-                    if len(result) <= 10 :
-                        for insert_data in list(feature_dict[str(feature_list[i-1])]) :
-                            result.add(insert_data)
-
-        id_result = list(result)
-        id_result.remove(int(internal_id))
-        id_result = id_result[:min(50, len(id_result))]
-        movie_info = LatestRating.objects.select_related("internal").order_by("imdb_rating", "rating_total_amount").reverse()
+        internal_id = request.GET.get('id')   
+        id_result = MovieRecommendList.objects.filter(internal_id=internal_id).values('recommend_list')
+        id_result = json.loads(list(id_result)[0]['recommend_list'])
+        movie_info = LatestRating.objects.select_related("internal").order_by("imdb_rating","rating_total_amount").reverse()
         recommend_result = movie_info.filter(internal_id__in=id_result)
-
         serializer = LastestInfoSerializer(recommend_result, many=True)
+        start = random.randint(0,40)
+        return Response(serializer.data[start:start+10])
+
+
+@rate_limiter
+@api_view(['GET'])
+def get_update_rating_status_data(request):
+    if request.method == 'GET':
+        start_time = request.GET.get('start')
+        end_time = request.GET.get('end')
+        pipeline_data = PipelineRatingStatus.objects.filter(
+            update_date__gte = start_time).filter(
+            update_date__lte = end_time).order_by("update_date")
+        serializer = RatingPipelineSerializer(pipeline_data, many=True)
+        return Response(serializer.data)
+
+
+
+@rate_limiter
+@api_view(['GET'])
+def get_update_movie_status_data(request):
+    if request.method == 'GET':
+        start_time = request.GET.get('start')
+        end_time = request.GET.get('end')
+        pipeline_data = UpdateMovieDetailPipelineData.objects.filter(
+            update_date__gte = start_time).filter(
+            update_date__lte = end_time).order_by("update_date")
+        serializer = MovieUpdatePipelineSerializer(pipeline_data, many=True)
         return Response(serializer.data)
 
 
@@ -387,3 +393,5 @@ def report_error(request):
                                     error_message=error_msg)
             review.save()
             return JsonResponse({"message": "success"})
+
+
