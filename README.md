@@ -55,7 +55,7 @@ For better resolution, please click [here](https://stylishforjimmy.s3.ap-northea
 
 ## Features
 ### Data pipeline dashboard
-![](https://i.imgur.com/MPDDWOk.gif)
+![](https://i.imgur.com/unaNFb0.gif)
 ### Search movies with multiple conditions
 ![](https://i.imgur.com/5hOj2nK.gif)
 ### Search movies by title
