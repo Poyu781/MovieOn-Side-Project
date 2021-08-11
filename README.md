@@ -10,7 +10,7 @@
 
 #### Test Account
 
-* Account: test_account
+* Account: testaccount
 * Password: trymypage
 
 Login to test the user-only function (Rating, Collection and Similarity Report)
