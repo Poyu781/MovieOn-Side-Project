@@ -161,16 +161,13 @@ def get_movie_data_with_rating(request, format='json'):
         feature = request.GET.get('feature')
         start_year = request.GET.get('start_year')
         end_year = request.GET.get('end_year')
-        sort = request.GET.get('sort')
-        if sort:
-            pass
-        else:
-            sort = "rating_total_amount"
+        sort = request.GET.get('sort',"rating_total_amount")
+        offset = request.GET.get("offset",20)
         imdb_rating = request.GET.get('imdb_rating')
         douban_rating = request.GET.get('douban_rating')
         start_num = int(request.GET.get('start', 0))
-        movie_info = LatestRating.objects.select_related("internal").order_by(
-            sort).reverse()
+        movie_info = LatestRating.objects.select_related("internal")\
+            .order_by(sort,"internal_id").reverse()
         if feature:
             id_result = FeatureMovieTable.objects.values("internal_id").filter(
                 feature_id=feature)
@@ -187,7 +184,7 @@ def get_movie_data_with_rating(request, format='json'):
             result = result.filter(douban_rating__gte=douban_rating)
         count = result.count()
         print(count)
-        serializer = LastestInfoSerializer(result[start_num:min(start_num + 20, count)], many=True)
+        serializer = LastestInfoSerializer(result[start_num:min(start_num + int(offset), count)], many=True)
 
         return Response(serializer.data)
 

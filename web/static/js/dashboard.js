@@ -5,11 +5,17 @@ const endDate = document.querySelector('input[name="endDate"]')
 const plotSection = document.querySelector('.plot__section')
 const loadNode = document.querySelector(".loader__wrapper")
 plotSection.style.display = "none"
-let today_date = new Date().toLocaleDateString().replace("/", "-").replace("/", "-");
-if (today_date.slice(5, 6) != 0) {
-    today_date = today_date.slice(0, 5) + "0" + today_date.slice(5)
-}
-
+// let today_date = new Date().toLocaleDateString().replace("/", "-").replace("/", "-");
+// console.log(today_date)
+// if (today_date.slice(5, 6) != 0) {
+//     today_date = today_date.slice(0, 5) + "0" + today_date.slice(5)
+// }
+// if (today_date[7] === "-"){
+//     today_date = today_date.slice(0, 8) + "0" + today_date.slice(8)
+// }
+// console.log(today_date)
+// console.log()
+let today_date = "2021-09-21"
 endDate.value = today_date
 
 function formatDate(date) {

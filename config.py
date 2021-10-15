@@ -109,3 +109,6 @@ ip_list = ['http://tihyjcyk-dest:sr9mbjac4xab@193.8.231.209:9215',
  'http://tihyjcyk-dest:sr9mbjac4xab@85.209.129.154:8694',
  'http://tihyjcyk-dest:sr9mbjac4xab@2.56.101.122:8654',
  'http://tihyjcyk-dest:sr9mbjac4xab@85.209.130.132:7673']
+
+if __name__ == "__main__":
+    print(rds_host)
