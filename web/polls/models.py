@@ -122,6 +122,7 @@ class MovieBasicInfo(models.Model):
     publish_country = models.CharField(max_length=16)
     runtime_minutes = models.IntegerField()
     img = models.CharField(max_length=255)
+    video_id = models.CharField(max_length=64)
 
     class Meta:
         managed = True
